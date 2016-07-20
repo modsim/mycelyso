@@ -42,6 +42,7 @@ class Pipeline(object):
         self.steps = []
 
     def __lt__(self, other):
+        print("LT")
         return self.__le__(other)
 
     def __le__(self, other):

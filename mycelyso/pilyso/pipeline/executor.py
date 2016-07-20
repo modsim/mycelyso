@@ -13,6 +13,7 @@ from copy import deepcopy
 from ..misc.processpool import cpu_count, SimpleProcessPool, WrappedException
 from .pipeline import PipelineEnvironment
 
+
 class Collected(object):
     pass
 
