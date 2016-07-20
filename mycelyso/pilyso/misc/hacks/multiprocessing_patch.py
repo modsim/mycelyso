@@ -11,6 +11,7 @@ import io
 
 SEND_MAX = 2**31 - 8*1024 - 1
 
+
 def _new_send(self, buf, write=multiprocessing.connection.Connection._write):
     remaining = len(buf)
     while True:
@@ -22,6 +23,7 @@ def _new_send(self, buf, write=multiprocessing.connection.Connection._write):
         if remaining == 0:
             break
         buf = buf[n:]
+
 
 def _new_recv(self, size, read=multiprocessing.connection.Connection._read):
     buf = io.BytesIO()
@@ -64,6 +66,7 @@ def _new_send_bytes(self, buf):
         chunks = [header]
     for chunk in chunks:
         self._send(chunk)
+
 
 def _new_recv_bytes(self, maxsize=None):
     buf = self._recv(8)

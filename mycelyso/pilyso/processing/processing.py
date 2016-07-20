@@ -108,7 +108,7 @@ def qimshow(image, cmap='gray'):
     import matplotlib.pyplot
     fig = matplotlib.pyplot.figure()
     ax = fig.add_subplot(111)
-    range = ax.imshow(image, cmap=cmap, interpolation='none')
+    range_ = ax.imshow(image, cmap=cmap, interpolation='none')
 
     def _format_coords(x, y):
         try:
@@ -120,7 +120,7 @@ def qimshow(image, cmap='gray'):
             value = float('nan')
         return 'x=%d y=%d value=%1.4f' % (x, y, value,)
     ax.format_coord = _format_coords
-    matplotlib.pyplot.colorbar(range)
+    matplotlib.pyplot.colorbar(range_)
     matplotlib.pyplot.show()
 
 

@@ -45,15 +45,22 @@ def singleton_class_mapper(class_, what, args, kwargs):
         raise
 
 
+try:
+    def get_progress_bar(n):
+        import progressbar
+        p = progressbar.ProgressBar()
+        return p(range(n))
 
-def get_progress_bar(n):
-    from clint.textui.progress import bar
-    return bar(range(n))
+except ImportError:
+    try:
+        def get_progress_bar(n):
+            from clint.textui.progress import bar
+            return bar(range(n))
+    except ImportError:
+        def get_progress_bar(n):
+            return range(n)
+        #raise ImportError
 
-def get_progress_bar(n):
-    import progressbar
-    p = progressbar.ProgressBar()
-    return p(range(n))
 
 class PipelineExecutor(object):
     wait = 0.01
@@ -189,11 +196,11 @@ class PipelineExecutor(object):
                     token = (reverse_todo[op], op,)
                     if self.in_cache(token):
                         raise RuntimeError('TODO')  # TODO
-                        result = self.pool.advanced_apply(
-                            command=singleton_class_mapper,
-                            args=(self.__class__, 'get_cache', (token,), {},),
-                            priority=priority
-                        )
+                        # result = self.pool.advanced_apply(
+                        #     command=singleton_class_mapper,
+                        #     args=(self.__class__, 'get_cache', (token,), {},),
+                        #     priority=priority
+                        # )
                         cache_originated.add(op)
 
                     else:

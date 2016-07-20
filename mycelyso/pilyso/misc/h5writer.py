@@ -35,6 +35,9 @@ def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
 
         base_filename = _filename
 
+        def release_lock(*args, **kwargs):
+            pass
+
         while not success:
 
             found_filename = False

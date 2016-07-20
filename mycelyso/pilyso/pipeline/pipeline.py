@@ -14,6 +14,7 @@ if getattr(inspect, 'signature'):
 else:
 
     def get_argnames_and_defaults(call):
+        # noinspection PyDeprecation
         argspec = inspect.getargspec(call)
 
         args = list(argspec.args)

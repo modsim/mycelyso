@@ -99,6 +99,7 @@ class Image(numpy.ndarray):
         self.meta = getattr(obj, 'meta', None)
 
     def __array_wrap__(self, out_arr, context=None):
+        # noinspection PyArgumentList
         return numpy.ndarray.__array_wrap__(self, out_arr, context)
 
 
@@ -234,6 +235,8 @@ class ImageStack(ImageStackAPI):
 
         def pin_index(self, index, to_what):
             n = 0
+            item = None
+
             for item in self.order:
                 try:
                     v = self.pinned_indices[item]

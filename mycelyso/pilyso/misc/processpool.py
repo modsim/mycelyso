@@ -6,8 +6,13 @@ documentation
 from signal import SIGINT
 from time import sleep
 from os import kill
+import datetime
+import traceback
+import heapq
+
 
 from multiprocessing import Process, Pipe
+
 
 class Future(object):
     command = None
@@ -33,7 +38,6 @@ class Future(object):
     def __lt__(self, other):
         # dummy
         return self.priority < other.priority
-
 
     def wait(self, time=None):
         pass
@@ -62,12 +66,12 @@ class Future(object):
 
                 try:
                     self.process.terminate()
-                    #kill(self.process.pid, SIGINT)
+                    # kill(self.process.pid, SIGINT)
                     sleep(0.25)
                 except Exception as e:
                     print(repr(e))
 
-                #self.process.terminate()
+                # self.process.terminate()
 
                 self.pool.report_broken_process(self.process)
                 self.status, (self.value, self.error) = \
@@ -103,12 +107,13 @@ class Future(object):
         self.process.dispatch()
 
 
-import datetime
-import traceback
+
 
 class WrappedException(RuntimeError):
+
     exception = None
     message = None
+
     def __init__(self, exception, message=''):
         self.exception = exception
         self.message = message
@@ -159,7 +164,6 @@ class FutureProcess(Process):
         else:
             return False, (None, None,)
 
-import heapq
 
 class SimpleProcessPool(object):
 

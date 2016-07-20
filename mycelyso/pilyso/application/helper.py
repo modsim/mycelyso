@@ -6,10 +6,10 @@ documentation
 from .application import App
 
 def pilyso_app_generator(**kwargs):
-    class _PylysoApp(App):
+    class _PilysoApp(App):
         def options(self):
             return kwargs
-    return _PylysoApp
+    return _PilysoApp
 
 def pipeline_to_app(pipeline):
     return pilyso_app_generator(name=pipeline.__name__.lower(), description=pipeline.__name__, pipeline=pipeline)
