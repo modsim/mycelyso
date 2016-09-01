@@ -6,7 +6,17 @@ documentation
 import numpy
 from scipy.stats import linregress
 
-def find_linear_window(x, y, begin=float('nan'), end=float('nan'), window=0.1, condition=('rvalue', 'gt', 0.95), return_begin_end=False, return_nan_if_impossible=True):
+
+def find_linear_window(
+        x,
+        y,
+        begin=float('nan'),
+        end=float('nan'),
+        window=0.1,
+        condition=('rvalue', 'gt', 0.95),
+        return_begin_end=False,
+        return_nan_if_impossible=True
+):
     data = numpy.c_[x, y]
 
     data[:, 1][~numpy.isfinite(data[:, 1])] = 0.0
@@ -51,10 +61,6 @@ def find_linear_window(x, y, begin=float('nan'), end=float('nan'), window=0.1, c
         return begin, end, regression
     else:
         return regression
-
-
-
-
 
 
 def prepare_optimized_regression(x, y):

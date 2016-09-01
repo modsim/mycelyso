@@ -5,6 +5,7 @@ documentation
 
 from itertools import tee
 
+
 # from the itertools help https://docs.python.org/2/library/itertools.html
 def pairwise(iterable):
     """s -> (s0,s1), (s1,s2), (s2, s3), ..."""

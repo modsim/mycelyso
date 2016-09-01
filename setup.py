@@ -14,10 +14,9 @@ setup(
     author='Christian C. Sachs',
     author_email='c.sachs@fz-juelich.de',
     url='https://github.com/modsim/mycelyso',
-    packages=find_packages('mycelyso'),
-    #scripts=[''],
-    requires=['numpy', 'scipy', 'matplotlib', 'networkx', 'cv2', 'numexpr', 'mpld3', 'pandas', 'flask', 'tables',
-              'tables'],
+    packages=find_packages(),
+    # scripts=[''],
+    requires=['numpy', 'scipy', 'cv2', 'pilyso', 'networkx', 'numexpr', 'tables'],
     # extras_require={
     #     'feature': ['package'],
     # },

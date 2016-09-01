@@ -13,7 +13,7 @@ from pilyso.processing.hessian import shapeindexmap
 
 # noinspection PyUnusedLocal
 def experimental_thresholding(image, window_size=15, gaussian_radius=3.0, shift=0.2, target=-0.5, quotient=1.2):
-    #novel method based upon shape index and Bataineh thresholding
+    # novel method based upon shape index and Bataineh thresholding
 
     float_image = image.astype(numpy.float32)
     means, stddev = means_and_stddev(image, window_size)
