@@ -207,7 +207,6 @@ class ImageStack(ImageStackAPI):
 
             return self_copy
 
-
         def __getitem__(self, item):
             self_copy = self.pin_indices(item)
 
@@ -453,7 +452,7 @@ class ImageStack(ImageStackAPI):
 
         xy_subsample = [self.parent.get_subsampling(Dimensions.Width), self.parent.get_subsampling(Dimensions.Height)]
         if xy_subsample[0] != xy_subsample[1]:
-            raise RuntimeError('Unsymmetric subsampling for width/height currently unsupported!')
+            raise RuntimeError('Asymmetric subsampling for width/height currently unsupported!')
 
         xy_subsample = xy_subsample[0]
         if xy_subsample != 1:
