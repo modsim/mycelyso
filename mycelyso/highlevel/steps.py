@@ -454,28 +454,32 @@ class MycelysoSteps(object):
                 'aux_table': aux_table_num
             }
 
-            regression = linregress(times, lengths)._asdict()
-            row.update({'plain_regression_' + k: v for k, v in regression.items()})
-            regression = linregress(times, relative_lengths)._asdict()
-            row.update({'normalized_regression_' + k: v for k, v in regression.items()})
+            try:
 
-            regression = linregress(times, numpy.log(lengths))._asdict()
-            row.update({'logarithmic_plain_regression_' + k: v for k, v in regression.items()})
-            regression = linregress(times, numpy.log(relative_lengths))._asdict()
-            row.update({'logarithmic_normalized_regression_' + k: v for k, v in regression.items()})
+                regression = linregress(times, lengths)._asdict()
+                row.update({'plain_regression_' + k: v for k, v in regression.items()})
+                regression = linregress(times, relative_lengths)._asdict()
+                row.update({'normalized_regression_' + k: v for k, v in regression.items()})
 
-            regression = prepare_optimized_regression(times, lengths)
-            row.update({'optimized_regression_' + k: v for k, v in regression.items()})
+                regression = linregress(times, numpy.log(lengths))._asdict()
+                row.update({'logarithmic_plain_regression_' + k: v for k, v in regression.items()})
+                regression = linregress(times, numpy.log(relative_lengths))._asdict()
+                row.update({'logarithmic_normalized_regression_' + k: v for k, v in regression.items()})
 
-            regression = prepare_optimized_regression(times, relative_lengths)
-            row.update({'optimized_normalized_regression_' + k: v for k, v in regression.items()})
+                regression = prepare_optimized_regression(times, lengths)
+                row.update({'optimized_regression_' + k: v for k, v in regression.items()})
+
+                regression = prepare_optimized_regression(times, relative_lengths)
+                row.update({'optimized_normalized_regression_' + k: v for k, v in regression.items()})
 
 
-            regression = prepare_optimized_regression(times, numpy.log(lengths))
-            row.update({'optimized_logarithmic_regression_' + k: v for k, v in regression.items()})
+                regression = prepare_optimized_regression(times, numpy.log(lengths))
+                row.update({'optimized_logarithmic_regression_' + k: v for k, v in regression.items()})
 
-            regression = prepare_optimized_regression(times, numpy.log(relative_lengths))
-            row.update({'optimized_logarithmic_normalized_regression_' + k: v for k, v in regression.items()})
+                regression = prepare_optimized_regression(times, numpy.log(relative_lengths))
+                row.update({'optimized_logarithmic_normalized_regression_' + k: v for k, v in regression.items()})
+            except IndexError:
+                pass
 
             track_table.append(row)
 
@@ -702,7 +706,10 @@ class MycelysoSteps(object):
             row.update({field + '_optimized_logarithmic_regression_' + k: v for k, v in regression.items()})
 
         for field in fields:
-            prepare_for_field(field)
+            try:
+                prepare_for_field(field)
+            except IndexError:
+                pass
 
         result.update(row)
 

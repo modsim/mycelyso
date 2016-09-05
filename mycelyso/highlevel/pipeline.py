@@ -10,7 +10,7 @@ from os.path import basename, abspath
 
 from .steps import MycelysoSteps
 
-from pilyso.misc.h5writer import hdf5_output
+from pilyso.misc.h5writer import hdf5_output, hdf5_node_name
 
 
 class Mycelyso(App):
@@ -28,10 +28,8 @@ class Mycelyso(App):
 
 class MycelysoPipeline(PipelineExecutionContext):
     def __init__(self, args):
-
         absolute_input = abspath(args.input)
-        h5nodename = absolute_input\
-            .replace('/', '_').replace(':', '_').replace('\\', '_').replace('.', '_').replace('-', '_')
+        h5nodename = hdf5_node_name(absolute_input)
 
         self.pipeline_environment = PipelineEnvironment(ims=ImageStack(args.input))
 
@@ -68,12 +66,11 @@ class MycelysoPipeline(PipelineExecutionContext):
             'binary': 'image'}
         )
 
-        per_image |= StartSubtractor
+        per_image |= StartSubtractor()
 
         # crop the box
-        per_image |= BoxDetectorAndCropper
+        per_image |= BoxDetectorAndCropper()
         per_image |= CreateBoxCropFromSubtractedImage
-
         #per_image |= set_result(subtracted_image=Delete)
 
         per_image |= rescale_image_to_uint8
