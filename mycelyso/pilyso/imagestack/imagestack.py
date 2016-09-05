@@ -107,12 +107,14 @@ class FloatFilter(ImageStackFilter):
     def filter(self, image):
         return image.astype(numpy.float32, copy=False)
 
+
 class MinMaxFilter(ImageStackFilter):
     def filter(self, image):
         fimage = image.astype(numpy.float32, copy=True)
         fimage -= fimage.min()
         fimage /= fimage.max()
         return fimage
+
 
 class UnwrapFilter(ImageStackFilter):
     def filter(self, image):

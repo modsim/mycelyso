@@ -3,7 +3,7 @@
 documentation
 """
 
-from .imagestack import ImageStack, Dimensions
+from ..imagestack import ImageStack, Dimensions
 
 from skimage.external.tifffile import TiffFile
 

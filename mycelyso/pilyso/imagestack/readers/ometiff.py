@@ -3,8 +3,8 @@
 documentation
 """
 
-from .imagestack import Dimensions
-from .tiffimagestack import TiffImageStack
+from ..imagestack import Dimensions
+from .tiff import TiffImageStack
 
 from xml.etree import cElementTree as ElementTree
 

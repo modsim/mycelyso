@@ -99,7 +99,7 @@ class BoxDetectorAndCropper(object):
     _angles = {}
 
     def get_parameters(self, ims, timepoint, pos):
-        reference = image_source(ims, Meta(t=timepoint, pos=pos)) # TODO proper sub pipeline
+        reference = image_source(ims, Meta(t=timepoint, pos=pos))  # TODO proper sub pipeline
 #        reference = self.embedded_pipeline([ImageSource], Meta(t=timepoint, pos=pos)).image
         angle = find_rotation(reference)
         reference = rotate_image(reference, angle)

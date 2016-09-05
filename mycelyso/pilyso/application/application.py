@@ -8,11 +8,9 @@ import logging
 import argparse
 import multiprocessing
 
-from ..imagestack.imagestack import ImageStack
+from ..imagestack.imagestack import ImageStack, Dimensions
 
-from ..imagestack.ometiffimagestack import *
-from ..imagestack.tiffimagestack import *
-from ..imagestack.nd2imagestack import * # TODO
+from ..imagestack.readers import *
 from ..pipeline import PipelineEnvironment, PipelineExecutor
 
 

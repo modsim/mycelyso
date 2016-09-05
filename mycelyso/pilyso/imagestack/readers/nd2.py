@@ -3,7 +3,7 @@
 documentation
 """
 
-from .imagestack import ImageStack, Dimensions
+from ..imagestack import ImageStack, Dimensions
 
 from molyso_nd2.nd2parser import ND2MultiDim
 

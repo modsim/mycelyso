@@ -17,6 +17,9 @@ import numpy
 
 timeout = 5 * 60.0
 
+def hdf5_node_name(s):
+    return s.replace('/', '_').replace(':', '_').replace('\\', '_').replace('.', '_').replace('-', '_')
+
 def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
     def _inner_hdf5_output(meta, result):
 
