@@ -22,7 +22,6 @@ else:
 
 from collections import OrderedDict
 
-
 class NeatDict(dict):
     def __getattr__(self, item):
         return self.get(item)
@@ -33,42 +32,16 @@ class NeatDict(dict):
     def __delattr__(self, item):
         del self[item]
 
+from dotmap import DotMap
 
-KEY_COLLECTED = 'collected'
-KEY_RESULT = 'result'
+def wrap_dict(what):
+    return DotMap(what)
 
-
-def reassemble_result(result, args, _call_return, ignore=None):
-    if ignore is None:
-        ignore = {}
-
-    if type(_call_return) == dict and KEY_RESULT in _call_return:
-        # if we get a dict back, we merge it with the ongoing result object
-        result.update(_call_return)
-    elif type(_call_return) == NeatDict:
-        # if we get a neatdict back, we assume its the proper result object
-        # and the pipeline step knew what it did ...
-        # we continue with it as-is
-        result = _call_return
-    else:
-        if type(_call_return) != tuple:
-            _call_return = (_call_return,)
-
-        for n, item in enumerate(reversed(_call_return)):
-            k = args[-(n + 1)]
-            if k == KEY_RESULT:
-                if type(item) == dict or type(item) == NeatDict:
-                    result.update(item)
-            else:
-                # do nothing if the parameter came from di
-                if k not in ignore:
-                    result[k] = item
-    return result
+def unwrap_dict(what):
+    return what.toDict()
 
 
-def call(self, call, result, di=None):
-
-    result = self.wrap_result(result)
+def call(call, result, di=None):
 
     args, defaults = get_argnames_and_defaults(call)
 
@@ -81,9 +54,7 @@ def call(self, call, result, di=None):
     parameters = []
 
     for n, arg in enumerate(args):
-        if arg == self.KEY_RESULT:
-            parameters.append(result)
-        elif arg in result:
+        if arg in result:
             parameters.append(result[arg])
         else:
             if n >= non_default_parameters:
@@ -98,44 +69,19 @@ def call(self, call, result, di=None):
                     # problem: pipeline step asks for a parameter we do not have
                     raise ValueError('[At %s]: Argument %r not in %r' % (repr(call), arg, result,))
 
+    ### the call
+
     _call_return = call(*parameters)
 
-    result = reassemble_result(result, args, _call_return, ignore=from_di)
+    ### /the call
 
-    result = unwrap_result(result)
+    if type(_call_return) != tuple:
+        _call_return = (_call_return,)
 
-    return result
-
-
-def wrap_result(result):
-
-    result = NeatDict(result)
-
-    result[KEY_RESULT] = True
-
-    if KEY_COLLECTED in result:
-        wrapped = OrderedDict()
-        for k, v in result[KEY_COLLECTED].items():
-            if v is None:
-                #wrapped[k] = None
-                pass
-            else:
-                wrapped[k] = NeatDict(v)
-        result[self.KEY_COLLECTED] = wrapped
-
-    return result
-
-
-def unwrap_result(result):
-    if KEY_COLLECTED in result and (result[KEY_COLLECTED] is not None):
-        unwrapped = OrderedDict()
-        for k, v in result[KEY_COLLECTED].items():
-            unwrapped[k] = dict(v)
-        result[KEY_COLLECTED] = unwrapped
-
-    result = dict(result)
-
-    if KEY_RESULT in result:
-        del result[KEY_RESULT]
+    for n, item in enumerate(reversed(_call_return)):
+        k = args[-(n + 1)]
+        # do nothing if the parameter came from di
+        if k not in from_di:
+            result[k] = item
 
     return result
