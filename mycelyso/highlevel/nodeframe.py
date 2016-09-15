@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import numpy
-import networkx
 from itertools import chain
 
 from scipy.sparse import lil_matrix
@@ -9,8 +8,29 @@ from scipy.sparse.csgraph import shortest_path, connected_components
 
 from scipy.spatial.ckdtree import cKDTree as KDTree
 
-from molyso.generic.smoothing import smooth
 from pilyso.processing.pixelgraphs import where2d, is_end
+
+
+def smooth(signal, kernel):
+    """
+    Generic smoothing function, smooths by convolving one signal with another.
+
+    :param signal: input signal to be smoothed
+    :type signal: numpy.ndarray
+    :param kernel: smoothing kernel to be used. will be normalized to :math:`\sum=1`
+    :type kernel: numpy.ndarray
+    :return: The signal convolved with the kernel
+    :rtype: numpy.ndarray
+
+    >>> smooth(numpy.array([0, 0, 0, 0, 1, 0, 0, 0, 0]), numpy.ones(3))
+    array([ 0.        ,  0.        ,  0.        ,  0.        ,  0.33333333,
+            0.33333333,  0.33333333,  0.        ,  0.        ])
+    """
+
+    return numpy.convolve(
+        kernel / kernel.sum(),
+        numpy.r_[signal[kernel.size - 1:0:-1], signal, signal[-1:-kernel.size:-1]],
+        mode='valid')[kernel.size // 2 - 1:-kernel.size // 2][0:len(signal)]
 
 
 def calculate_length(g):
@@ -74,8 +94,8 @@ class NodeFrame(object):
             unique_indices = numpy.unique(list(l[0] for l in sorted(mapping)))
             return points[unique_indices]
 
-        endpoint_tree_data = clean_by_radius(where2d(self.pf.endpoints_map), 8.0)
-        junction_tree_data = clean_by_radius(where2d(self.pf.junctions_map), 8.0)
+        endpoint_tree_data = clean_by_radius(where2d(self.pf.endpoints_map), 8.0)  # TODO
+        junction_tree_data = clean_by_radius(where2d(self.pf.junctions_map), 8.0)  # TODO
 
         e_length = len(endpoint_tree_data)
         j_length = len(junction_tree_data)
@@ -118,7 +138,7 @@ class NodeFrame(object):
             l_side = pathlet[0]
             r_side = pathlet[-1]
 
-            distance_threshold = 10.0
+            distance_threshold = 10.0  # TODO
 
             # experiment
             l_test_distance, l_test_index = endpoint_tree.query(l_side, k=1)
@@ -149,7 +169,7 @@ class NodeFrame(object):
             except AttributeError:
                 continue
 
-            if l_distance > 30 or r_distance > 30:
+            if l_distance > 30 or r_distance > 30:  # TODO
                 # probably does not happen
                 continue
 
@@ -246,8 +266,8 @@ class NodeFrame(object):
         return numpy.where(self.connected_components[self.connected_components == label])[0]
 
     def track(self, successor):
-        junction_shift_radius = 50.0
-        endpoint_shift_radius = 150.0
+        junction_shift_radius = 50.0  # TODO
+        endpoint_shift_radius = 150.0  # TODO
 
         ##
         self_len = len(self.data)
@@ -304,7 +324,9 @@ class NodeFrame(object):
         self.self_to_successor_alternatives = self_to_successor_alternatives
 
     def get_networkx_graph(self, with_z=0, return_positions=False):
-        g = networkx.from_scipy_sparse_matrix(self.adjacency)
+        from networkx import from_scipy_sparse_matrix
+
+        g = from_scipy_sparse_matrix(self.adjacency)
 
         positions = {}
 

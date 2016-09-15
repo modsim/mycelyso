@@ -8,7 +8,7 @@ from pilyso.imagestack import ImageStack
 from pilyso.steps import *
 from os.path import basename, abspath
 
-from .steps import MycelysoSteps
+from .steps import *
 
 from pilyso.misc.h5writer import hdf5_output, hdf5_node_name
 
@@ -66,11 +66,11 @@ class MycelysoPipeline(PipelineExecutionContext):
             'binary': 'image'}
         )
 
-        per_image |= StartSubtractor()
+        per_image |= substract_start_frame()
 
         # crop the box
-        per_image |= BoxDetectorAndCropper()
-        per_image |= CreateBoxCropFromSubtractedImage
+        per_image |= box_detector_cropper()
+        per_image |= create_boxcrop_from_subtracted_image
         #per_image |= set_result(subtracted_image=Delete)
 
         per_image |= rescale_image_to_uint8
@@ -94,62 +94,62 @@ class MycelysoPipeline(PipelineExecutionContext):
         per_image |= skip_if_image_is_below_size(4, 4)
 
         # generate statistics of the image
-        per_image |= MycelysoSteps.ImageStatistics
+        per_image |= MycelysoSteps.image_statistics
 
         # binarize
-        per_image |= MycelysoSteps.Binarize
+        per_image |= MycelysoSteps.binarize
 
         from pilyso.processing.processing import blur_and_threshold, fill_holes_smaller_than
 
-        def NewCleanUp(binary):
+        def additional_cleanup(binary):
             binary = blur_and_threshold(binary)
             binary = fill_holes_smaller_than(binary, 50)
             return binary
 
         # ... and cleanup
-        per_image |= NewCleanUp
+        per_image |= additional_cleanup
         # generate statistics of the binarized image
 
         #self.add_step(Meta(t=Every, pos=Every), image_shower('binary'))
 
-        per_image |= MycelysoSteps.QuantifyBinary
+        per_image |= MycelysoSteps.quantify_binary
 
         per_image |= skeletonize
 
         #self.add_step(Meta(t=Every, pos=Every), image_shower('skeleton'))
 
-        per_image |= MycelysoSteps.RemoveSmallStructures
+        per_image |= MycelysoSteps.remove_small_structures
 
         # 'binary', 'skeleton' are kept!
-        per_image |= MycelysoSteps.ConvertToNodes
+        per_image |= MycelysoSteps.convert_to_nodes
 
         per_image |= set_result(image=Delete)
         per_image |= set_result(pixel_frame=Delete)
         #per_image |= lambda result: print(result)
         #self.add_step(Meta(t=Every, pos=Every), MycelysoSteps.ReconnectNodePixelFrame)
 
-        per_image |= MycelysoSteps.GraphStatistics
-        per_image |= MycelysoSteps.GenerateGraphML
+        per_image |= MycelysoSteps.graph_statistics
+        per_image |= MycelysoSteps.generate_graphml
 
         per_position = self.add_stage(Meta(pos=Every, t=Collected))
 
 
-        per_position |= MycelysoSteps.TrackMultipoint
-        per_position |= MycelysoSteps.GenerateOverallGraphML
+        per_position |= MycelysoSteps.track_multipoint
+
+        per_position |= MycelysoSteps.generate_overall_graphml
 
         #per_position |= MycelysoSteps.AnalyzeMultipoint
         #
 
         #per_position |= MycelysoSteps.DebugPlotInjector
         #self.add_step(Meta(t=Collected, pos=Every), MycelysoSteps.MergeAttempt)
-        per_position |= MycelysoSteps.IndividualTracking
+        per_position |= MycelysoSteps.individual_tracking
 
         #self.add_step(Meta(t=Collected, pos=Every), MycelysoSteps.DebugPrintingAnalysis)
 
-        per_position |= MycelysoSteps.PrepareTrackedFragments
+        per_position |= MycelysoSteps.prepare_tracked_fragments
 
-        per_position |= MycelysoSteps.PreparePositionRegressions
-
+        per_position |= MycelysoSteps.prepare_position_regressions
 
         per_position |= lambda meta, meta_pos=None: meta.pos
 
@@ -172,9 +172,11 @@ class MycelysoPipeline(PipelineExecutionContext):
         )
 
         per_position |= hdf5_output(args.output, h5nodename)
+
         def black_hole(result):
             for k in list(result.keys()):
                 del result[k]
             del result
             return {}
+
         per_position |= black_hole
