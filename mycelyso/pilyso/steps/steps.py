@@ -63,7 +63,7 @@ def skeletonize(binary, skeleton=None):
     return morphology.skeletonize(binary)
 
 
-class StartSubtractor(object):
+class substract_start_frame(object):
 
     gaussian_blur_radius = 15.0
 
@@ -92,7 +92,7 @@ from ..processing.processing import blur_box
 from ..pipeline.executor import Skip, Collected
 
 
-class BoxDetectorAndCropper(object):
+class box_detector_cropper(object):
 
     _fft_cache = {}
     _boxes = {}
@@ -146,7 +146,7 @@ class BoxDetectorAndCropper(object):
         return shift, crop, angle
 
 
-def CreateBoxCropFromSubtractedImage(subtracted_image, shift, angle, crop, result):
+def create_boxcrop_from_subtracted_image(subtracted_image, shift, angle, crop, result):
     result.shift_x = shift[0]
     result.shift_y = shift[1]
 
