@@ -63,29 +63,30 @@ def skeletonize(binary, skeleton=None):
     return morphology.skeletonize(binary)
 
 
-class substract_start_frame(object):
+
+
+_substract_start_frame_start_images = {}
+
+def substract_start_frame(meta, ims, reference_timepoint, image, subtracted_image=None):
 
     gaussian_blur_radius = 15.0
 
-    _start_images = {}
+    if meta.pos not in _substract_start_frame_start_images:
+        reference = image_source(ims, Meta(t=reference_timepoint, pos=meta.pos))  # TODO proper sub pipeline
+        #reference = self.embedded_pipeline([ImageSource], Meta(t=reference_timepoint, pos=meta.pos)).image
+        blurred = blur_gaussian(reference, gaussian_blur_radius)
+        _substract_start_frame_start_images[meta.pos] = blurred
+    else:
+        blurred = _substract_start_frame__start_images[meta.pos]
 
-    def __call__(self, meta, ims, reference_timepoint, image, subtracted_image=None):
-        if meta.pos not in self._start_images:
-            reference = image_source(ims, Meta(t=reference_timepoint, pos=meta.pos)) # TODO proper sub pipeline
-            #reference = self.embedded_pipeline([ImageSource], Meta(t=reference_timepoint, pos=meta.pos)).image
-            blurred = blur_gaussian(reference, self.gaussian_blur_radius)
-            self._start_images[meta.pos] = blurred
-        else:
-            blurred = self._start_images[meta.pos]
+    image = image.astype(numpy.float32)
 
-        image = image.astype(numpy.float32)
+    image /= blurred
 
-        image /= blurred
+    image -= image.min()
+    image /= image.max()
 
-        image -= image.min()
-        image /= image.max()
-
-        return image
+    return image
 
 
 from ..processing.processing import blur_box
