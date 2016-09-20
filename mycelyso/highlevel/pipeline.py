@@ -66,10 +66,10 @@ class MycelysoPipeline(PipelineExecutionContext):
             'binary': 'image'}
         )
 
-        per_image |= substract_start_frame()
+        per_image |= substract_start_frame
 
         # crop the box
-        per_image |= box_detector_cropper()
+        per_image |= box_detector_cropper
         per_image |= create_boxcrop_from_subtracted_image
         #per_image |= set_result(subtracted_image=Delete)
 
@@ -94,10 +94,10 @@ class MycelysoPipeline(PipelineExecutionContext):
         per_image |= skip_if_image_is_below_size(4, 4)
 
         # generate statistics of the image
-        per_image |= MycelysoSteps.image_statistics
+        per_image |= image_statistics
 
         # binarize
-        per_image |= MycelysoSteps.binarize
+        per_image |= binarize
 
         from pilyso.processing.processing import blur_and_threshold, fill_holes_smaller_than
 
@@ -112,44 +112,44 @@ class MycelysoPipeline(PipelineExecutionContext):
 
         #self.add_step(Meta(t=Every, pos=Every), image_shower('binary'))
 
-        per_image |= MycelysoSteps.quantify_binary
+        per_image |= quantify_binary
 
         per_image |= skeletonize
 
         #self.add_step(Meta(t=Every, pos=Every), image_shower('skeleton'))
 
-        per_image |= MycelysoSteps.remove_small_structures
+        per_image |= remove_small_structures
 
         # 'binary', 'skeleton' are kept!
-        per_image |= MycelysoSteps.convert_to_nodes
+        per_image |= convert_to_nodes
 
         per_image |= set_result(image=Delete)
         per_image |= set_result(pixel_frame=Delete)
         #per_image |= lambda result: print(result)
         #self.add_step(Meta(t=Every, pos=Every), MycelysoSteps.ReconnectNodePixelFrame)
 
-        per_image |= MycelysoSteps.graph_statistics
-        per_image |= MycelysoSteps.generate_graphml
+        per_image |= graph_statistics
+        per_image |= generate_graphml
 
         per_position = self.add_stage(Meta(pos=Every, t=Collected))
 
 
-        per_position |= MycelysoSteps.track_multipoint
+        per_position |= track_multipoint
 
-        per_position |= MycelysoSteps.generate_overall_graphml
+        per_position |= generate_overall_graphml
 
-        #per_position |= MycelysoSteps.AnalyzeMultipoint
+        #per_position |= AnalyzeMultipoint
         #
 
-        #per_position |= MycelysoSteps.DebugPlotInjector
-        #self.add_step(Meta(t=Collected, pos=Every), MycelysoSteps.MergeAttempt)
-        per_position |= MycelysoSteps.individual_tracking
+        #per_position |= DebugPlotInjector
+        #self.add_step(Meta(t=Collected, pos=Every), MergeAttempt)
+        per_position |= individual_tracking
 
-        #self.add_step(Meta(t=Collected, pos=Every), MycelysoSteps.DebugPrintingAnalysis)
+        #self.add_step(Meta(t=Collected, pos=Every), DebugPrintingAnalysis)
 
-        per_position |= MycelysoSteps.prepare_tracked_fragments
+        per_position |= prepare_tracked_fragments
 
-        per_position |= MycelysoSteps.prepare_position_regressions
+        per_position |= prepare_position_regressions
 
         per_position |= lambda meta, meta_pos=None: meta.pos
 
