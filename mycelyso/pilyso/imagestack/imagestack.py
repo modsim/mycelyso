@@ -156,7 +156,6 @@ class ImageStack(ImageStackAPI):
         def order(self, order):
             self._order = order
 
-
         def __init__(self, parent, pinned_indices=None, order=None, filters=None):
             self.parent = parent
 
