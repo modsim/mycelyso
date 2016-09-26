@@ -17,7 +17,6 @@ from ..pipeline import PipelineEnvironment, PipelineExecutor
 from molyso.generic.etc import parse_range, prettify_numpy_array
 
 
-
 class AppInterface(object):
     def options(self):
         return {}
@@ -31,6 +30,7 @@ class AppInterface(object):
 from collections import namedtuple
 
 Meta = namedtuple('Meta', ['pos', 't'])
+
 
 class App(AppInterface):
     @staticmethod
