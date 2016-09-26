@@ -61,7 +61,7 @@ def call(call, result, di=None):
                 parameters.append(defaults[n - non_default_parameters])
             else:
                 try:
-                    di_arg = self.di(arg)
+                    di_arg = di(arg)
 
                     from_di.add(arg)
                     parameters.append(di_arg)

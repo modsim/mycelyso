@@ -376,6 +376,7 @@ class ImageStack(ImageStackAPI):
         for hit in hits:
             try:
                 result = hit()
+                result.uri = what
                 result.parameters = parameters
                 result.parse_parameters_before()
                 result.open(to_open, **parameters)
@@ -391,6 +392,8 @@ class ImageStack(ImageStackAPI):
     def __init__(self, *args, **kwargs):
         if self.__init___called:
             return
+
+        self.parent = self
 
         self.pid = getpid()
 
