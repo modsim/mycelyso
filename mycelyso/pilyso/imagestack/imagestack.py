@@ -38,6 +38,8 @@ class Dimensions(object):
     class Height(Dimension):
         char = 'h'
 
+    # ISR TZCXY0
+
     # we could add more:
     """ # this snippet is taken from tifffile.py
         axes : str
@@ -46,6 +48,25 @@ class Dimensions(object):
         'Z' depth, 'C' color|em-wavelength|channel, 'E' ex-wavelength|lambda,
         'T' time, 'R' region|tile, 'A' angle, 'P' phase, 'H' lifetime,
         'L' exposure, 'V' event, 'Q' unknown, '_' missing
+
+        snippet from czifile
+            # map dimension character to description
+            DIMENSIONS = {
+            b'0': 'Sample',  # e.g. RGBA
+            b'X': 'Width',
+            b'Y': 'Height',
+            b'C': 'Channel',
+            b'Z': 'Slice',  # depth
+            b'T': 'Time',
+            b'R': 'Rotation',
+            b'S': 'Scene',
+            b'I': 'Illumination',  # direction
+            b'B': 'Block',  # acquisition
+            b'M': 'Mosaic',  # tile
+            b'H': 'Phase',
+            b'V': 'View',
+            }
+
     """
 
 
