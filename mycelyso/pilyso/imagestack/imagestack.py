@@ -241,7 +241,7 @@ class ImageStack(ImageStackAPI):
                     else:
                         filters.append(a_filter)
 
-                return self.parent.perform_get_data(self_copy.collect(), filters)
+                return self.parent._perform_get_data(self_copy.collect(), filters)
             else:
                 return self_copy
 
@@ -303,7 +303,7 @@ class ImageStack(ImageStackAPI):
                 self_copy = self.pin_indices(what)
 
                 if self_copy.is_fixed():
-                    return self.parent.perform_get_meta(self_copy.collect())
+                    return self.parent._perform_get_meta(self_copy.collect())
                 else:
                     return self_copy
 
