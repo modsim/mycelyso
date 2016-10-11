@@ -81,7 +81,8 @@ def clean_up(binary):
 
 
 def remove_small_structures(binary):
-    return filter_connected_components(binary, 10)  # TODO
+    from skimage.morphology import remove_small_objects
+    return remove_small_objects(binary, min_size=10, connectivity=2)  # TODO
 
 
 def convert_to_nodes(skeleton, timepoint, pixel_frame=None, node_frame=None):

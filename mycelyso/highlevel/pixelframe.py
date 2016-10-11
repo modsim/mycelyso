@@ -5,7 +5,8 @@ documentation
 
 import numpy
 
-from pilyso.processing.processing import label_image
+from skimage.measure import label
+
 from pilyso.processing.pixelgraphs import where2d, get_connectivity_map, get_neighborhood_map, is_junction, is_end, \
     get_next_neighbor, get_inverse_neighbor_shift, is_edge, get_all_neighbor_nums
 
@@ -17,7 +18,7 @@ class PixelFrame(object):
         # binary image of skeleton, 0 and 1s (forced bool cast)
         self.image = (image > 0).astype(numpy.uint8)
 
-        self.marker = label_image(image)
+        self.marker = label(image)
 
         self.graph_lengths = numpy.bincount(self.marker.ravel())
 
