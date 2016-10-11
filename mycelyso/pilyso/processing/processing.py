@@ -97,7 +97,7 @@ def merge(p, r=15):
     from cv2 import filter2D
 
     p = only_centerpoints(p)
-    p = filter2D(p.astype(numpy.uint8), -1, numpy.ones((r,r)))
+    p = filter2D(p.astype(numpy.uint8), -1, numpy.ones((r, r)))
     p[p > 0] = 1
     p = only_centerpoints(p)
 
