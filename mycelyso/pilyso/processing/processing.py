@@ -131,7 +131,8 @@ def grow_points(i):
     return filter2D(i, -1, numpy.ones((15, 15)))
 
 def _numpy_get_integral_image_and_squared(image):
-    integral_image = lambda mat: mat.cumsum(axis=1).cumsum(axis=0)
+    def integral_image(mat):
+        return mat.cumsum(axis=1).cumsum(axis=0)
     return integral_image(image), integral_image(image**2)
 
 def _cv2_get_integral_image_and_squared(image):

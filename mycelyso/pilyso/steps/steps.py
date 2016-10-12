@@ -77,7 +77,7 @@ def substract_start_frame(meta, ims, reference_timepoint, image, subtracted_imag
         blurred = blur_gaussian(reference, gaussian_blur_radius)
         _substract_start_frame_start_images[meta.pos] = blurred
     else:
-        blurred = _substract_start_frame__start_images[meta.pos]
+        blurred = _substract_start_frame_start_images[meta.pos]
 
     image = image.astype(numpy.float32)
 

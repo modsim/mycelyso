@@ -7,4 +7,6 @@ from .application import App, AppInterface, Meta
 from ..pipeline import *
 from .helper import *
 
+from ..pipeline.executor import Skip
+
 
