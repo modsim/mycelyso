@@ -32,6 +32,7 @@ X = 1
 Y = 0
 
 # remember: Y, X
+# noinspection PyPep8
 _NEIGHBORS = {
     #    YY  XX
     N:  [-1,  0],

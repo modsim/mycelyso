@@ -7,8 +7,9 @@ import numpy
 
 from skimage.measure import label
 
-from pilyso.processing.pixelgraphs import where2d, get_connectivity_map, get_neighborhood_map, is_junction, is_end, \
-    get_next_neighbor, get_inverse_neighbor_shift, is_edge, get_all_neighbor_nums
+from ..processing.pixelgraphs import \
+    where2d, get_connectivity_map, get_neighborhood_map, is_edge, is_end, is_junction, \
+    get_next_neighbor, get_inverse_neighbor_shift, get_all_neighbor_nums
 
 
 class PixelFrame(object):

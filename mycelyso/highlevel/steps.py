@@ -3,17 +3,18 @@
 documentation
 """
 
-import networkx as nx
 
+import warnings
 from itertools import product, chain
 
+import numpy
 from scipy.stats import linregress
 
-from pilyso.processing.processing import *
-from pilyso.processing.pixelgraphs import *
+from skimage.morphology import remove_small_holes, remove_small_objects, skeletonize as sk_skeletonize
 
-import numpy
+from scipy import ndimage as ndi
 
+import networkx as nx
 
 from ..misc.graphml import to_graphml_string
 from ..misc.pairwise import pairwise
@@ -21,14 +22,16 @@ from ..misc.regression import prepare_optimized_regression
 
 from ..processing.binarization import experimental_thresholding
 
-
-
 from .pixelframe import PixelFrame
 from .nodeframe import NodeFrame
 
 
 def binarize(image, binary=None):
     return experimental_thresholding(image)
+
+
+def skeletonize(binary, skeleton=None):
+    return sk_skeletonize(binary)
 
 
 def image_statistics(image, calibration, result=None):
@@ -70,19 +73,32 @@ def graph_statistics(node_frame, result=None):
     }
 
 
-class clean_up_minimal_threshold(Tunable):
+# class clean_up_minimal_threshold(Tunable):
+#     """"""
+#     default = 1000
+
+class clean_up_hole_fill_size(object):
     """"""
-    default = 1000
+    value = 50  # 1000
+
 
 def clean_up(binary):
-    binary = blur_and_threshold(binary)
-    binary = fill_holes_smaller_than(binary, clean_up_minimal_threshold.value)  # TODO
+
+    sigma = 1.0  # TODO
+    threshold = 0.5  # TODO
+    binary = ndi.gaussian_filter(binary * 1.0, sigma) > threshold
+
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore')
+        binary = remove_small_holes(binary, min_size=clean_up_hole_fill_size.value, connectivity=2)  # TODO
+
     return binary
 
 
 def remove_small_structures(binary):
-    from skimage.morphology import remove_small_objects
-    return remove_small_objects(binary, min_size=10, connectivity=2)  # TODO
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore')
+        return remove_small_objects(binary, min_size=10, connectivity=2)  # TODO
 
 
 def convert_to_nodes(skeleton, timepoint, pixel_frame=None, node_frame=None):
@@ -119,14 +135,14 @@ def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fat
         # either: look for pairs of endpoints and junctions,
         # or endpoints and endpoints, if there are no junctions yet
         def valid_pairs():
-            for e in frame.every_endpoint:
-                edges = frame.adjacency[e, :]
+            for _e in frame.every_endpoint:
+                edges = frame.adjacency[_e, :]
                 edge_indices = edges.nonzero()[1]
 
-                for other in edge_indices:
-                    no_junctions = not any_in(frame.get_connected_nodes(other), frame.every_junction)
-                    if frame.is_junction(other) or (no_junctions and frame.is_endpoint(other)):
-                        yield None, e, other
+                for _other in edge_indices:
+                    no_junctions = not any_in(frame.get_connected_nodes(_other), frame.every_junction)
+                    if frame.is_junction(_other) or (no_junctions and frame.is_endpoint(_other)):
+                        yield None, _e, _other
 
         valid = []
         endpoints_used = set()
@@ -177,14 +193,16 @@ def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fat
                 # the first one should never happen,
                 # the nodes are no longer connected on the next frame?
                 fates[track_id] = "formerly connected components became unconnected? (dist/nextdist %.4f %.4f)" % (
-                distance, next_distance)
+                    distance, next_distance
+                )
                 # print(fates[track_id])
                 continue
 
             if not distance_condition(distance, next_distance):
                 # a later distance was SHORTER than the current, that means tracking error or cycle in graph
                 fates[track_id] = "track aborted due to shortcut (cycle or mistrack) [last %f > next %f]" % (
-                distance, next_distance)
+                    distance, next_distance
+                )
                 # print(fates[track_id])
                 continue
 
@@ -220,9 +238,8 @@ def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fat
 # endpiece_tracking[i] = set()
 # endpiece_tracking[i] += {(e, other, e_on_next, other_on_next)}
 
-# find_linear_window(x, y, begin=float('nan'), end=float('nan'), window=0.1, condition=('rvalue', 'gt', 0.95), return_begin_end=False):
 
-
+# noinspection PyProtectedMember
 def prepare_tracked_fragments(collected, tracked_fragments, tracked_fragments_fates, track_table=None,
                               track_table_aux_tables=None):
     key_list = list(collected.keys())
@@ -322,24 +339,26 @@ def prepare_position_regressions(collected, result):
 
     row = {}
 
-    def prepare_for_field(field):
-        data = numpy.array([[f.timepoint, f[field]] for f in collected.values()])
+    # noinspection PyProtectedMember
+    def prepare_for_field(field_name):
+        data = numpy.array([[f.timepoint, f[field_name]] for f in collected.values()])
 
         regression = linregress(data[:, 0], data[:, 1])._asdict()
-        row.update({field + '_linear_regression_' + k: v for k, v in regression.items()})
+        row.update({field_name + '_linear_regression_' + k: v for k, v in regression.items()})
 
         regression = linregress(data[:, 0], numpy.log(data[:, 1]))._asdict()
-        row.update({field + '_logarithmic_regression_' + k: v for k, v in regression.items()})
+        row.update({field_name + '_logarithmic_regression_' + k: v for k, v in regression.items()})
 
         regression = prepare_optimized_regression(data[:, 0], data[:, 1])
-        row.update({field + '_optimized_linear_regression_' + k: v for k, v in regression.items()})
+        row.update({field_name + '_optimized_linear_regression_' + k: v for k, v in regression.items()})
 
         regression = prepare_optimized_regression(data[:, 0], numpy.log(data[:, 1]))
-        row.update({field + '_optimized_logarithmic_regression_' + k: v for k, v in regression.items()})
+        row.update({field_name + '_optimized_logarithmic_regression_' + k: v for k, v in regression.items()})
 
     for field in fields:
         try:
-            prepare_for_field(field)
+            with numpy.errstate(divide='ignore', invalid='ignore'):
+                prepare_for_field(field)
         except IndexError:
             pass
 
@@ -348,14 +367,13 @@ def prepare_position_regressions(collected, result):
     return result
 
 
-@staticmethod
 def generate_graphml(node_frame, result):
     return {
         'graphml': to_graphml_string(node_frame.get_networkx_graph())
     }
 
 
-@staticmethod
+# noinspection PyTypeChecker
 def generate_overall_graphml(collected, result):
     time_to_z_scale = 25.0
 
@@ -391,6 +409,8 @@ def generate_overall_graphml(collected, result):
         'overall_graphml': to_graphml_string(graph)
     }
 
+
+"""
 
 class MycelysoStepsUnused(object):
 
@@ -444,7 +464,7 @@ class MycelysoStepsUnused(object):
                 return other_node, frame.adjacency[e, other_node]
 
             radius = 30.0
-            angle = numpy.deg2rad(15.0)
+            max_angle = numpy.deg2rad(15.0)
 
             def contains_cycle(adjacency):
                 stack = []
@@ -500,7 +520,7 @@ class MycelysoStepsUnused(object):
                     if delta_angle == 0.0: # compare to eps
                         continue
 
-                    if True or delta_angle < angle:
+                    if True or delta_angle < max_angle:
                         # dist
                         worked_at.add(a)
                         worked_at.add(b)
@@ -723,11 +743,13 @@ class MycelysoStepsUnused(object):
         try:
             with DebugPlot() as p:
                     p.title("Slopes Boxplot\nmedian=%.2f mean=%.2f stddev=%.2f" %
-                            (float(numpy.median(slopes[:, 0])), float(numpy.mean(slopes[:, 0])), float(numpy.std(slopes[:, 0]))))
+                            (float(numpy.median(slopes[:, 0])), float(numpy.mean(slopes[:, 0])),
+                             float(numpy.std(slopes[:, 0]))))
                     p.boxplot(slopes[:, 0])
             with DebugPlot() as p:
                     p.title("Slopes Histogram\nmedian=%.2f mean=%.2f stddev=%.2f" %
-                            (float(numpy.median(slopes[:, 0])), float(numpy.mean(slopes[:, 0])), float(numpy.std(slopes[:, 0]))))
+                            (float(numpy.median(slopes[:, 0])), float(numpy.mean(slopes[:, 0])),
+                            float(numpy.std(slopes[:, 0]))))
                     try:
                         p.hist(slopes[:, 0])
                     except AttributeError:
@@ -735,25 +757,29 @@ class MycelysoStepsUnused(object):
 
             with DebugPlot() as p:
                     p.title("Slopes Scatter\nmedian=%.2f mean=%.2f stddev=%.2f" %
-                            (float(numpy.median(slopes[:, 0])), float(numpy.mean(slopes[:, 0])), float(numpy.std(slopes[:, 0]))))
+                            (float(numpy.median(slopes[:, 0])), float(numpy.mean(slopes[:, 0])),
+                            float(numpy.std(slopes[:, 0]))))
                     p.scatter(slopes[:, 1], slopes[:, 0], s=2.5*slopes[:, 2], linewidths=(0.0,))
                     p.xlabel('timepoint')
                     p.ylabel('growth rate (slope)')
 
             with DebugPlot() as p:
                     p.title("Relative Slopes Boxplot\nmedian=%.2f mean=%.2f stddev=%.2f" %
-                            (float(numpy.median(r_slopes[:, 0])), float(numpy.mean(r_slopes[:, 0])), float(numpy.std(r_slopes[:, 0]))))
+                            (float(numpy.median(r_slopes[:, 0])), float(numpy.mean(r_slopes[:, 0])),
+                            float(numpy.std(r_slopes[:, 0]))))
                     p.boxplot(r_slopes[:, 0])
             with DebugPlot() as p:
                     p.title("Relative Slopes Histogram\nmedian=%.2f mean=%.2f stddev=%.2f" %
-                            (float(numpy.median(r_slopes[:, 0])), float(numpy.mean(r_slopes[:, 0])), float(numpy.std(r_slopes[:, 0]))))
+                            (float(numpy.median(r_slopes[:, 0])), float(numpy.mean(r_slopes[:, 0])),
+                            float(numpy.std(r_slopes[:, 0]))))
                     try:
                         p.hist(slopes[:, 0])
                     except AttributeError:
                         pass
             with DebugPlot() as p:
                     p.title("Relative Slopes Scatter\nmedian=%.2f mean=%.2f stddev=%.2f" %
-                            (float(numpy.median(r_slopes[:, 0])), float(numpy.mean(r_slopes[:, 0])), float(numpy.std(r_slopes[:, 0]))))
+                            (float(numpy.median(r_slopes[:, 0])), float(numpy.mean(r_slopes[:, 0])),
+                            float(numpy.std(r_slopes[:, 0]))))
                     p.scatter(r_slopes[:, 1], r_slopes[:, 0], s=2.5*r_slopes[:, 2], linewidths=(0.0,))
                     p.xlabel('timepoint')
                     p.ylabel('growth rate (slope) relative')
@@ -763,3 +789,5 @@ class MycelysoStepsUnused(object):
         DebugPlot.call_exit_handlers()
 
         return collected
+
+"""

@@ -8,12 +8,10 @@ from scipy.sparse.csgraph import shortest_path, connected_components
 from scipy.spatial.ckdtree import cKDTree as KDTree
 
 from ..misc.util import calculate_length, clean_by_radius
-from pilyso.processing.pixelgraphs import where2d, is_end
 
 
 class NodeFrame(object):
 
-    pf = None
     timepoint = None
 
     junction_shift = None
@@ -43,13 +41,12 @@ class NodeFrame(object):
     self_to_successor_alternatives = None
 
     def __init__(self, pf):
-        self.pf = pf
-        self.timepoint = self.pf.timepoint  # copy this information, so we can set pf to None for serialization
-        self.prepare_graph()
+        self.timepoint = pf.timepoint  # copy this information, so we can set pf to None for serialization
+        self.prepare_graph(pf)
 
-    def prepare_graph(self):
-        endpoint_tree_data = clean_by_radius(where2d(self.pf.endpoints_map), 8.0)  # TODO
-        junction_tree_data = clean_by_radius(where2d(self.pf.junctions_map), 8.0)  # TODO
+    def prepare_graph(self, pf):
+        endpoint_tree_data = clean_by_radius(pf.endpoints, 8.0)  # TODO
+        junction_tree_data = clean_by_radius(pf.junctions, 8.0)  # TODO
 
         e_length = len(endpoint_tree_data)
         j_length = len(junction_tree_data)
@@ -86,7 +83,7 @@ class NodeFrame(object):
         # its begin is the 'left' l_ side, its end is the 'right' r_ side
         # (not using begin / end not to confuse end with endpoint ...)
 
-        for pathlet in self.pf.pathlets:
+        for pathlet in pf.pathlets:
             pathlet_length = calculate_length(pathlet)
 
             l_side = pathlet[0]
@@ -100,7 +97,7 @@ class NodeFrame(object):
                 l_is_end = True
             else:
                 # original code
-                l_is_end = is_end(self.pf.connectivity[l_side[0], l_side[1]])
+                l_is_end = pf.endpoints_map[l_side[0], l_side[1]]
 
             # experiment
             r_test_distance, r_test_index = endpoint_tree.query(r_side, k=1)
@@ -108,7 +105,7 @@ class NodeFrame(object):
                 r_is_end = True
             else:
                 # original code
-                r_is_end = is_end(self.pf.connectivity[r_side[0], r_side[1]])
+                r_is_end = pf.endpoints_map[r_side[0], r_side[1]]
 
             l_index_shift = endpoint_shift if l_is_end else junction_shift
             r_index_shift = endpoint_shift if r_is_end else junction_shift
@@ -127,8 +124,8 @@ class NodeFrame(object):
                 # probably does not happen
                 continue
 
-            adjacency_left_index = l_index+l_index_shift
-            adjacency_right_index = r_index+r_index_shift
+            adjacency_left_index = l_index + l_index_shift
+            adjacency_right_index = r_index + r_index_shift
             adjacency[adjacency_left_index, adjacency_right_index] = pathlet_length
             adjacency[adjacency_right_index, adjacency_left_index] = pathlet_length
 
@@ -158,10 +155,11 @@ class NodeFrame(object):
 
     def cleanup_adjacency(self):
         non_empty_mask = (self.adjacency.getnnz(axis=0) + self.adjacency.getnnz(axis=1)) > 0
+        # noinspection PyTypeChecker
         empty_indices, = numpy.where(~non_empty_mask)
         # these int casts can go away, once scipy #5026 is in
 
-        # if this ever becomes multithreaded, we should lock the trees now
+        # if this ever becomes multi threaded, we should lock the trees now
         # endpoint_tree, junction_tree = None, None
 
         e_length = non_empty_mask[:self.junction_shift].sum()

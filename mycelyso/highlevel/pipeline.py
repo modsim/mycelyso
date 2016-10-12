@@ -3,9 +3,10 @@
 documentation
 """
 
-from pilyso.application import App, Meta, PipelineExecutionContext, PipelineEnvironment, Every, Collected
+from pilyso.application import App, PipelineExecutionContext, PipelineEnvironment, Every, Collected, Meta, Skip
 from pilyso.imagestack import ImageStack
-from pilyso.steps import *
+from pilyso.steps import \
+    image_source, pull_metadata_from_image, substract_start_frame, rescale_image_to_uint8, set_result, Delete
 from os.path import basename, abspath
 
 from .steps import *
@@ -58,20 +59,23 @@ class MycelysoPipeline(PipelineExecutionContext):
                     'filename', 'metadata', 'shift_x', 'shift_y',
                     'crop_t', 'crop_b', 'crop_l', 'crop_r'
                 ],
-            'graphml': 'data',
-            # 'image': 'image',
-            # 'raw_unrotated_image': 'image',
-            # 'raw_image': 'image',
-            'skeleton': 'image',
-            'binary': 'image'}
+                'graphml': 'data',
+                # 'image': 'image',
+                # 'raw_unrotated_image': 'image',
+                # 'raw_image': 'image',
+                'skeleton': 'image',
+                'binary': 'image'
+            }
         )
 
         per_image |= substract_start_frame
 
         # crop the box
-        per_image |= box_detector_cropper
-        per_image |= create_boxcrop_from_subtracted_image
-        #per_image |= set_result(subtracted_image=Delete)
+
+        # per_image |= box_detector_cropper
+        # per_image |= create_boxcrop_from_subtracted_image
+
+        # per_image |= set_result(subtracted_image=Delete)
 
         per_image |= rescale_image_to_uint8
 
@@ -85,9 +89,6 @@ class MycelysoPipeline(PipelineExecutionContext):
                 return image, meta
             return _inner
 
-
-
-
         # NEW MODIFICATION
         per_image |= lambda image: image[60:-60, 10:-10]
 
@@ -99,24 +100,17 @@ class MycelysoPipeline(PipelineExecutionContext):
         # binarize
         per_image |= binarize
 
-        from pilyso.processing.processing import blur_and_threshold, fill_holes_smaller_than
-
-        def additional_cleanup(binary):
-            binary = blur_and_threshold(binary)
-            binary = fill_holes_smaller_than(binary, 50)
-            return binary
-
         # ... and cleanup
-        per_image |= additional_cleanup
+        per_image |= clean_up
         # generate statistics of the binarized image
 
-        #self.add_step(Meta(t=Every, pos=Every), image_shower('binary'))
+        # self.add_step(Meta(t=Every, pos=Every), image_shower('binary'))
 
         per_image |= quantify_binary
 
         per_image |= skeletonize
 
-        #self.add_step(Meta(t=Every, pos=Every), image_shower('skeleton'))
+        # self.add_step(Meta(t=Every, pos=Every), image_shower('skeleton'))
 
         per_image |= remove_small_structures
 
@@ -125,27 +119,26 @@ class MycelysoPipeline(PipelineExecutionContext):
 
         per_image |= set_result(image=Delete)
         per_image |= set_result(pixel_frame=Delete)
-        #per_image |= lambda result: print(result)
-        #self.add_step(Meta(t=Every, pos=Every), MycelysoSteps.ReconnectNodePixelFrame)
+        # per_image |= lambda result: print(result)
+        # self.add_step(Meta(t=Every, pos=Every), MycelysoSteps.ReconnectNodePixelFrame)
 
         per_image |= graph_statistics
         per_image |= generate_graphml
 
         per_position = self.add_stage(Meta(pos=Every, t=Collected))
 
-
         per_position |= track_multipoint
 
         per_position |= generate_overall_graphml
 
-        #per_position |= AnalyzeMultipoint
+        # per_position |= AnalyzeMultipoint
         #
 
-        #per_position |= DebugPlotInjector
-        #self.add_step(Meta(t=Collected, pos=Every), MergeAttempt)
+        # per_position |= DebugPlotInjector
+        # self.add_step(Meta(t=Collected, pos=Every), MergeAttempt)
         per_position |= individual_tracking
 
-        #self.add_step(Meta(t=Collected, pos=Every), DebugPrintingAnalysis)
+        # self.add_step(Meta(t=Collected, pos=Every), DebugPrintingAnalysis)
 
         per_position |= prepare_tracked_fragments
 
