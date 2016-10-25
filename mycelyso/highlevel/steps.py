@@ -98,7 +98,31 @@ def clean_up(binary):
 def remove_small_structures(binary):
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
-        return remove_small_objects(binary, min_size=10, connectivity=2)  # TODO
+        return remove_small_objects(binary, min_size=64, connectivity=2)  # TODO
+
+from skimage.measure import label, regionprops
+
+def remove_border_artifacts(binary):
+
+    border = 15
+
+    labeled = label(binary)
+    corner_pixels = numpy.r_[
+        labeled[0, :].ravel(),
+        labeled[-1, :].ravel(),
+        labeled[:, 0].ravel(),
+        labeled[:, -1].ravel()
+    ]
+
+    corner_pixels = set(numpy.unique(corner_pixels)) - {0}
+
+    for region in regionprops(labeled):
+        if region.label in corner_pixels:
+            if ((region.centroid[0] < border) or (region.centroid[0] > (binary.shape[0] - border)) or
+                    (region.centroid[1] < border) or (region.centroid[1] > (binary.shape[1] - border))):
+                binary[labeled == region.label] = False
+    return binary
+
 
 
 def convert_to_nodes(skeleton, timepoint, pixel_frame=None, node_frame=None):
