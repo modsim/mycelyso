@@ -128,7 +128,6 @@ def remove_border_artifacts(binary):
 def convert_to_nodes(skeleton, timepoint, pixel_frame=None, node_frame=None):
     pixel_frame = PixelFrame(skeleton, timepoint)
     node_frame = NodeFrame(pixel_frame)
-    node_frame.pf = None  # disconnect these
     return pixel_frame, node_frame
 
 
