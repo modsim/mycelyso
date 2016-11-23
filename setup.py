@@ -16,7 +16,7 @@ setup(
     url='https://github.com/modsim/mycelyso',
     packages=find_packages(),
     # scripts=[''],
-    requires=['numpy', 'scipy', 'scikit-image>=0.12', 'pilyso', 'networkx', 'tables'],
+    install_requires=['numpy', 'scipy', 'scikit-image>=0.12', 'pilyso', 'networkx', 'tables'],
     extras_require={
         'fast_segmentation': ['numexpr'],
     },
