@@ -31,12 +31,12 @@ class TiffImageStack(ImageStack):
         try:
             calibration = float(self.parameters['calibration'])
         except KeyError:
-            calibration = 0.0
+            calibration = 1.0
 
         try:
             interval = float(self.parameters['interval'])
         except KeyError:
-            interval = 0.0
+            interval = 1.0
 
         position = self.__class__.Position(x=0.0, y=0.0, z=0.0)
         meta = self.__class__.Metadata(time=interval * what[Dimensions.Time], position=position, calibration=calibration)
