@@ -12,4 +12,10 @@ BANNER = """
             \    `           __     ,''''   Modeling&Simulation Group
              \    `----._ _,'  `'  _/
               ---'       ''      `-'        Research  Center  Juelich
+
+If you use this software in a publication, cite our paper:
+
+Sachs CC, Nöh K (2017)
+mycelyso: Analysis of Streptomyces mycel live cell imaging
+In press.
 """

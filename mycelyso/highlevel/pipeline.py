@@ -12,13 +12,14 @@ from os.path import basename, abspath
 from .steps import *
 
 from pilyso.misc.h5writer import hdf5_output, hdf5_node_name
-
+from .. import BANNER
 
 class Mycelyso(App):
     def options(self):
         return {
             'name': "mycelyso",
-            'description': "mycelyso",
+            'description': "",
+            'banner': BANNER,
             'pipeline': MycelysoPipeline
         }
 
@@ -69,6 +70,8 @@ class MycelysoPipeline(PipelineExecutionContext):
         )
 
         per_image |= substract_start_frame
+
+        # TODO add registration routine, in case no box cropping is to be done
 
         # crop the box
 
