@@ -5,7 +5,7 @@ documentation
 
 from pandas import HDFStore, DataFrame
 from tables.nodes import filenode
-from tables import NodeError
+from tables import NodeError, Filters
 
 from os.path import isfile
 from time import sleep
@@ -17,8 +17,24 @@ import numpy
 
 timeout = 5 * 60.0
 
+
 def hdf5_node_name(s):
-    return s.replace('/', '_').replace(':', '_').replace('\\', '_').replace('.', '_').replace('-', '_')
+    s = s.\
+        replace('/', '_').\
+        replace(':', '_').\
+        replace('\\', '_').\
+        replace('.', '_').\
+        replace('-', '_').\
+        replace('?', '_').\
+        replace('=', '_').\
+        replace('&', '_').\
+        replace(';', '_')
+
+    if s[0:1] == '_':
+        s = s[1:]
+
+    return s
+
 
 def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
     def _inner_hdf5_output(meta, result):
@@ -77,13 +93,16 @@ def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
                 except FileNotFoundError:
                     pass
 
+            compression_type = 'zlib'
+            compression_level = 6
+
+            compression_filter = Filters(complib=compression_type, complevel=compression_level)
+
             try:
                 # race conditions
                 # open(lock_file, 'w+')
                 with acquire_lock(lock_file) as lock:
-
-                    # compression does not really seem to work with pytables
-                    store = HDFStore(filename, complevel=1, complib='zlib') #blosc
+                    store = HDFStore(filename, complevel=compression_level, complib=compression_type)
 
                     h5 = store._handle
 
@@ -96,7 +115,7 @@ def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
                         # hdf5 stores bitfields as well, but default 0,1 will be invisible on a fixed 0-255 palette ...
                         if data.dtype == bool and upsample_binary:
                             data = (data * 255).astype(numpy.uint8)
-                        arr = h5.create_array(h5path, name, data, createparents=True)
+                        arr = h5.create_carray(h5path, name, obj=data, createparents=True, filters=compression_filter)
                         arr.attrs.CLASS = 'IMAGE'
                         arr.attrs.IMAGE_SUBCLASS = 'IMAGE_GRAYSCALE'
                         arr.attrs.IMAGE_VERSION = '1.2'
@@ -111,8 +130,8 @@ def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
                                 h5.create_group('/' + '/'.join(h5path_splits[:i]), h5path_splits[i])
                             except NodeError:
                                 pass
-                            #createparents=True
-                        f = filenode.new_node(h5, where=h5path, name=name)
+
+                        f = filenode.new_node(h5, where=h5path, name=name, filters=compression_filter)
                         if type(data) == str:
                             data = data.encode('utf-8')
                         f.write(data)
@@ -122,11 +141,9 @@ def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
                         _frame = DataFrame(data)
                         store[name] = _frame  # .append(name, _frame, data_columns=_frame.columns)
 
-
                     image_counter = {}
                     data_counter = {}
                     table_counter = {}
-
 
                     def process_row(result_table_rows, m, row):
                         cresults = []
@@ -151,7 +168,6 @@ def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
                                 for row_key in row.keys():
                                     if fnmatch(row_key, k):
                                         result_table_rows[row_key] = v
-
 
                         for k, v in result_table_rows.items():
                             if v == 'table':
@@ -265,7 +281,7 @@ def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
     return _inner_hdf5_output
 
 
-
+# Storing other image data or paletted images
 
 #from tables import Atom
 #arr = store._handle.create_carray(h5path, name, Atom.from_dtype(data.dtype), data.shape, createparents=True)
