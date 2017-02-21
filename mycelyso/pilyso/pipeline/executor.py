@@ -47,15 +47,17 @@ def singleton_class_mapper(class_, what, args, kwargs):
 
 
 try:
+    import progressbar
+
     def get_progress_bar(n):
-        import progressbar
         p = progressbar.ProgressBar()
         return p(range(n))
 
 except ImportError:
     try:
+        from clint.textui.progress import bar
+
         def get_progress_bar(n):
-            from clint.textui.progress import bar
             return bar(range(n))
     except ImportError:
         def get_progress_bar(n):
