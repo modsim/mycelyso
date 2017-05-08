@@ -11,6 +11,7 @@ import numpy
 from scipy.stats import linregress
 
 from skimage.morphology import remove_small_holes, remove_small_objects, skeletonize as sk_skeletonize
+from skimage.measure import label, regionprops
 
 from scipy import ndimage as ndi
 
@@ -100,7 +101,6 @@ def remove_small_structures(binary):
         warnings.simplefilter('ignore')
         return remove_small_objects(binary, min_size=64, connectivity=2)  # TODO
 
-from skimage.measure import label, regionprops
 
 def remove_border_artifacts(binary):
 
@@ -122,7 +122,6 @@ def remove_border_artifacts(binary):
                     (region.centroid[1] < border) or (region.centroid[1] > (binary.shape[1] - border))):
                 binary[labeled == region.label] = False
     return binary
-
 
 
 def convert_to_nodes(skeleton, timepoint, pixel_frame=None, node_frame=None):
@@ -398,7 +397,7 @@ def generate_graphml(node_frame, result):
 
 # noinspection PyTypeChecker
 def generate_overall_graphml(collected, result):
-    time_to_z_scale = 25.0
+    time_to_z_scale = 1.0
 
     graphs_list = {}
     successors = {}

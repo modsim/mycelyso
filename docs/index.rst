@@ -1,5 +1,5 @@
 Welcome to mycelysos's documentation!
-==================================
+=====================================
 
 See :doc:`readme` for information.
 

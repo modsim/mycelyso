@@ -3,4 +3,4 @@
 mycelyso
 ========
 
-Mycel Analysis Software. Currently a work in progress, will be added here soon.
+Mycelium Analysis Software. Currently a work in progress, will be added here soon.

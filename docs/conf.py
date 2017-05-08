@@ -247,7 +247,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     ('index', 'mycelyso', 'mycelyso Documentation',
-     'Christian C. Sachs', 'mycelyso', 'Mycel Analysis Software',
+     'Christian C. Sachs', 'mycelyso', 'Mycelium Analysis Software',
      'Miscellaneous'),
 ]
 
