@@ -77,6 +77,7 @@ except ImportError:
 
 # py27 compatibility
 if 'xrange' in dir(__builtins__):
+    # noinspection PyShadowingBuiltins
     range = xrange
 
 from os import getpid

@@ -5,7 +5,12 @@ documentation
 
 from ..imagestack import ImageStack, Dimensions
 
-from skimage.external.tifffile import TiffFile
+import warnings
+
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore')
+    from tiffile import TiffFile
+
 
 class TiffImageStack(ImageStack):
     extensions = ('.tif', '.tiff',)
