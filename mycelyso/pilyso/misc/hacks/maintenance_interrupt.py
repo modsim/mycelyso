@@ -7,7 +7,7 @@ from signal import signal, SIGUSR2
 import traceback
 
 
-def maintenance_interrupt(signal, frame):
+def maintenance_interrupt(the_signal, frame):
 
     print("Interrupted at:")
     print(''.join(traceback.format_stack(frame)))
@@ -19,3 +19,8 @@ def maintenance_interrupt(signal, frame):
         from code import interact
         interact(local=locals())
     print("... continuing")
+
+
+def install_maintenance_interrupt():
+    signal(SIGUSR2, maintenance_interrupt)
+

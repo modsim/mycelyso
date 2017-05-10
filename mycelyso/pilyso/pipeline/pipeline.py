@@ -1,6 +1,7 @@
 
 # encoding: utf-8
 
+from collections import OrderedDict
 from inspect import isclass
 import inspect
 
@@ -20,8 +21,6 @@ else:
         defaults = argspec.defaults if list(argspec.defaults) else []
 
         return args, defaults
-
-from collections import OrderedDict
 
 
 class NeatDict(dict):
@@ -99,7 +98,6 @@ class PipelineEnvironment(object):
         else:
             pass
 
-
     def wrap_result(self, result):
 
         result = NeatDict(result)
@@ -110,7 +108,7 @@ class PipelineEnvironment(object):
             wrapped = OrderedDict()
             for k, v in result[self.KEY_COLLECTED].items():
                 if v is None:
-                    #wrapped[k] = None
+                    # wrapped[k] = None
                     pass
                 else:
                     wrapped[k] = NeatDict(v)
@@ -131,8 +129,6 @@ class PipelineEnvironment(object):
             del result[self.KEY_RESULT]
 
         return result
-
-
 
     def prepare_call(self, call, di=None, result=None):
         if di is None:
@@ -173,7 +169,6 @@ class PipelineEnvironment(object):
 
         return _wrapped
 
-
     def reassemble_result(self, result, args, _call_return):
         if type(_call_return) == dict and self.KEY_RESULT in _call_return:
             # if we get a dict back, we merge it with the ongoing result object
@@ -197,7 +192,6 @@ class PipelineEnvironment(object):
                     if k not in self.external_di:
                         result[k] = item
         return result
-
 
     def wrap(self, what):
         name = ("class_" if isclass(what) else "function_") +\

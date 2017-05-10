@@ -3,6 +3,17 @@
 documentation
 """
 
+import numpy
+import scipy.ndimage as ndi
+from ..imagestack.imagestack import Dimensions
+from ..application.application import Meta
+
+from mfisp_boxdetection import find_box
+from molyso.generic.rotation import find_rotation, rotate_image
+from molyso.generic.registration import translation_2x1d, shift_image
+from skimage import morphology
+from ..pipeline.executor import Skip, Collected
+
 
 def add_result(**kwargs):
     def _inner(result):
@@ -15,6 +26,7 @@ def remove_result(**kwargs):
         for k, v in kwargs.items():
             del result[k]
         return result
+
     return _inner
 
 
@@ -30,6 +42,7 @@ def set_result(**kwargs):
             else:
                 result[k] = v
         return result
+
     return _inner
 
 
@@ -45,36 +58,20 @@ def pull_metadata_from_image(image, timepoint=None, position=None, calibration=N
     return image, image.meta.time, image.meta.position, image.meta.calibration
 
 
-######
-
-
-from ..imagestack.imagestack import Dimensions
-from ..application.application import Meta
-
-from boxdetection import find_box
-from molyso.generic.rotation import find_rotation, rotate_image
-from molyso.generic.registration import translation_2x1d, shift_image
-from skimage import morphology
-from ..processing.processing import blur_gaussian
-import numpy
-
-
 def skeletonize(binary, skeleton=None):
     return morphology.skeletonize(binary)
 
 
-
-
 _substract_start_frame_start_images = {}
 
-def substract_start_frame(meta, ims, reference_timepoint, image, subtracted_image=None):
 
+def substract_start_frame(meta, ims, reference_timepoint, image, subtracted_image=None):
     gaussian_blur_radius = 15.0
 
     if meta.pos not in _substract_start_frame_start_images:
         reference = image_source(ims, Meta(t=reference_timepoint, pos=meta.pos))  # TODO proper sub pipeline
-        #reference = self.embedded_pipeline([ImageSource], Meta(t=reference_timepoint, pos=meta.pos)).image
-        blurred = blur_gaussian(reference, gaussian_blur_radius)
+        # reference = self.embedded_pipeline([ImageSource], Meta(t=reference_timepoint, pos=meta.pos)).image
+        blurred = ndi.gaussian_filter(reference, gaussian_blur_radius)
         _substract_start_frame_start_images[meta.pos] = blurred
     else:
         blurred = _substract_start_frame_start_images[meta.pos]
@@ -89,19 +86,14 @@ def substract_start_frame(meta, ims, reference_timepoint, image, subtracted_imag
     return image
 
 
-from ..processing.processing import blur_box
-from ..pipeline.executor import Skip, Collected
-
-
-class box_detector_cropper(object):
-
+class BoxDetectorCropper(object):
     _fft_cache = {}
     _boxes = {}
     _angles = {}
 
     def get_parameters(self, ims, timepoint, pos):
         reference = image_source(ims, Meta(t=timepoint, pos=pos))  # TODO proper sub pipeline
-#        reference = self.embedded_pipeline([ImageSource], Meta(t=timepoint, pos=pos)).image
+        #        reference = self.embedded_pipeline([ImageSource], Meta(t=timepoint, pos=pos)).image
         angle = find_rotation(reference)
         reference = rotate_image(reference, angle)
 
@@ -111,11 +103,11 @@ class box_detector_cropper(object):
 
             reference = reference.astype(numpy.float32)
 
-            cleaned_reference = reference - blur_box(reference, 25)
+            cleaned_reference = reference - ndi.uniform_filter(reference, 25)  # "box" blur
             cleaned_reference[cleaned_reference < 0] = 0
             cleaned_reference /= cleaned_reference.max()
 
-            #qimshow(cleaned_reference)
+            # qimshow(cleaned_reference)
 
             crop = find_box(cleaned_reference, throw=True, subsample=2)
             t, b, l, r = crop
@@ -124,18 +116,16 @@ class box_detector_cropper(object):
             cleaned_reference[:, l] = 1
             cleaned_reference[:, r] = 1
 
-            #qimshow(cleaned_reference)
-
         except RuntimeError:
             raise Skip(Meta(pos=pos, t=Collected)) from None
 
         return angle, fft_a, crop
 
-    def __call__(self, ims,  image, meta, reference_timepoint, shift=None, crop=None, angle=None):
+    def __call__(self, ims, image, meta, reference_timepoint, shift=None, crop=None, angle=None):
         # probably implement a voting scheme?
 
         if meta.pos not in self._boxes:
-            self._angles[meta.pos], self._fft_cache[meta.pos], self._boxes[meta.pos] =\
+            self._angles[meta.pos], self._fft_cache[meta.pos], self._boxes[meta.pos] = \
                 self.get_parameters(ims, reference_timepoint, meta.pos)
 
         angle = self._angles[meta.pos]
@@ -172,4 +162,3 @@ def rescale_image_to_uint8(image):
     image *= 255.0
 
     return image.astype(numpy.uint8)
-

@@ -5,7 +5,8 @@ documentation
 
 from ..imagestack import ImageStack, Dimensions
 
-from molyso_nd2.nd2parser import ND2MultiDim
+from nd2file import ND2MultiDim
+
 
 class ND2ImageStack(ImageStack):
     extensions = ('.nd2',)
@@ -48,7 +49,11 @@ class ND2ImageStack(ImageStack):
         position = self.__class__.Position(x=float(pos_meta['x']), y=float(pos_meta['y']), z=float(pos_meta['z']))
 
         meta = self.__class__.Metadata(
-            time=float(self.nd2.get_time(self.nd2.calc_num(multipoint=what[Dimensions.PositionXY], timepoint=what[Dimensions.Time]))),
+            time=float(
+                self.nd2.get_time(
+                    self.nd2.calc_num(multipoint=what[Dimensions.PositionXY], timepoint=what[Dimensions.Time])
+                )
+            ),
             position=position,
             calibration=self.nd2.calibration)
 

@@ -1,5 +1,13 @@
 # coding=utf-8
 
+import numpy
+from os import getpid
+from collections import namedtuple
+from itertools import product
+
+from urllib.parse import urlparse, parse_qs
+
+
 class Dimensions(object):
 
     @classmethod
@@ -13,7 +21,6 @@ class Dimensions(object):
     @classmethod
     def by_char(cls, char):
         return cls.all_by_char()[char]
-
 
     class Dimension(object):
         char = 'd'
@@ -70,18 +77,6 @@ class Dimensions(object):
     """
 
 
-try:
-    from urllib.parse import urlparse, parse_qs
-except ImportError:
-    from urlparse import urlparse, parse_qs
-
-# py27 compatibility
-if 'xrange' in dir(__builtins__):
-    # noinspection PyShadowingBuiltins
-    range = xrange
-
-from os import getpid
-
 class UnsupportedImageError(NotImplementedError):
     pass
 
@@ -91,7 +86,7 @@ class ImageStackAPI(object):
         pass
 
     def get_meta(self, what):
-        return None
+        return {}
 
     def init(self):
         pass
@@ -102,11 +97,11 @@ class ImageStackAPI(object):
     def notify_fork(self):
         pass
 
+
 class ImageStackFilter(object):
     def filter(self, image):
         return image
 
-import numpy
 
 class Image(numpy.ndarray):
     def __new__(cls, input_array, meta=None):
@@ -143,11 +138,9 @@ class UnwrapFilter(ImageStackFilter):
         return image.view(numpy.ndarray)
 
 
-from collections import namedtuple
-from itertools import product
-
 Metadata = namedtuple('Metadata', ['time', 'position', 'calibration'])
 Position = namedtuple('Position', ['x', 'y', 'z'])
+
 
 class ImageStack(ImageStackAPI):
 
@@ -247,7 +240,10 @@ class ImageStack(ImageStackAPI):
                 return self_copy
 
         def collect(self):
-            return {k: v * self.parent.get_subsampling(k) for k, v in self.pinned_indices.items() if k in self.parent._all_dimensions}
+            return {
+                k: v * self.parent.get_subsampling(k)
+                for k, v in self.pinned_indices.items() if k in self.parent._all_dimensions
+            }
 
         def is_fixed(self):
             for item in self.pinned_indices.values():
@@ -319,11 +315,14 @@ class ImageStack(ImageStackAPI):
             self_copy.order = list(new_order)
             return self_copy
 
-
         @property
         def dimensions(self):
-            return [item for item in self.order if item not in self.pinned_indices or type(self.pinned_indices[item]) != int]
-            #return self.order
+            return [
+                item
+                for item in self.order
+                if item not in self.pinned_indices or type(self.pinned_indices[item]) != int
+            ]
+            # return self.order
 
         @property
         def size(self):
@@ -367,7 +366,6 @@ class ImageStack(ImageStackAPI):
             dim = self.dimensions
             for tup in self.every_index:
                 yield dict(zip(dim, tup)), self.__getitem__(tup)
-
 
     def __new__(cls, *args, **kwargs):
         if cls != ImageStack:
@@ -439,7 +437,6 @@ class ImageStack(ImageStackAPI):
                 if d in dimensions:
                     self.subsampling[dimensions[d]] = int(value)
 
-
     def parse_parameters_after(self):
         dimensions = Dimensions.all_by_char()
         for param, value in self.parameters.items():
@@ -447,7 +444,6 @@ class ImageStack(ImageStackAPI):
                 dim = dimensions[param]
                 self.root_view.pinned_indices[dim] = int(value)
                 self.root_view = self.root_view.view([_d for _d in self.root_view.order if _d != dim])
-
 
     def get_subsampling(self, dim):
         try:

@@ -105,7 +105,9 @@ class CziImageStack(ImageStack):
             channel = what[Dimensions.Channel]
         except KeyError:
             channel = 0
-        return _get_image_from_subblock(self.frames[_normalize(dict(C=channel, S=what[Dimensions.PositionXY], T=what[Dimensions.Time]))])
+        return _get_image_from_subblock(self.frames[_normalize(
+            dict(C=channel, S=what[Dimensions.PositionXY], T=what[Dimensions.Time])
+        )])
 
     def get_meta(self, what):
 

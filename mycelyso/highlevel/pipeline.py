@@ -76,7 +76,7 @@ class MycelysoPipeline(PipelineExecutionContext):
 
         # crop the box
 
-        # per_image |= box_detector_cropper
+        # per_image |= BoxDetectorCropper
         # per_image |= create_boxcrop_from_subtracted_image
 
         # per_image |= set_result(subtracted_image=Delete)

@@ -9,7 +9,7 @@ import warnings
 
 with warnings.catch_warnings():
     warnings.simplefilter('ignore')
-    from tiffile import TiffFile
+    from tifffile import TiffFile
 
 
 class TiffImageStack(ImageStack):
@@ -44,6 +44,10 @@ class TiffImageStack(ImageStack):
             interval = 1.0
 
         position = self.__class__.Position(x=0.0, y=0.0, z=0.0)
-        meta = self.__class__.Metadata(time=interval * what[Dimensions.Time], position=position, calibration=calibration)
+        meta = self.__class__.Metadata(
+            time=interval * what[Dimensions.Time],
+            position=position,
+            calibration=calibration
+        )
         return meta
 

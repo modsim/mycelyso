@@ -26,6 +26,39 @@ from ..processing.binarization import experimental_thresholding
 from .pixelframe import PixelFrame
 from .nodeframe import NodeFrame
 
+try:
+    import matplotlib.pyplot as pyplot
+except ImportError:
+    pyplot = None
+
+
+def qimshow(image, cmap='gray'):
+    """
+    debug function
+    :param image: 
+    :param cmap: 
+    :return: 
+    """
+    if not pyplot:
+        raise RuntimeError('matplotlib not installed.')
+    fig = matplotlib.pyplot.figure()
+    ax = fig.add_subplot(111)
+    range_ = ax.imshow(image, cmap=cmap, interpolation='none')
+
+    def _format_coords(x, y):
+        try:
+            y, x = int(y + 0.5), int(x + 0.5)
+            if y < 0 or x < 0:
+                raise IndexError
+            value = image[y, x]
+        except IndexError:
+            value = float('nan')
+        return 'x=%d y=%d value=%1.4f' % (x, y, value,)
+
+    ax.format_coord = _format_coords
+    matplotlib.pyplot.colorbar(range_)
+    matplotlib.pyplot.show()
+
 
 def binarize(image, binary=None):
     return experimental_thresholding(image)
@@ -74,11 +107,7 @@ def graph_statistics(node_frame, result=None):
     }
 
 
-# class clean_up_minimal_threshold(Tunable):
-#     """"""
-#     default = 1000
-
-class clean_up_hole_fill_size(object):
+class CleanUpHoleFillSize(object):
     """"""
     value = 50  # 1000
 
@@ -91,7 +120,7 @@ def clean_up(binary):
 
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
-        binary = remove_small_holes(binary, min_size=clean_up_hole_fill_size.value, connectivity=2)  # TODO
+        binary = remove_small_holes(binary, min_size=CleanUpHoleFillSize.value, connectivity=2)  # TODO
 
     return binary
 

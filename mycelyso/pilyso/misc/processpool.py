@@ -3,15 +3,14 @@
 documentation
 """
 
-from signal import SIGINT
 from time import sleep
-from os import kill
 import datetime
 import traceback
 import heapq
 
+from multiprocessing import Process, Pipe, cpu_count
 
-from multiprocessing import Process, Pipe
+from multiprocessing.pool import Pool
 
 
 class Future(object):
@@ -107,10 +106,7 @@ class Future(object):
         self.process.dispatch()
 
 
-
-
 class WrappedException(RuntimeError):
-
     exception = None
     message = None
 
@@ -118,8 +114,8 @@ class WrappedException(RuntimeError):
         self.exception = exception
         self.message = message
 
-class FutureProcess(Process):
 
+class FutureProcess(Process):
     STARTUP = 0
     RUN = 1
     STOP = 2
@@ -166,7 +162,6 @@ class FutureProcess(Process):
 
 
 class SimpleProcessPool(object):
-
     def new_process(self):
         p = FutureProcess()
         p.start()
@@ -214,19 +209,18 @@ class SimpleProcessPool(object):
             self.active_processes.remove(p)
 
         if p in self.waiting_processes:
-            #print("found a process where it does not belong", p)
+            # print("found a process where it does not belong", p)
             self.waiting_processes.remove(p)
 
         if f in self.active_futures:
             self.active_futures.remove(f)
-
 
         if f in self.waiting_futures:
             # remove one entry, rebuild
             self.waiting_futures.remove(f)
             heapq.heapify(self.waiting_futures)
 
-        #if f in self.waiting_futures:
+        # if f in self.waiting_futures:
         #    #print("found a future where it does not belong", f)
         #    self.waiting_futures.remove(f)
 
@@ -254,13 +248,12 @@ class SimpleProcessPool(object):
 
         f.pool = self
 
-        #self.waiting_futures.add(f)
+        # self.waiting_futures.add(f)
         heapq.heappush(self.waiting_futures, f)
 
         self.schedule()
 
         return f
-
 
     # ugly signature
     def apply_async(self, fun, args=None, kwargs=None):
@@ -290,7 +283,7 @@ class SimpleProcessPool(object):
             if len(self.waiting_futures) == 0:
                 break
 
-            #f = self.waiting_futures.pop()
+            # f = self.waiting_futures.pop()
             f = heapq.heappop(self.waiting_futures)
 
             p = self.waiting_processes.pop()
@@ -337,15 +330,10 @@ class DuckTypedApplyResult(object):
         return self.value
 
 
-
-from multiprocessing import cpu_count
-
-
-from multiprocessing.pool import Pool
-
 class NormalPool(Pool):
     def advanced_apply(self, command, args, **kwargs):
         return self.apply(func=command, args=args)
+
 
 class InProcessFakePool(object):
     @staticmethod
@@ -353,6 +341,7 @@ class InProcessFakePool(object):
         def _bind_it(inner_args):
             def _perform():
                 return command(inner_args)
+
             return _perform
 
         return DuckTypedApplyResult(_bind_it(args))

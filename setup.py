@@ -16,7 +16,11 @@ setup(
     url='https://github.com/modsim/mycelyso',
     packages=find_packages(),
     # scripts=[''],
-    install_requires=['numpy', 'scipy', 'scikit-image>=0.12', 'networkx', 'tables', 'tifffile'],
+    install_requires=[
+        'numpy', 'scipy', 'scikit-image>=0.12', 'networkx', 'tables', 'numexpr', 'pandas',
+        'tifffile', 'nd2file',
+        'mfisp_boxdetection', 'molyso'
+    ],
     extras_require={
         'fast_segmentation': ['numexpr'],
     },

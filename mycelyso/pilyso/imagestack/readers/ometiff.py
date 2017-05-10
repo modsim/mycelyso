@@ -8,6 +8,7 @@ from .tiff import TiffImageStack
 
 from xml.etree import cElementTree as ElementTree
 
+
 class OMETiffImageStack(TiffImageStack):
     extensions = ('.ome.tif', '.ome.tiff',)
 
@@ -138,7 +139,6 @@ class OMETiffImageStack(TiffImageStack):
                 images[n] = planes
 
         return images
-
 
     def get_data(self, what):
 

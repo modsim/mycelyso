@@ -39,7 +39,10 @@ def hdf5_node_name(s):
 def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
     def _inner_hdf5_output(meta, result):
 
-        meta_str = '_'.join(k + '_' + ('%09d' % v if type(v) == int else v.__name__) for k, v in sorted(meta._asdict().items(), key=lambda x: x[0]))
+        meta_str = '_'.join(
+            k + '_' + ('%09d' % v if type(v) == int else v.__name__)
+            for k, v in sorted(meta._asdict().items(), key=lambda x: x[0])
+        )
 
         prefix = '/results/'
 
@@ -69,12 +72,16 @@ def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
                 begin_time = datetime.now()
 
                 while isfile(lock_file) or local_timeout == 0:
-                    #print(lock_file, isfile(lock_file), local_timeout)
+                    # print(lock_file, isfile(lock_file), local_timeout)
                     sleep(1.0)
                     current_time = datetime.now()
                     if (current_time - begin_time).total_seconds() > local_timeout:
                         newfilename = '%s_%s.h5' % (base_filename, current_time.strftime("%Y%m%d%H%M%S_%f"),)
-                        print("WARNING: Waited %d seconds to acquire a lock for \"%s\", but failed. Will now try to write data to new file \"%s\"." % (local_timeout, filename, newfilename,))
+                        print(
+                            "WARNING: Waited %d seconds to acquire a lock for \"%s\", "
+                            "but failed. Will now try to write data to new file \"%s\"." %
+                            (local_timeout, filename, newfilename,)
+                        )
                         filename = newfilename
                         lock_file = '%s.lock' % (filename,)
                         break
@@ -190,7 +197,6 @@ def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
 
                                         table_counter[k] += 1
 
-
                                         i_mapping = []
 
                                         for n, i_table in enumerate(row[k]):
@@ -266,7 +272,7 @@ def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
             except NodeError as e:
                 print("NodeError Exception occurred while writing, " +
                       "apparently the file has already been used to store similar results.")
-                #print("Leaving it LOCKED (remove manually!) and trying to write to another file!")
+                # print("Leaving it LOCKED (remove manually!) and trying to write to another file!")
                 local_timeout = 0
                 release_lock(lock_file)
 
@@ -283,12 +289,12 @@ def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
 
 # Storing other image data or paletted images
 
-#from tables import Atom
-#arr = store._handle.create_carray(h5path, name, Atom.from_dtype(data.dtype), data.shape, createparents=True)
-#arr[:] = data[:]
+# from tables import Atom
+# arr = store._handle.create_carray(h5path, name, Atom.from_dtype(data.dtype), data.shape, createparents=True)
+# arr[:] = data[:]
 
-#if data.dtype == bool:
-    #arr.attrs.PALETTE = pal.object_id
+# if data.dtype == bool:
+    # arr.attrs.PALETTE = pal.object_id
 
 # if False and True not in palette_written:
 #

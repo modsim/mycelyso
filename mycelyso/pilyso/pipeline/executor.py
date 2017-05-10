@@ -35,6 +35,7 @@ class NotDispatchedYet(object):
 
 singleton_class_mapper_local_cache = {}
 
+
 def singleton_class_mapper(class_, what, args, kwargs):
     try:
         if class_ not in singleton_class_mapper_local_cache:
@@ -54,15 +55,19 @@ try:
         return p(range(n))
 
 except ImportError:
+    progressbar = None
+
     try:
         from clint.textui.progress import bar
 
         def get_progress_bar(n):
             return bar(range(n))
     except ImportError:
+        bar = None
+
         def get_progress_bar(n):
             return range(n)
-        #raise ImportError
+        # raise ImportError
 
 
 class PipelineExecutor(object):
@@ -239,7 +244,8 @@ class PipelineExecutor(object):
 
                             if op not in cache_originated:
                                 token = (reverse_todo[op], op,)
-                                # so far, solely accessing (write) the cache from one process should mitigate locking issues
+                                # so far, solely accessing (write) the cache from
+                                # one process should mitigate locking issues
                                 self.set_cache(token, result)
 
                         except WrappedException as ee:
