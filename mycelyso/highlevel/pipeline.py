@@ -3,15 +3,15 @@
 documentation
 """
 
-from pilyso.application import App, PipelineExecutionContext, PipelineEnvironment, Every, Collected, Meta, Skip
-from pilyso.imagestack import ImageStack
-from pilyso.steps import \
+from ..pilyso.application import App, PipelineExecutionContext, PipelineEnvironment, Every, Collected, Meta, Skip
+from ..pilyso.imagestack import ImageStack
+from ..pilyso.steps import \
     image_source, pull_metadata_from_image, substract_start_frame, rescale_image_to_uint8, set_result, Delete
 from os.path import basename, abspath
 
 from .steps import *
 
-from pilyso.misc.h5writer import hdf5_output, hdf5_node_name
+from ..pilyso.misc.h5writer import hdf5_output, hdf5_node_name
 from .. import BANNER
 
 
