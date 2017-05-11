@@ -15,8 +15,8 @@ from ..misc.hacks.multiprocessing_patch import *
 from collections import namedtuple
 
 from ..imagestack.imagestack import ImageStack, Dimensions
+from ..imagestack.readers import *
 from ..pipeline import PipelineExecutor
-
 
 
 def parse_range(s, maximum=0):
