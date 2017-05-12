@@ -208,6 +208,8 @@ def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fat
                 continue
 
             def distance_condition(current, new):
+                if new == 0.0 or current == 0.0:
+                    return False
                 return (new > current) or (abs(1.0 - (current / new)) < 0.2)
 
             distance = frame.shortest_paths[e, other]
@@ -243,7 +245,7 @@ def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fat
             if distance == float('inf') or next_distance == float('inf'):
                 # the first one should never happen,
                 # the nodes are no longer connected on the next frame?
-                fates[track_id] = "formerly connected components became unconnected? (dist/nextdist %.4f %.4f)" % (
+                fates[track_id] = "formerly connected components became unconnected? (dist/next dist %.4f %.4f)" % (
                     distance, next_distance
                 )
                 # print(fates[track_id])
@@ -251,7 +253,7 @@ def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fat
 
             if not distance_condition(distance, next_distance):
                 # a later distance was SHORTER than the current, that means tracking error or cycle in graph
-                fates[track_id] = "track aborted due to shortcut (cycle or mistrack) [last %f > next %f]" % (
+                fates[track_id] = "track aborted due to shortcut (cycle or tracking error) [last %f > next %f]" % (
                     distance, next_distance
                 )
                 # print(fates[track_id])
@@ -272,22 +274,6 @@ def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fat
 
         last_valid = valid
     return tracks, fates
-
-
-# pixel data:
-# filled area, total area
-# "has outgrown" flag:
-
-# lets generate different data
-
-# first: endpoint lengths. endpoint to branchpoint, tracked over time
-# biological result => "mean length before branching"
-
-# as well: overall length / number of branchpoints
-
-# endpiece_tracking = {}
-# endpiece_tracking[i] = set()
-# endpiece_tracking[i] += {(e, other, e_on_next, other_on_next)}
 
 
 # noinspection PyProtectedMember

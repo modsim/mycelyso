@@ -28,7 +28,8 @@ def find_linear_window(
         window = 3
 
     pairs = [[i, min(i+window, data.shape[0])] for i in range(0, data.shape[0], window)]
-    results = [[b, e, linregress(data[b:e, 0], data[b:e, 1])] for b, e in pairs]
+    with np.errstate(all='ignore'):
+        results = [[b, e, linregress(data[b:e, 0], data[b:e, 1])] for b, e in pairs]
 
     condition_check = (lambda r: getattr(r, condition[0]) > condition[2]) if condition[1] == 'gt'\
         else (lambda r: getattr(r, condition[0]) < condition[2])
@@ -56,7 +57,8 @@ def find_linear_window(
 
     filtered_data = data[begin:end, :]
 
-    regression = linregress(filtered_data[:, 0], filtered_data[:, 1])
+    with np.errstate(all='ignore'):
+        regression = linregress(filtered_data[:, 0], filtered_data[:, 1])
 
     if return_begin_end:
         return begin, end, regression
