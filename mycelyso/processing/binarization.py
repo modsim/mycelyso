@@ -3,7 +3,7 @@
 documentation
 """
 
-import numpy
+import numpy as np
 
 try:
     import numexpr
@@ -15,7 +15,7 @@ from skimage.feature import shape_index
 
 
 def mean_and_std(image, window_size=15):
-    enlarged = numpy.zeros((image.shape[0] + 2 * window_size, image.shape[1] + 2 * window_size), numpy.double)
+    enlarged = np.zeros((image.shape[0] + 2 * window_size, image.shape[1] + 2 * window_size), np.double)
 
     enlarged[window_size:-window_size, window_size:-window_size] = image
     enlarged[0:window_size] = enlarged[window_size + 1, :]
@@ -33,7 +33,7 @@ def mean_and_std(image, window_size=15):
         c = mat[:-2 * window_size, 2 * window_size:]
         d = mat[2 * window_size:, :-2 * window_size]
         if numexpr:
-            return numexpr.evaluate("(a + b) - (c + d)").astype(numpy.float32)
+            return numexpr.evaluate("(a + b) - (c + d)").astype(np.float32)
         else:
             return (a + b) - (c + d)
 
@@ -47,7 +47,7 @@ def mean_and_std(image, window_size=15):
     if numexpr:
         std = numexpr.evaluate("sqrt(sums_squared / area - mean ** 2)")
     else:
-        std = numpy.sqrt(sums_squared / area - mean ** 2)
+        std = np.sqrt(sums_squared / area - mean ** 2)
 
     return mean, std
 
@@ -74,7 +74,7 @@ def experimental_thresholding(image, window_size=15, gaussian_radius=3.0, shift=
         )
     else:
         return image < \
-               (numpy.exp((-(sim - target)**2)/quotient) + shift) * \
+               (np.exp((-(sim - target)**2)/quotient) + shift) * \
                means * \
                ((image_mean + stddev) * (stddev + ((stddev - stddev_min) / stddev_delta)))/(means**2 - stddev)
 

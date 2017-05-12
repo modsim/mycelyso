@@ -2,7 +2,7 @@
 
 from itertools import chain
 
-import numpy
+import numpy as np
 from scipy.sparse import lil_matrix
 from scipy.sparse.csgraph import shortest_path, connected_components
 from scipy.spatial.ckdtree import cKDTree as KDTree
@@ -53,7 +53,7 @@ class NodeFrame(object):
 
         total_length = e_length + j_length
 
-        data = numpy.r_[endpoint_tree_data, junction_tree_data]
+        data = np.r_[endpoint_tree_data, junction_tree_data]
 
         endpoint_tree_data = data[:e_length]
         junction_tree_data = data[e_length:]
@@ -156,7 +156,7 @@ class NodeFrame(object):
     def cleanup_adjacency(self):
         non_empty_mask = (self.adjacency.getnnz(axis=0) + self.adjacency.getnnz(axis=1)) > 0
         # noinspection PyTypeChecker
-        empty_indices, = numpy.where(~non_empty_mask)
+        empty_indices, = np.where(~non_empty_mask)
         # these int casts can go away, once scipy #5026 is in
 
         # if this ever becomes multi threaded, we should lock the trees now
@@ -190,8 +190,8 @@ class NodeFrame(object):
         coo = self.adjacency.tocoo()
 
         for n, m, value in zip(coo.row, coo.col, coo.data):
-            npos, = numpy.where(n >= empty_indices)
-            mpos, = numpy.where(m >= empty_indices)
+            npos, = np.where(n >= empty_indices)
+            mpos, = np.where(m >= empty_indices)
             npos = 0 if len(npos) == 0 else npos[-1] + 1
             mpos = 0 if len(mpos) == 0 else mpos[-1] + 1
             new_adjacency[n-npos, m-mpos] = value
@@ -215,7 +215,7 @@ class NodeFrame(object):
 
     def get_connected_nodes(self, some_node):
         label = self.connected_components[some_node]
-        return numpy.where(self.connected_components[self.connected_components == label])[0]
+        return np.where(self.connected_components[self.connected_components == label])[0]
 
     def track(self, successor):
         junction_shift_radius = 50.0  # TODO
@@ -226,8 +226,8 @@ class NodeFrame(object):
 
         successor_len = len(successor.data)
 
-        self_to_successor = numpy.zeros(self_len, dtype=int)
-        successor_to_self = numpy.zeros(successor_len, dtype=int)
+        self_to_successor = np.zeros(self_len, dtype=int)
+        successor_to_self = np.zeros(successor_len, dtype=int)
 
         self_to_successor[:] = -1
         successor_to_self[:] = -1
@@ -253,14 +253,14 @@ class NodeFrame(object):
             else:
                 search_point = self.data[self_hit]
 
-                hit_points = numpy.array([successor.data[h] for h in n])
+                hit_points = np.array([successor.data[h] for h in n])
 
-                distances = numpy.sqrt(((hit_points - search_point) ** 2).sum(axis=1))
+                distances = np.sqrt(((hit_points - search_point) ** 2).sum(axis=1))
 
-                indexed = numpy.c_[distances, n]
+                indexed = np.c_[distances, n]
                 ordered_n = [int(nn[1]) for nn in sorted(indexed, key=lambda t: t[0])]
 
-                min_distance = numpy.argmin(distances)
+                min_distance = np.argmin(distances)
 
                 n = n[min_distance]
                 if self_hit > self.junction_shift:

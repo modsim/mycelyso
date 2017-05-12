@@ -7,6 +7,7 @@ import argparse
 import logging
 import multiprocessing
 import sys
+import numpy as np
 
 from ..misc.hacks.maintenance_interrupt import install_maintenance_interrupt
 from ..misc.hacks.recursionlimit_raise import *
@@ -76,7 +77,7 @@ def prettify_numpy_array(arr, space_or_prefix):
     :return:
     """
     six_spaces = ' ' * 6
-    prepared = repr(numpy.array(arr)).replace(')', '').replace('array(', six_spaces)
+    prepared = repr(np.array(arr)).replace(')', '').replace('array(', six_spaces)
     if isinstance(space_or_prefix, int):
         return prepared.replace(six_spaces, ' ' * space_or_prefix)
     else:

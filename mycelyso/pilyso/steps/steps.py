@@ -3,7 +3,7 @@
 documentation
 """
 
-import numpy
+import numpy as np
 import scipy.ndimage as ndi
 from ..imagestack.imagestack import Dimensions
 from ..application.application import Meta
@@ -51,7 +51,7 @@ def image_source(ims, meta, image=None):
 
 
 def image_to_ndarray(image):
-    return numpy.array(image)
+    return np.array(image)
 
 
 def pull_metadata_from_image(image, timepoint=None, position=None, calibration=None):
@@ -76,7 +76,7 @@ def substract_start_frame(meta, ims, reference_timepoint, image, subtracted_imag
     else:
         blurred = _substract_start_frame_start_images[meta.pos]
 
-    image = image.astype(numpy.float32)
+    image = image.astype(np.float32)
 
     image /= blurred
 
@@ -101,7 +101,7 @@ class BoxDetectorCropper(object):
 
         try:
 
-            reference = reference.astype(numpy.float32)
+            reference = reference.astype(np.float32)
 
             cleaned_reference = reference - ndi.uniform_filter(reference, 25)  # "box" blur
             cleaned_reference[cleaned_reference < 0] = 0
@@ -155,10 +155,10 @@ def create_boxcrop_from_subtracted_image(subtracted_image, shift, angle, crop, r
 
 
 def rescale_image_to_uint8(image):
-    image = image.astype(numpy.float32)
+    image = image.astype(np.float32)
     image -= image.min()
     image /= image.max()
 
     image *= 255.0
 
-    return image.astype(numpy.uint8)
+    return image.astype(np.uint8)

@@ -3,7 +3,7 @@
 documentation
 """
 
-import numpy
+import numpy as np
 
 from skimage.measure import label
 
@@ -17,11 +17,11 @@ class PixelFrame(object):
         self.timepoint = timepoint  # meta
 
         # binary image of skeleton, 0 and 1s (forced bool cast)
-        self.image = (image > 0).astype(numpy.uint8)
+        self.image = (image > 0).astype(np.uint8)
 
         self.marker = label(image)
 
-        self.graph_lengths = numpy.bincount(self.marker.ravel())
+        self.graph_lengths = np.bincount(self.marker.ravel())
 
         self.graph_count = self.graph_lengths.shape[0]
 
@@ -80,7 +80,7 @@ class PixelFrame(object):
                 if n == 0:
                     break
 
-            points = numpy.array(points)
+            points = np.array(points)
 
             if is_junction(conn[y, x]):
                 if nm[y, x] > 0:
@@ -93,7 +93,7 @@ class PixelFrame(object):
 
         if False:
 
-            result_buffer = numpy.zeros_like(conn, dtype=numpy.uint16)
+            result_buffer = np.zeros_like(conn, dtype=np.uint16)
 
             result_buffer[self.image > 0] = 2**16 - 1
 

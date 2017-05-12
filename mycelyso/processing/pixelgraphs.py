@@ -3,15 +3,15 @@
 documentation
 """
 
-import numpy
+import numpy as np
 
 from scipy import ndimage as ndi
 
 
-_COUNTING_KERNEL = numpy.array(
+_COUNTING_KERNEL = np.array(
     [[1, 1, 1],
      [1, 0, 1],
-     [1, 1, 1]], dtype=numpy.uint8
+     [1, 1, 1]], dtype=np.uint8
 )
 
 _COUNTING_KERNEL.flags.writeable = False
@@ -19,10 +19,10 @@ _COUNTING_KERNEL.flags.writeable = False
 N, NW, W, SW, S, SE, E, NE = 2, 1, 128, 64, 32, 16, 8, 4
 
 # noinspection PyPep8
-_NEIGHBORHOOD_KERNEL = numpy.array(
+_NEIGHBORHOOD_KERNEL = np.array(
     [[NW,  N, NE],
      [ W,  0,  E],
-     [SW,  S, SE]], dtype=numpy.uint8
+     [SW,  S, SE]], dtype=np.uint8
 )
 
 # a constant
@@ -58,11 +58,11 @@ _INVERSE_NEIGHBORS = {
 
 
 def get_connectivity_map(binary):
-    return binary * ndi.correlate(binary.astype(numpy.uint8), _COUNTING_KERNEL, mode='constant')
+    return binary * ndi.correlate(binary.astype(np.uint8), _COUNTING_KERNEL, mode='constant')
 
 
 def get_neighborhood_map(binary):
-    return binary * ndi.correlate(binary.astype(numpy.uint8), _NEIGHBORHOOD_KERNEL, mode='constant')
+    return binary * ndi.correlate(binary.astype(np.uint8), _NEIGHBORHOOD_KERNEL, mode='constant')
 
 
 def get_next_neighbor(num):
@@ -95,9 +95,9 @@ def is_end(connectivity):
 
 def where2d(image):
 
-    hits = numpy.where(image.ravel())[0]
+    hits = np.where(image.ravel())[0]
 
-    result = numpy.c_[hits, hits]
+    result = np.c_[hits, hits]
 
     result[:, 0] //= image.shape[1]
     result[:, 1] %= image.shape[1]

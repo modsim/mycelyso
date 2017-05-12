@@ -3,7 +3,7 @@
 documentation
 """
 
-import numpy
+import numpy as np
 
 from networkx.readwrite import GraphMLWriter
 
@@ -11,8 +11,8 @@ from networkx.readwrite import GraphMLWriter
 def to_graphml_writer(g):
     writer = GraphMLWriter()
     writer.xml_type.update({
-        numpy.float32: 'double',
-        numpy.float64: 'double'
+        np.float32: 'double',
+        np.float64: 'double'
     })
     writer.add_graph_element(g)
     return writer

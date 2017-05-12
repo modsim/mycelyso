@@ -3,7 +3,7 @@
 documentation
 """
 
-import numpy
+import numpy as np
 from scipy.stats import linregress
 
 
@@ -17,9 +17,9 @@ def find_linear_window(
         return_begin_end=False,
         return_nan_if_impossible=True
 ):
-    data = numpy.c_[x, y]
+    data = np.c_[x, y]
 
-    data[:, 1][~numpy.isfinite(data[:, 1])] = 0.0
+    data[:, 1][~np.isfinite(data[:, 1])] = 0.0
 
     if type(window) == float:
         window = int(window * data.shape[0])
@@ -48,10 +48,10 @@ def find_linear_window(
             else:
                 return regression
 
-    if numpy.isnan(begin):
+    if np.isnan(begin):
         begin = filtered_results[0][0]
 
-    if numpy.isnan(end):
+    if np.isnan(end):
         end = filtered_results[-1][1]
 
     filtered_data = data[begin:end, :]

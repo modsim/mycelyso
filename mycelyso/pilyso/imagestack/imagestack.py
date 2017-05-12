@@ -1,6 +1,6 @@
 # coding=utf-8
 
-import numpy
+import numpy as np
 from os import getpid
 from collections import namedtuple
 from itertools import product
@@ -103,9 +103,9 @@ class ImageStackFilter(object):
         return image
 
 
-class Image(numpy.ndarray):
+class Image(np.ndarray):
     def __new__(cls, input_array, meta=None):
-        obj = numpy.asarray(input_array).view(cls)
+        obj = np.asarray(input_array).view(cls)
         obj.meta = meta
         return obj
 
@@ -117,17 +117,17 @@ class Image(numpy.ndarray):
 
     def __array_wrap__(self, out_arr, context=None):
         # noinspection PyArgumentList
-        return numpy.ndarray.__array_wrap__(self, out_arr, context)
+        return np.ndarray.__array_wrap__(self, out_arr, context)
 
 
 class FloatFilter(ImageStackFilter):
     def filter(self, image):
-        return image.astype(numpy.float32, copy=False)
+        return image.astype(np.float32, copy=False)
 
 
 class MinMaxFilter(ImageStackFilter):
     def filter(self, image):
-        fimage = image.astype(numpy.float32, copy=True)
+        fimage = image.astype(np.float32, copy=True)
         fimage -= fimage.min()
         fimage /= fimage.max()
         return fimage
@@ -135,7 +135,7 @@ class MinMaxFilter(ImageStackFilter):
 
 class UnwrapFilter(ImageStackFilter):
     def filter(self, image):
-        return image.view(numpy.ndarray)
+        return image.view(np.ndarray)
 
 
 Metadata = namedtuple('Metadata', ['time', 'position', 'calibration'])

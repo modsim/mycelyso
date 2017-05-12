@@ -13,7 +13,7 @@ from datetime import datetime
 from os import remove, fdopen, open as low_level_open, O_CREAT, O_EXCL, O_WRONLY, getpid
 from fnmatch import fnmatch
 
-import numpy
+import numpy as np
 
 timeout = 5 * 60.0
 
@@ -121,7 +121,7 @@ def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
                         h5path = h5path.replace('//', '/')
                         # hdf5 stores bitfields as well, but default 0,1 will be invisible on a fixed 0-255 palette ...
                         if data.dtype == bool and upsample_binary:
-                            data = (data * 255).astype(numpy.uint8)
+                            data = (data * 255).astype(np.uint8)
                         arr = h5.create_carray(h5path, name, obj=data, createparents=True, filters=compression_filter)
                         arr.attrs.CLASS = 'IMAGE'
                         arr.attrs.IMAGE_SUBCLASS = 'IMAGE_GRAYSCALE'
@@ -298,7 +298,7 @@ def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
 
 # if False and True not in palette_written:
 #
-#     palette = numpy.zeros((256, 3,), dtype=numpy.uint8)
+#     palette = np.zeros((256, 3,), dtype=np.uint8)
 #
 #     s = 256//3
 #

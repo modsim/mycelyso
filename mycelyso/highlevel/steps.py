@@ -7,7 +7,7 @@ documentation
 import warnings
 from itertools import product, chain
 
-import numpy
+import numpy as np
 from scipy.stats import linregress
 
 from skimage.morphology import remove_small_holes, remove_small_objects, skeletonize as sk_skeletonize
@@ -80,7 +80,7 @@ def image_statistics(image, calibration, result=None):
 
 
 def quantify_binary(binary, calibration, result=None):
-    ones = numpy.sum(binary)
+    ones = np.sum(binary)
     total = binary.shape[0] * binary.shape[1]
     return {
         'covered_ratio': ones / total,
@@ -136,14 +136,14 @@ def remove_border_artifacts(binary):
     border = 15
 
     labeled = label(binary)
-    corner_pixels = numpy.r_[
+    corner_pixels = np.r_[
         labeled[0, :].ravel(),
         labeled[-1, :].ravel(),
         labeled[:, 0].ravel(),
         labeled[:, -1].ravel()
     ]
 
-    corner_pixels = set(numpy.unique(corner_pixels)) - {0}
+    corner_pixels = set(np.unique(corner_pixels)) - {0}
 
     for region in regionprops(labeled):
         if region.label in corner_pixels:
@@ -308,7 +308,7 @@ def prepare_tracked_fragments(collected, tracked_fragments, tracked_fragments_fa
 
         track_list = [[i, track[i]] for i in sorted(track.keys())]
 
-        times_lengths = numpy.array(
+        times_lengths = np.array(
             [[collected[key_list[i]]['node_frame'].timepoint, calibration * distance]
              for i, (e, other, e_on_next, other_on_next, distance, distance_num)
              in track_list])
@@ -331,7 +331,7 @@ def prepare_tracked_fragments(collected, tracked_fragments, tracked_fragments_fa
              } for i, (e, other, e_on_next, other_on_next, distance, distance_num) in track_list]
         )
 
-        distance_num_helper = numpy.array(
+        distance_num_helper = np.array(
             [distance_num for i, (e, other, e_on_next, other_on_next, distance, distance_num) in track_list])
 
         times = times_lengths[:, 0]
@@ -360,9 +360,9 @@ def prepare_tracked_fragments(collected, tracked_fragments, tracked_fragments_fa
             regression = linregress(times, relative_lengths)._asdict()
             row.update({'normalized_regression_' + k: v for k, v in regression.items()})
 
-            regression = linregress(times, numpy.log(lengths))._asdict()
+            regression = linregress(times, np.log(lengths))._asdict()
             row.update({'logarithmic_plain_regression_' + k: v for k, v in regression.items()})
-            regression = linregress(times, numpy.log(relative_lengths))._asdict()
+            regression = linregress(times, np.log(relative_lengths))._asdict()
             row.update({'logarithmic_normalized_regression_' + k: v for k, v in regression.items()})
 
             regression = prepare_optimized_regression(times, lengths)
@@ -371,10 +371,10 @@ def prepare_tracked_fragments(collected, tracked_fragments, tracked_fragments_fa
             regression = prepare_optimized_regression(times, relative_lengths)
             row.update({'optimized_normalized_regression_' + k: v for k, v in regression.items()})
 
-            regression = prepare_optimized_regression(times, numpy.log(lengths))
+            regression = prepare_optimized_regression(times, np.log(lengths))
             row.update({'optimized_logarithmic_regression_' + k: v for k, v in regression.items()})
 
-            regression = prepare_optimized_regression(times, numpy.log(relative_lengths))
+            regression = prepare_optimized_regression(times, np.log(relative_lengths))
             row.update({'optimized_logarithmic_normalized_regression_' + k: v for k, v in regression.items()})
         except IndexError:
             pass
@@ -392,23 +392,23 @@ def prepare_position_regressions(collected, result):
 
     # noinspection PyProtectedMember
     def prepare_for_field(field_name):
-        data = numpy.array([[f.timepoint, f[field_name]] for f in collected.values()])
+        data = np.array([[f.timepoint, f[field_name]] for f in collected.values()])
 
         regression = linregress(data[:, 0], data[:, 1])._asdict()
         row.update({field_name + '_linear_regression_' + k: v for k, v in regression.items()})
 
-        regression = linregress(data[:, 0], numpy.log(data[:, 1]))._asdict()
+        regression = linregress(data[:, 0], np.log(data[:, 1]))._asdict()
         row.update({field_name + '_logarithmic_regression_' + k: v for k, v in regression.items()})
 
         regression = prepare_optimized_regression(data[:, 0], data[:, 1])
         row.update({field_name + '_optimized_linear_regression_' + k: v for k, v in regression.items()})
 
-        regression = prepare_optimized_regression(data[:, 0], numpy.log(data[:, 1]))
+        regression = prepare_optimized_regression(data[:, 0], np.log(data[:, 1]))
         row.update({field_name + '_optimized_logarithmic_regression_' + k: v for k, v in regression.items()})
 
     for field in fields:
         try:
-            with numpy.errstate(divide='ignore', invalid='ignore'):
+            with np.errstate(divide='ignore', invalid='ignore'):
                 prepare_for_field(field)
         except IndexError:
             pass
@@ -503,26 +503,26 @@ class MycelysoStepsUnused(object):
                 vec = pos_e - pos_o
 
                 # arctan2 takes y, x parameters BUT our coordinates are stored the same way ;)
-                angle = numpy.arctan2(vec[0], vec[1])
+                angle = np.arctan2(vec[0], vec[1])
 
                 while angle < 0.0:
-                    angle += 2*numpy.pi
+                    angle += 2*np.pi
 
-                return float(numpy.fmod(angle, 2*numpy.pi))
+                return float(np.fmod(angle, 2*np.pi))
 
             def get_next_neighbor(e):
                 other_node = frame.adjacency[e, :].nonzero()[1][0]
                 return other_node, frame.adjacency[e, other_node]
 
             radius = 30.0
-            max_angle = numpy.deg2rad(15.0)
+            max_angle = np.deg2rad(15.0)
 
             def contains_cycle(adjacency):
                 stack = []
                 from scipy.sparse import lil_matrix
                 visited = lil_matrix(adjacency.shape, dtype=bool)
                 for n, row in enumerate(adjacency):
-                    indices, = numpy.where(row.getnnz(axis=0))
+                    indices, = np.where(row.getnnz(axis=0))
                     for m in indices:
                         if visited[n, m]:
                             continue
@@ -556,17 +556,17 @@ class MycelysoStepsUnused(object):
                     if a in worked_at or b in worked_at:
                         continue
 
-                    dist = numpy.sqrt(((frame.data[a] - frame.data[b])**2).sum())
+                    dist = np.sqrt(((frame.data[a] - frame.data[b])**2).sum())
 
                     angle_a, angle_b = angles[a], angles[b]
 
-                    delta_angle = abs(numpy.fmod((angle_a + numpy.pi) - angle_b + 2*numpy.pi, numpy.pi/2))
+                    delta_angle = abs(np.fmod((angle_a + np.pi) - angle_b + 2*np.pi, np.pi/2))
 
-                    if delta_angle > (numpy.pi/2)/2:
-                        delta_angle -= (numpy.pi/2)
+                    if delta_angle > (np.pi/2)/2:
+                        delta_angle -= (np.pi/2)
                         delta_angle = abs(delta_angle)
 
-                    #print(angle_a - angle_b, angle_a, angle_b, delta_angle, numpy.rad2deg(delta_angle))
+                    #print(angle_a - angle_b, angle_a, angle_b, delta_angle, np.rad2deg(delta_angle))
 
                     if delta_angle == 0.0: # compare to eps
                         continue
@@ -679,7 +679,7 @@ class MycelysoStepsUnused(object):
 
 
             track_list = [[i, track[i]] for i in sorted(track.keys())]
-            times_lengths = numpy.array(
+            times_lengths = np.array(
                 [[collected[key_list[i]]['node_frame'].timepoint, calibration * distance]
                  for i, (e, other, e_on_next, other_on_next, distance, distance_num)
                  in track_list])
@@ -705,7 +705,7 @@ class MycelysoStepsUnused(object):
                          'ultimate fate: ' + fates[track_id] if track_id in fates else "none?"))
                 p.plot(times_lengths[:, 0], times_lengths[:, 1])
 
-                x = numpy.linspace(times_lengths[0, 0], times_lengths[-1, 0])
+                x = np.linspace(times_lengths[0, 0], times_lengths[-1, 0])
                 p.plot(x, x*slope + intercept)
 
             with DebugPlot() as p:
@@ -714,7 +714,7 @@ class MycelysoStepsUnused(object):
                          'ultimate fate: ' + fates[track_id] if track_id in fates else "none?"))
                 p.plot(times_lengths[:, 0], times_lengths[:, 1] / times_lengths[:, 1].min())
 
-                x = numpy.linspace(times_lengths[0, 0], times_lengths[-1, 0])
+                x = np.linspace(times_lengths[0, 0], times_lengths[-1, 0])
                 p.plot(x, x*r_slope + r_intercept)
 
 
@@ -788,19 +788,19 @@ class MycelysoStepsUnused(object):
             print(times_lengths.tolist())
             print("*")
 
-        slopes = numpy.array(slopes)
-        r_slopes = numpy.array(r_slopes)
+        slopes = np.array(slopes)
+        r_slopes = np.array(r_slopes)
 
         try:
             with DebugPlot() as p:
                     p.title("Slopes Boxplot\nmedian=%.2f mean=%.2f stddev=%.2f" %
-                            (float(numpy.median(slopes[:, 0])), float(numpy.mean(slopes[:, 0])),
-                             float(numpy.std(slopes[:, 0]))))
+                            (float(np.median(slopes[:, 0])), float(np.mean(slopes[:, 0])),
+                             float(np.std(slopes[:, 0]))))
                     p.boxplot(slopes[:, 0])
             with DebugPlot() as p:
                     p.title("Slopes Histogram\nmedian=%.2f mean=%.2f stddev=%.2f" %
-                            (float(numpy.median(slopes[:, 0])), float(numpy.mean(slopes[:, 0])),
-                            float(numpy.std(slopes[:, 0]))))
+                            (float(np.median(slopes[:, 0])), float(np.mean(slopes[:, 0])),
+                            float(np.std(slopes[:, 0]))))
                     try:
                         p.hist(slopes[:, 0])
                     except AttributeError:
@@ -808,29 +808,29 @@ class MycelysoStepsUnused(object):
 
             with DebugPlot() as p:
                     p.title("Slopes Scatter\nmedian=%.2f mean=%.2f stddev=%.2f" %
-                            (float(numpy.median(slopes[:, 0])), float(numpy.mean(slopes[:, 0])),
-                            float(numpy.std(slopes[:, 0]))))
+                            (float(np.median(slopes[:, 0])), float(np.mean(slopes[:, 0])),
+                            float(np.std(slopes[:, 0]))))
                     p.scatter(slopes[:, 1], slopes[:, 0], s=2.5*slopes[:, 2], linewidths=(0.0,))
                     p.xlabel('timepoint')
                     p.ylabel('growth rate (slope)')
 
             with DebugPlot() as p:
                     p.title("Relative Slopes Boxplot\nmedian=%.2f mean=%.2f stddev=%.2f" %
-                            (float(numpy.median(r_slopes[:, 0])), float(numpy.mean(r_slopes[:, 0])),
-                            float(numpy.std(r_slopes[:, 0]))))
+                            (float(np.median(r_slopes[:, 0])), float(np.mean(r_slopes[:, 0])),
+                            float(np.std(r_slopes[:, 0]))))
                     p.boxplot(r_slopes[:, 0])
             with DebugPlot() as p:
                     p.title("Relative Slopes Histogram\nmedian=%.2f mean=%.2f stddev=%.2f" %
-                            (float(numpy.median(r_slopes[:, 0])), float(numpy.mean(r_slopes[:, 0])),
-                            float(numpy.std(r_slopes[:, 0]))))
+                            (float(np.median(r_slopes[:, 0])), float(np.mean(r_slopes[:, 0])),
+                            float(np.std(r_slopes[:, 0]))))
                     try:
                         p.hist(slopes[:, 0])
                     except AttributeError:
                         pass
             with DebugPlot() as p:
                     p.title("Relative Slopes Scatter\nmedian=%.2f mean=%.2f stddev=%.2f" %
-                            (float(numpy.median(r_slopes[:, 0])), float(numpy.mean(r_slopes[:, 0])),
-                            float(numpy.std(r_slopes[:, 0]))))
+                            (float(np.median(r_slopes[:, 0])), float(np.mean(r_slopes[:, 0])),
+                            float(np.std(r_slopes[:, 0]))))
                     p.scatter(r_slopes[:, 1], r_slopes[:, 0], s=2.5*r_slopes[:, 2], linewidths=(0.0,))
                     p.xlabel('timepoint')
                     p.ylabel('growth rate (slope) relative')
