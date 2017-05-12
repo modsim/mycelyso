@@ -4,6 +4,10 @@ documentation
 """
 
 import logging
+try:
+    import tqdm
+except ImportError:
+    tqdm = None
 from itertools import product
 from collections import OrderedDict
 
@@ -47,27 +51,11 @@ def singleton_class_mapper(class_, what, args, kwargs):
         raise
 
 
-try:
-    import progressbar
-
-    def get_progress_bar(n):
-        p = progressbar.ProgressBar()
-        return p(range(n))
-
-except ImportError:
-    progressbar = None
-
-    try:
-        from clint.textui.progress import bar
-
-        def get_progress_bar(n):
-            return bar(range(n))
-    except ImportError:
-        bar = None
-
-        def get_progress_bar(n):
-            return range(n)
-        # raise ImportError
+def get_progress_bar(n):
+    if tqdm:
+        return iter(tqdm.tqdm(range(n)))
+    else:
+        return range(n)
 
 
 class PipelineExecutor(object):
