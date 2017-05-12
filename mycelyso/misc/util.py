@@ -1,10 +1,11 @@
 import numpy as np
+from itertools import tee
 from scipy.ndimage import uniform_filter1d
 from scipy.spatial.ckdtree import cKDTree as KDTree
 
 
 def calculate_length(points, times=1, w=5):
-    # adapted Cornelisse and van den Berg method
+    # adapted method from Cornelisse and van den Berg
     if (len(points) - 2) > w:
         for _ in range(times):
             points[:, 0] = uniform_filter1d(points[:, 0], w, mode='nearest')
@@ -22,3 +23,12 @@ def clean_by_radius(points, radius=15.0):
     mapping = tree.query_ball_tree(tree, radius)
     unique_indices = np.unique(list(l[0] for l in sorted(mapping)))
     return points[unique_indices]
+
+
+# from the itertools help https://docs.python.org/2/library/itertools.html
+def pairwise(iterable):
+    """s -> (s0,s1), (s1,s2), (s2, s3), ..."""
+    a, b = tee(iterable)
+    next(b, None)
+    return zip(a, b)
+# end

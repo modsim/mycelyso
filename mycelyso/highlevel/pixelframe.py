@@ -13,8 +13,9 @@ from ..processing.pixelgraphs import \
 
 
 class PixelFrame(object):
-    def __init__(self, image, timepoint=0.0):
-        self.timepoint = timepoint  # meta
+    def __init__(self, image, timepoint=0.0, calibration=1.0):
+        self.timepoint = timepoint
+        self.calibration = calibration
 
         # binary image of skeleton, 0 and 1s (forced bool cast)
         self.image = (image > 0).astype(np.uint8)
@@ -58,7 +59,7 @@ class PixelFrame(object):
             while True:
                 ys, xs = get_next_neighbor(n)
                 nm[y, x] -= n
-                lastn = n
+                last_n = n
 
                 y, x = y + ys, x + xs
 
@@ -69,7 +70,7 @@ class PixelFrame(object):
 
                 points.append([y, x])
 
-                inverse = get_inverse_neighbor_shift(lastn)
+                inverse = get_inverse_neighbor_shift(last_n)
                 if inverse < nm[y, x]:
                     nm[y, x] -= inverse
 
@@ -90,14 +91,3 @@ class PixelFrame(object):
             pathlets.append(points)
 
         self.pathlets = pathlets
-
-        if False:
-
-            result_buffer = np.zeros_like(conn, dtype=np.uint16)
-
-            result_buffer[self.image > 0] = 2**16 - 1
-
-            for n, points in enumerate(pathlets):
-                for y, x in points:
-                    result_buffer[y, x] = n
-            return result_buffer

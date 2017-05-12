@@ -10,9 +10,43 @@ from scipy.spatial.ckdtree import cKDTree as KDTree
 from ..misc.util import calculate_length, clean_by_radius
 
 
+class Tunable(object):
+    pass
+
+
+class NodeEndpointMergeRadius(Tunable):
+    """ [µm] """
+    value = 0.5
+
+
+class NodeJunctionMergeRadius(Tunable):
+    """ [µm] """
+    value = 0.5
+
+
+class NodeLookupRadius(Tunable):
+    """ [µm] """
+    value = 0.5
+
+class NodeLookupCutoffRadius(Tunable):
+    """ [µm] """
+    value = 2.5
+
+
+class NodeTrackingJunctionShiftRadius(Tunable):
+    """"""
+    value = 3
+
+
+class NodeTrackingEndpointShiftRadius(Tunable):
+    """"""
+    value = 10
+
+
 class NodeFrame(object):
 
     timepoint = None
+    calibration = None
 
     junction_shift = None
     endpoint_shift = None
@@ -42,11 +76,12 @@ class NodeFrame(object):
 
     def __init__(self, pf):
         self.timepoint = pf.timepoint  # copy this information, so we can set pf to None for serialization
+        self.calibration = pf.calibration
         self.prepare_graph(pf)
 
     def prepare_graph(self, pf):
-        endpoint_tree_data = clean_by_radius(pf.endpoints, 8.0)  # TODO
-        junction_tree_data = clean_by_radius(pf.junctions, 8.0)  # TODO
+        endpoint_tree_data = clean_by_radius(pf.endpoints, NodeEndpointMergeRadius.value / self.calibration)
+        junction_tree_data = clean_by_radius(pf.junctions, NodeJunctionMergeRadius.value / self.calibration)
 
         e_length = len(endpoint_tree_data)
         j_length = len(junction_tree_data)
@@ -83,13 +118,14 @@ class NodeFrame(object):
         # its begin is the 'left' l_ side, its end is the 'right' r_ side
         # (not using begin / end not to confuse end with endpoint ...)
 
+        distance_threshold = NodeLookupRadius.value / self.calibration
+        cutoff_radius = NodeLookupCutoffRadius.value / self.calibration
+
         for pathlet in pf.pathlets:
             pathlet_length = calculate_length(pathlet)
 
             l_side = pathlet[0]
             r_side = pathlet[-1]
-
-            distance_threshold = 10.0  # TODO
 
             # experiment
             l_test_distance, l_test_index = endpoint_tree.query(l_side, k=1)
@@ -120,7 +156,7 @@ class NodeFrame(object):
             except AttributeError:
                 continue
 
-            if l_distance > 30 or r_distance > 30:  # TODO
+            if l_distance > cutoff_radius or r_distance > cutoff_radius:  # TODO
                 # probably does not happen
                 continue
 
@@ -218,8 +254,8 @@ class NodeFrame(object):
         return np.where(self.connected_components[self.connected_components == label])[0]
 
     def track(self, successor):
-        junction_shift_radius = 50.0  # TODO
-        endpoint_shift_radius = 150.0  # TODO
+        junction_shift_radius = NodeTrackingJunctionShiftRadius.value / self.calibration
+        endpoint_shift_radius = NodeTrackingEndpointShiftRadius.value / self.calibration
 
         ##
         self_len = len(self.data)

@@ -18,7 +18,7 @@ from scipy import ndimage as ndi
 import networkx as nx
 
 from ..misc.graphml import to_graphml_string
-from ..misc.pairwise import pairwise
+from ..misc.util import pairwise
 from ..misc.regression import prepare_optimized_regression
 
 from ..processing.binarization import experimental_thresholding
@@ -31,6 +31,10 @@ try:
 except ImportError:
     pyplot = None
 
+
+# compatibility
+class Tunable(object):
+    pass
 
 def qimshow(image, cmap='gray'):
     """
@@ -60,6 +64,20 @@ def qimshow(image, cmap='gray'):
     matplotlib.pyplot.show()
 
 
+def set_empty_crops(image, crop_t=None, crop_b=None, crop_l=None, crop_r=None):
+    return 0, image.shape[0], 0, image.shape[1]
+
+
+def skip_if_image_is_below_size(min_height=4, min_width=4):
+    def _inner(image, meta):
+        if image.shape[0] < min_height or image.shape[1] < min_width:
+            raise Skip(Meta(pos=meta.pos, t=Collected)) from None
+
+        return image, meta
+
+    return _inner
+
+
 def binarize(image, binary=None):
     return experimental_thresholding(image)
 
@@ -84,7 +102,7 @@ def quantify_binary(binary, calibration, result=None):
     total = binary.shape[0] * binary.shape[1]
     return {
         'covered_ratio': ones / total,
-        'covered_area': ones * calibration * calibration,
+        'covered_area': ones * calibration **2,
         'covered_area_pixel': ones
     }
 
@@ -99,7 +117,7 @@ def graph_statistics(node_frame, result=None):
     graph_endpoint_count = len(node_frame.every_endpoint)
 
     return {
-        'graph_edge_length': graph_edge_length,
+        'graph_edge_length': graph_edge_length * node_frame.calibration,
         'graph_edge_count': graph_edge_count,
         'graph_node_count': graph_node_count,
         'graph_junction_count': graph_junction_count,
@@ -107,33 +125,48 @@ def graph_statistics(node_frame, result=None):
     }
 
 
-class CleanUpHoleFillSize(object):
-    """"""
-    value = 50  # 1000
+class CleanUpGaussianSigma(Tunable):
+    """Clean up step: Sigma [µm] used for Gaussian filter"""
+    value = 0.075
 
 
-def clean_up(binary):
+class CleanUpGaussianThreshold(Tunable):
+    """Clean up step: Threshold used after Gaussian filter (values range from 0 to 1)"""
+    value = 0.5
 
-    sigma = 1.0  # TODO
-    threshold = 0.5  # TODO
-    binary = ndi.gaussian_filter(binary * 1.0, sigma) > threshold
+
+class CleanUpHoleFillSize(Tunable):
+    """Clean up step: Maximum size of holes [µm²] which will be filled"""
+    value = 20
+
+
+def clean_up(calibration, binary):
+    binary = ndi.gaussian_filter(binary * 1.0, CleanUpGaussianSigma.value / calibration) > CleanUpGaussianThreshold.value
 
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
-        binary = remove_small_holes(binary, min_size=CleanUpHoleFillSize.value, connectivity=2)  # TODO
+        binary = remove_small_holes(binary, min_size=int(CleanUpHoleFillSize.value / calibration**2), connectivity=2)
 
     return binary
 
 
-def remove_small_structures(binary):
+class RemoveSmallStructuresSize(Tunable):
+    """Remove structures up to this size [µm²]"""
+    value = 30
+
+def remove_small_structures(calibration, binary):
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
-        return remove_small_objects(binary, min_size=64, connectivity=2)  # TODO
+        return remove_small_objects(binary, min_size=int(RemoveSmallStructuresSize.value / calibration**2), connectivity=2)  # TODO
 
 
-def remove_border_artifacts(binary):
+class BorderArtifactRemovalBorderSize(Tunable):
+    """Remove structures, whose centroid lies within that distance [µm] of a border"""
+    value = 10
 
-    border = 15
+def remove_border_artifacts(calibration, binary):
+
+    border = BorderArtifactRemovalBorderSize.value / calibration
 
     labeled = label(binary)
     corner_pixels = np.r_[
@@ -153,8 +186,8 @@ def remove_border_artifacts(binary):
     return binary
 
 
-def convert_to_nodes(skeleton, timepoint, pixel_frame=None, node_frame=None):
-    pixel_frame = PixelFrame(skeleton, timepoint)
+def convert_to_nodes(skeleton, timepoint, calibration, pixel_frame=None, node_frame=None):
+    pixel_frame = PixelFrame(skeleton, timepoint, calibration=calibration)
     node_frame = NodeFrame(pixel_frame)
     return pixel_frame, node_frame
 
@@ -164,6 +197,10 @@ def track_multipoint(collected):
         result1.node_frame.track(result2.node_frame)
     return collected
 
+
+class TrackingMaximumRelativeChange(Tunable):
+    """"""
+    value = 0.2
 
 def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fates=None):
     def any_in(needles, haystack):
@@ -210,7 +247,7 @@ def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fat
             def distance_condition(current, new):
                 if new == 0.0 or current == 0.0:
                     return False
-                return (new > current) or (abs(1.0 - (current / new)) < 0.2)
+                return (new > current) or (abs(1.0 - (current / new)) < TrackingMaximumRelativeChange.value)
 
             distance = frame.shortest_paths[e, other]
 
@@ -239,7 +276,7 @@ def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fat
             # print(track_id, i, e, other, e_on_next, other_on_next, distance, distance_num)
 
             if e in endpoints_used or other in endpoints_used:
-                fates[track_id] = "endpoints used otherly"
+                fates[track_id] = "endpoints used otherwise"
                 continue
 
             if distance == float('inf') or next_distance == float('inf'):
@@ -276,20 +313,32 @@ def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fat
     return tracks, fates
 
 
+class TrackingMinimumTrackedPointCount(Tunable):
+    """"""
+    value = 5
+    
+class TrackingMinimalMaximumLength(Tunable):
+    """µm"""
+    value = 10.0
+
+
+class TrackingMinimalGrownLength(Tunable):
+    """µm"""
+    value = 5.0
+
+
 # noinspection PyProtectedMember
 def prepare_tracked_fragments(collected, tracked_fragments, tracked_fragments_fates, track_table=None,
                               track_table_aux_tables=None):
     key_list = list(collected.keys())
     calibration = next(iter(collected.values()))['calibration']
 
-    minimum_track_length = 3
-
     track_table = []
 
     track_table_aux_tables = []
 
     for track_id, track in tracked_fragments.items():
-        if len(track) < minimum_track_length:
+        if len(track) < TrackingMinimumTrackedPointCount.value:
             continue
 
         track_list = [[i, track[i]] for i in sorted(track.keys())]
@@ -299,6 +348,15 @@ def prepare_tracked_fragments(collected, tracked_fragments, tracked_fragments_fa
              for i, (e, other, e_on_next, other_on_next, distance, distance_num)
              in track_list])
 
+        # minimum length of the maximally tracked segment
+        if times_lengths[:, 1].max() < TrackingMinimalMaximumLength.value:
+            continue
+
+        # minimum length grown additionally
+        if (times_lengths[:, 1].max() - times_lengths[:, 1].min()) < TrackingMinimalGrownLength.value:
+            continue
+
+        # whatever the settings are, there must be growth
         if (times_lengths[:, 1].max() - times_lengths[:, 1].min()) == 0.0:
             continue
 

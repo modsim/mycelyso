@@ -11,7 +11,6 @@ from ..application.application import Meta
 from mfisp_boxdetection import find_box
 from molyso.generic.rotation import find_rotation, rotate_image
 from molyso.generic.registration import translation_2x1d, shift_image
-from skimage import morphology
 from ..pipeline.executor import Skip, Collected
 
 
@@ -58,10 +57,6 @@ def pull_metadata_from_image(image, timepoint=None, position=None, calibration=N
     return image, image.meta.time, image.meta.position, image.meta.calibration
 
 
-def skeletonize(binary, skeleton=None):
-    return morphology.skeletonize(binary)
-
-
 _substract_start_frame_start_images = {}
 
 
@@ -86,53 +81,54 @@ def substract_start_frame(meta, ims, reference_timepoint, image, subtracted_imag
     return image
 
 
-class BoxDetectorCropper(object):
-    _fft_cache = {}
-    _boxes = {}
-    _angles = {}
+_box_cache_fft_cache = {}
+_box_cache_boxes = {}
+_box_cache_angles = {}
 
-    def get_parameters(self, ims, timepoint, pos):
-        reference = image_source(ims, Meta(t=timepoint, pos=pos))  # TODO proper sub pipeline
-        #        reference = self.embedded_pipeline([ImageSource], Meta(t=timepoint, pos=pos)).image
-        angle = find_rotation(reference)
-        reference = rotate_image(reference, angle)
 
-        shift, fft_a = translation_2x1d(image_a=reference, image_b=reference, return_a=True)
+def _box_detection_get_parameters(ims, timepoint, pos):
+    reference = image_source(ims, Meta(t=timepoint, pos=pos))  # TODO proper sub pipeline
+    #        reference = self.embedded_pipeline([ImageSource], Meta(t=timepoint, pos=pos)).image
+    angle = find_rotation(reference)
+    reference = rotate_image(reference, angle)
 
-        try:
+    shift, fft_a = translation_2x1d(image_a=reference, image_b=reference, return_a=True)
 
-            reference = reference.astype(np.float32)
+    try:
 
-            cleaned_reference = reference - ndi.uniform_filter(reference, 25)  # "box" blur
-            cleaned_reference[cleaned_reference < 0] = 0
-            cleaned_reference /= cleaned_reference.max()
+        reference = reference.astype(np.float32)
 
-            # qimshow(cleaned_reference)
+        cleaned_reference = reference - ndi.uniform_filter(reference, 25)  # "box" blur
+        cleaned_reference[cleaned_reference < 0] = 0
+        cleaned_reference /= cleaned_reference.max()
 
-            crop = find_box(cleaned_reference, throw=True, subsample=2)
-            t, b, l, r = crop
-            cleaned_reference[t, :] = 1
-            cleaned_reference[b, :] = 1
-            cleaned_reference[:, l] = 1
-            cleaned_reference[:, r] = 1
+        # qimshow(cleaned_reference)
 
-        except RuntimeError:
-            raise Skip(Meta(pos=pos, t=Collected)) from None
+        crop = find_box(cleaned_reference, throw=True, subsample=2)
+        t, b, l, r = crop
+        cleaned_reference[t, :] = 1
+        cleaned_reference[b, :] = 1
+        cleaned_reference[:, l] = 1
+        cleaned_reference[:, r] = 1
 
-        return angle, fft_a, crop
+    except RuntimeError:
+        raise Skip(Meta(pos=pos, t=Collected)) from None
 
-    def __call__(self, ims, image, meta, reference_timepoint, shift=None, crop=None, angle=None):
+    return angle, fft_a, crop
+
+
+def box_detection(ims, image, meta, reference_timepoint, shift=None, crop=None, angle=None):
         # probably implement a voting scheme?
 
-        if meta.pos not in self._boxes:
-            self._angles[meta.pos], self._fft_cache[meta.pos], self._boxes[meta.pos] = \
-                self.get_parameters(ims, reference_timepoint, meta.pos)
+        if meta.pos not in _box_cache_boxes:
+            _box_cache_angles[meta.pos], _box_cache_fft_cache[meta.pos], _box_cache_boxes[meta.pos] = \
+                _box_detection_get_parameters(ims, reference_timepoint, meta.pos)
 
-        angle = self._angles[meta.pos]
+        angle = _box_cache_angles[meta.pos]
         image = rotate_image(image, angle)
 
-        shift, = translation_2x1d(image_a=None, image_b=image, ffts_a=self._fft_cache[meta.pos])
-        crop = self._boxes[meta.pos]
+        shift, = translation_2x1d(image_a=None, image_b=image, ffts_a=_box_cache_fft_cache[meta.pos])
+        crop = _box_cache_boxes[meta.pos]
 
         return shift, crop, angle
 

@@ -6,7 +6,8 @@ documentation
 from ..pilyso.application import App, PipelineExecutionContext, PipelineEnvironment, Every, Collected, Meta, Skip
 from ..pilyso.imagestack import ImageStack
 from ..pilyso.steps import \
-    image_source, pull_metadata_from_image, substract_start_frame, rescale_image_to_uint8, set_result, Delete
+    image_source, pull_metadata_from_image, substract_start_frame, rescale_image_to_uint8, set_result, Delete, \
+    box_detection, create_boxcrop_from_subtracted_image
 from os.path import basename, abspath
 
 from .steps import *
@@ -26,6 +27,10 @@ class Mycelyso(App):
 
     def arguments(self, argparser):
         argparser.add_argument('--meta', '--meta', dest='meta', default='')
+        argparser.add_argument('--box', '--detect-box-structure', dest='box_detection',
+                               default=False, action='store_true')
+        argparser.add_argument('--cw', '--crop-width', dest='crop_width', default=0, type=int)
+        argparser.add_argument('--ch', '--crop-height', dest='crop_height', default=0, type=int)
         argparser.add_argument('--output', '--output', dest='output', default='output.h5')
 
 
@@ -44,6 +49,9 @@ class MycelysoPipeline(PipelineExecutionContext):
 
         per_image |= lambda image, raw_image=None: image
         per_image |= lambda image, raw_unrotated_image=None: image
+
+        per_image |= set_empty_crops
+
 
         # define what we want (per image) as results
 
@@ -74,27 +82,25 @@ class MycelysoPipeline(PipelineExecutionContext):
 
         # TODO add registration routine, in case no box cropping is to be done
 
-        # crop the box
-
-        # per_image |= BoxDetectorCropper
-        # per_image |= create_boxcrop_from_subtracted_image
-
-        # per_image |= set_result(subtracted_image=Delete)
+        if args.box_detection:
+            per_image |= box_detection
+            per_image |= create_boxcrop_from_subtracted_image
 
         per_image |= rescale_image_to_uint8
 
         per_image |= set_result(raw_unrotated_image=Delete, raw_image=Delete, subtracted_image=Delete)
 
-        def skip_if_image_is_below_size(min_height=4, min_width=4):
-            def _inner(image, meta):
-                if image.shape[0] < min_height or image.shape[1] < min_width:
-                    raise Skip(Meta(pos=meta.pos, t=Collected)) from None
+        per_image |= lambda image: image[
+                                   args.crop_height:-(args.crop_height if args.crop_height > 0 else 1),
+                                   args.crop_width:-(args.crop_width if args.crop_width > 0 else 1)
+                                   ]
 
-                return image, meta
-            return _inner
-
-        # NEW MODIFICATION
-        per_image |= lambda image: image[60:-60, 10:-10]
+        per_image |= lambda crop_t, crop_b, crop_l, crop_r: (
+            crop_t + args.crop_height,
+            crop_b - args.crop_height,
+            crop_l + args.crop_width,
+            crop_r - args.crop_width
+        )
 
         per_image |= skip_if_image_is_below_size(4, 4)
 
@@ -106,25 +112,20 @@ class MycelysoPipeline(PipelineExecutionContext):
 
         # ... and cleanup
         per_image |= clean_up
+
+        per_image |= remove_small_structures
+
+
         # generate statistics of the binarized image
-
-        # self.add_step(Meta(t=Every, pos=Every), image_shower('binary'))
-
         per_image |= quantify_binary
 
         per_image |= skeletonize
-
-        # self.add_step(Meta(t=Every, pos=Every), image_shower('skeleton'))
-
-        per_image |= remove_small_structures
 
         # 'binary', 'skeleton' are kept!
         per_image |= convert_to_nodes
 
         per_image |= set_result(image=Delete)
         per_image |= set_result(pixel_frame=Delete)
-        # per_image |= lambda result: print(result)
-        # self.add_step(Meta(t=Every, pos=Every), MycelysoSteps.ReconnectNodePixelFrame)
 
         per_image |= graph_statistics
         per_image |= generate_graphml
@@ -135,14 +136,7 @@ class MycelysoPipeline(PipelineExecutionContext):
 
         per_position |= generate_overall_graphml
 
-        # per_position |= AnalyzeMultipoint
-        #
-
-        # per_position |= DebugPlotInjector
-        # self.add_step(Meta(t=Collected, pos=Every), MergeAttempt)
         per_position |= individual_tracking
-
-        # self.add_step(Meta(t=Collected, pos=Every), DebugPrintingAnalysis)
 
         per_position |= prepare_tracked_fragments
 
