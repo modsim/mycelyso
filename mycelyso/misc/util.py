@@ -1,44 +1,18 @@
 import numpy as np
+from scipy.ndimage import uniform_filter1d
 from scipy.spatial.ckdtree import cKDTree as KDTree
 
 
-def smooth(signal, kernel):
-    """
-    Generic smoothing function, smooths by convolving one signal with another.
+def calculate_length(points, times=1, w=5):
+    # adapted Cornelisse and van den Berg method
+    if (len(points) - 2) > w:
+        for _ in range(times):
+            points[:, 0] = uniform_filter1d(points[:, 0], w, mode='nearest')
+            points[:, 1] = uniform_filter1d(points[:, 1], w, mode='nearest')
 
-    :param signal: input signal to be smoothed
-    :type signal: numpy.ndarray
-    :param kernel: smoothing kernel to be used. will be normalized to :math:`\sum=1`
-    :type kernel: numpy.ndarray
-    :return: The signal convolved with the kernel
-    :rtype: numpy.ndarray
+    result = np.sqrt((np.diff(points, axis=0) ** 2.0).sum(axis=1)).sum()
 
-    >>> smooth(numpy.array([0, 0, 0, 0, 1, 0, 0, 0, 0]), numpy.ones(3))
-    array([ 0.        ,  0.        ,  0.        ,  0.        ,  0.33333333,
-            0.33333333,  0.33333333,  0.        ,  0.        ])
-    """
-
-    return np.convolve(
-        kernel / kernel.sum(),
-        np.r_[signal[kernel.size - 1:0:-1], signal, signal[-1:-kernel.size:-1]],
-        mode='valid')[kernel.size // 2 - 1:-kernel.size // 2][0:len(signal)]
-
-
-def calculate_length(g):
-    def get_length(points, times=1, w=5):
-        # Cornelisse
-        if (len(points) - 2) > w:
-            kernel = np.ones(w)
-            for _ in range(times):
-                # keep first and last point static, otherwise the line may drift
-                # TODO: replace with Gaussian filter
-                points[1:-1, 0] = smooth(points[1:-1, 0], kernel)
-                points[1:-1, 1] = smooth(points[1:-1, 1], kernel)
-
-        result = np.sqrt((np.diff(points, axis=0) ** 2.0).sum(axis=1)).sum()
-
-        return result
-    return get_length(g)
+    return result
 
 
 def clean_by_radius(points, radius=15.0):
