@@ -55,7 +55,7 @@ def get_progress_bar(n):
     if tqdm:
         return iter(tqdm.tqdm(range(n)))
     else:
-        return range(n)
+        return iter(range(n))
 
 
 class PipelineExecutor(object):
