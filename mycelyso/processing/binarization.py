@@ -59,7 +59,9 @@ def experimental_thresholding(image, window_size=15, gaussian_radius=3.0, shift=
     # novel method based upon shape index and Bataineh thresholding
 
     means, stddev = mean_and_std(image, window_size)
-    sim = shape_index(image, gaussian_radius)
+
+    with np.errstate(invalid='ignore'):
+        sim = shape_index(image, gaussian_radius)
 
     stddev_min, stddev_max = stddev.min(), stddev.max()
     stddev_delta = stddev_max - stddev_min
