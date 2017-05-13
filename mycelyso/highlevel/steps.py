@@ -154,6 +154,7 @@ class RemoveSmallStructuresSize(Tunable):
     """Remove structures up to this size [µm²]"""
     value = 30
 
+
 def remove_small_structures(calibration, binary):
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
@@ -163,6 +164,7 @@ def remove_small_structures(calibration, binary):
 class BorderArtifactRemovalBorderSize(Tunable):
     """Remove structures, whose centroid lies within that distance [µm] of a border"""
     value = 10
+
 
 def remove_border_artifacts(calibration, binary):
 
@@ -198,9 +200,20 @@ def track_multipoint(collected):
     return collected
 
 
-class TrackingMaximumRelativeChange(Tunable):
+class TrackingMaximumRelativeShrinkage(Tunable):
     """"""
     value = 0.2
+
+
+class TrackingMinimumTipElongationRate(Tunable):
+    """"""
+    value = -50.0
+
+
+class TrackingMaximumTipElongationRate(Tunable):
+    """"""
+    value = 100.0
+
 
 def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fates=None):
     def any_in(needles, haystack):
@@ -220,6 +233,11 @@ def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fat
 
         frame, next_frame = current_result.node_frame, next_result.node_frame
 
+        calibration = frame.calibration
+
+        timepoint, next_timepoint = frame.timepoint, next_frame.timepoint
+        delta_t_in_hours = (next_timepoint - timepoint) / (60.0*60.0)
+
         # either: look for pairs of endpoints and junctions,
         # or endpoints and endpoints, if there are no junctions yet
         def valid_pairs():
@@ -230,7 +248,8 @@ def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fat
                 for _other in edge_indices:
                     no_junctions = not any_in(frame.get_connected_nodes(_other), frame.every_junction)
                     if frame.is_junction(_other) or (no_junctions and frame.is_endpoint(_other)):
-                        yield None, _e, _other
+                        if _e != _other:
+                            yield None, _e, _other
 
         valid = []
         endpoints_used = set()
@@ -238,29 +257,21 @@ def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fat
         for track_id, e, other in chain(last_valid, valid_pairs()):
             e_on_next, other_on_next = frame.self_to_successor[e], frame.self_to_successor[other]
 
+            if e_on_next == other_on_next:
+                continue
+
             if e_on_next == -1 or other_on_next == -1:
                 # tracking error
                 fates[track_id] = "track aborted due to missing future node"
-                # print(fates[track_id])
                 continue
-
-            def distance_condition(current, new):
-                if new == 0.0 or current == 0.0:
-                    return False
-                return (new > current) or (abs(1.0 - (current / new)) < TrackingMaximumRelativeChange.value)
 
             distance = frame.shortest_paths[e, other]
 
             if next_frame.connected_components[e_on_next] != next_frame.connected_components[other_on_next]:
-                # print("*", frame.timepoint)
                 #  careful now: either the track broke, or we need to pick an alternative, fitting variant
-                # print(next_frame.__dict__)
-                # print(next_frame.adjacency.todense())
 
                 for _e_on_next, _other_on_next in product(frame.self_to_successor_alternatives[e],
                                                           frame.self_to_successor_alternatives[other]):
-                    #    print(next_frame.connected_components[_e_on_next],next_frame.connected_components[_other_on_next])
-                    #    print(distance, next_frame.shortest_paths[_e_on_next, _other_on_next])
                     if _e_on_next != _other_on_next \
                             and next_frame.connected_components[_e_on_next] == next_frame.connected_components[
                                 _other_on_next] \
@@ -285,15 +296,24 @@ def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fat
                 fates[track_id] = "formerly connected components became unconnected? (dist/next dist %.4f %.4f)" % (
                     distance, next_distance
                 )
-                # print(fates[track_id])
                 continue
 
-            if not distance_condition(distance, next_distance):
+            if (next_distance < distance) and
+                abs(1.0 - (distance / next_distance)) > TrackingMaximumRelativeShrinkage.value:
                 # a later distance was SHORTER than the current, that means tracking error or cycle in graph
                 fates[track_id] = "track aborted due to shortcut (cycle or tracking error) [last %f > next %f]" % (
                     distance, next_distance
                 )
-                # print(fates[track_id])
+                continue
+
+            mu_per_h = ((next_distance - distance) * calibration) / delta_t_in_hours
+
+            if not (TrackingMinimumTipElongationRate.value < mu_per_h < TrackingMaximumTipElongationRate.value):
+                # a later distance changed too much, which might be a tracking error
+                fates[track_id] = "track aborted due to too large change in length " \
+                                  "[last %f, next %f, change %f mu per h]" % (
+                    distance, next_distance, mu_per_h
+                )
                 continue
 
             if track_id is None:
@@ -316,7 +336,8 @@ def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fat
 class TrackingMinimumTrackedPointCount(Tunable):
     """"""
     value = 5
-    
+
+
 class TrackingMinimalMaximumLength(Tunable):
     """µm"""
     value = 10.0
