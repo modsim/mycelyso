@@ -31,6 +31,7 @@ class Mycelyso(App):
                                default=False, action='store_true')
         argparser.add_argument('--cw', '--crop-width', dest='crop_width', default=0, type=int)
         argparser.add_argument('--ch', '--crop-height', dest='crop_height', default=0, type=int)
+        argparser.add_argument('--si', '--store-image', dest='store_image', default=False, action='store_true')
         argparser.add_argument('--output', '--output', dest='output', default='output.h5')
 
 
@@ -55,32 +56,35 @@ class MycelysoPipeline(PipelineExecutionContext):
 
         # define what we want (per image) as results
 
+        result_table = {
+            '_plain': [
+                'calibration', 'timepoint', 'input_height',
+                'input_width', 'area', 'covered_ratio', 'covered_area',
+                'graph_edge_length', 'graph_edge_count', 'graph_node_count',
+                'graph_junction_count', 'graph_endpoint_count',
+                'filename', 'metadata', 'shift_x', 'shift_y',
+                'crop_t', 'crop_b', 'crop_l', 'crop_r'
+            ],
+            'graphml': 'data',
+            # 'image': 'image',
+            # 'raw_unrotated_image': 'image',
+            # 'raw_image': 'image',
+            'skeleton': 'image',
+            'binary': 'image'
+        }
+
+        if args.store_image:
+            result_table['image'] = 'image'
+
         per_image |= set_result(
             reference_timepoint=1,
             filename_complete=absolute_input,
             filename=basename(absolute_input),
             metadata=args.meta,
-            result_table={
-                '_plain': [
-                    'calibration', 'timepoint', 'input_height',
-                    'input_width', 'area', 'covered_ratio', 'covered_area',
-                    'graph_edge_length', 'graph_edge_count', 'graph_node_count',
-                    'graph_junction_count', 'graph_endpoint_count',
-                    'filename', 'metadata', 'shift_x', 'shift_y',
-                    'crop_t', 'crop_b', 'crop_l', 'crop_r'
-                ],
-                'graphml': 'data',
-                # 'image': 'image',
-                # 'raw_unrotated_image': 'image',
-                # 'raw_image': 'image',
-                'skeleton': 'image',
-                'binary': 'image'
-            }
+            result_table=result_table
         )
 
         per_image |= substract_start_frame
-
-        # TODO add registration routine, in case no box cropping is to be done
 
         if args.box_detection:
             per_image |= box_detection
@@ -115,6 +119,7 @@ class MycelysoPipeline(PipelineExecutionContext):
 
         per_image |= remove_small_structures
 
+        per_image |= remove_border_artifacts
 
         # generate statistics of the binarized image
         per_image |= quantify_binary
@@ -124,7 +129,9 @@ class MycelysoPipeline(PipelineExecutionContext):
         # 'binary', 'skeleton' are kept!
         per_image |= convert_to_nodes
 
-        per_image |= set_result(image=Delete)
+        if not args.store_image:
+            per_image |= set_result(image=Delete)
+
         per_image |= set_result(pixel_frame=Delete)
 
         per_image |= graph_statistics
