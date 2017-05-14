@@ -9,6 +9,7 @@ import multiprocessing
 import sys
 import numpy as np
 
+from tunable import Tunable
 from ..misc.hacks.maintenance_interrupt import install_maintenance_interrupt
 from ..misc.hacks.recursionlimit_raise import *
 from ..misc.hacks.multiprocessing_patch import *
@@ -146,8 +147,10 @@ class App(AppInterface):
         argparser.add_argument('-m', '--module', dest='modules', type=str, default=None, action='append')
         argparser.add_argument('-n', '--processes', dest='processes', default=-1, type=int)
         argparser.add_argument('--prompt', '--prompt', dest='wait_on_start', default=False, action='store_true')
-        argparser.add_argument('-t', '--timepoints', dest='timepoints', default='0-', type=str)
-        argparser.add_argument('-p', '--positions', dest='positions', default='0-', type=str)
+        argparser.add_argument('-tp', '--timepoints', dest='timepoints', default='0-', type=str)
+        argparser.add_argument('-mp', '--positions', dest='positions', default='0-', type=str)
+
+        Tunable.Manager.register_argparser(argparser)
 
     args = None
 

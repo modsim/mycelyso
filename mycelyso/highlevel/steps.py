@@ -17,6 +17,7 @@ from scipy import ndimage as ndi
 
 import networkx as nx
 
+from tunable import Tunable
 from ..misc.graphml import to_graphml_string
 from ..misc.util import pairwise
 from ..misc.regression import prepare_optimized_regression
@@ -31,10 +32,6 @@ try:
 except ImportError:
     pyplot = None
 
-
-# compatibility
-class Tunable(object):
-    pass
 
 def qimshow(image, cmap='gray'):
     """
@@ -127,17 +124,17 @@ def graph_statistics(node_frame, result=None):
 
 class CleanUpGaussianSigma(Tunable):
     """Clean up step: Sigma [µm] used for Gaussian filter"""
-    value = 0.075
+    default = 0.075
 
 
 class CleanUpGaussianThreshold(Tunable):
     """Clean up step: Threshold used after Gaussian filter (values range from 0 to 1)"""
-    value = 0.5
+    default = 0.5
 
 
 class CleanUpHoleFillSize(Tunable):
     """Clean up step: Maximum size of holes [µm²] which will be filled"""
-    value = 20
+    default = 20
 
 
 def clean_up(calibration, binary):
@@ -152,7 +149,7 @@ def clean_up(calibration, binary):
 
 class RemoveSmallStructuresSize(Tunable):
     """Remove structures up to this size [µm²]"""
-    value = 30
+    default = 30
 
 
 def remove_small_structures(calibration, binary):
@@ -163,7 +160,7 @@ def remove_small_structures(calibration, binary):
 
 class BorderArtifactRemovalBorderSize(Tunable):
     """Remove structures, whose centroid lies within that distance [µm] of a border"""
-    value = 10
+    default = 10
 
 
 def remove_border_artifacts(calibration, binary):
@@ -202,17 +199,17 @@ def track_multipoint(collected):
 
 class TrackingMaximumRelativeShrinkage(Tunable):
     """"""
-    value = 0.2
+    default = 0.2
 
 
 class TrackingMinimumTipElongationRate(Tunable):
     """"""
-    value = -50.0
+    default = -50.0
 
 
 class TrackingMaximumTipElongationRate(Tunable):
     """"""
-    value = 100.0
+    default = 100.0
 
 
 def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fates=None):
@@ -267,16 +264,22 @@ def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fat
 
             distance = frame.shortest_paths[e, other]
 
+            def distance_condition(current, new):
+                if new == 0.0 or current == 0.0:
+                    # print(new, current)
+                    return False
+                return (new > current) or (abs(1.0 - (current / new)) < TrackingMaximumRelativeShrinkage.value)
+
             if next_frame.connected_components[e_on_next] != next_frame.connected_components[other_on_next]:
                 #  careful now: either the track broke, or we need to pick an alternative, fitting variant
 
                 for _e_on_next, _other_on_next in product(frame.self_to_successor_alternatives[e],
                                                           frame.self_to_successor_alternatives[other]):
-                    if _e_on_next != _other_on_next \
-                            and next_frame.connected_components[_e_on_next] == next_frame.connected_components[
-                                _other_on_next] \
-                            and next_frame.shortest_paths[_e_on_next, _other_on_next] < float('inf') \
-                            and distance_condition(distance, next_frame.shortest_paths[_e_on_next, _other_on_next]):
+                    if (_e_on_next != _other_on_next and (
+                        next_frame.connected_components[_e_on_next] == next_frame.connected_components[
+                        _other_on_next]) and (
+                        next_frame.shortest_paths[_e_on_next, _other_on_next] < float('inf')) and distance_condition(
+                            distance, next_frame.shortest_paths[_e_on_next, _other_on_next])):
                         e_on_next, other_on_next = _e_on_next, _other_on_next
                         break
 
@@ -298,8 +301,8 @@ def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fat
                 )
                 continue
 
-            if (next_distance < distance) and
-                abs(1.0 - (distance / next_distance)) > TrackingMaximumRelativeShrinkage.value:
+            if ((next_distance < distance) and
+                        abs(1.0 - (distance / next_distance)) > TrackingMaximumRelativeShrinkage.value):
                 # a later distance was SHORTER than the current, that means tracking error or cycle in graph
                 fates[track_id] = "track aborted due to shortcut (cycle or tracking error) [last %f > next %f]" % (
                     distance, next_distance
@@ -315,6 +318,16 @@ def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fat
                     distance, next_distance, mu_per_h
                 )
                 continue
+
+            # split up tracks which contain just endpoints ... otherwise the elongation rate is twice as high
+            if frame.is_endpoint(e) and frame.is_endpoint(other):
+                path = frame.get_path(e, other)
+                if next_frame.is_endpoint(e_on_next) and next_frame.is_endpoint(other_on_next):
+                    if len(path) > 2:
+                        other = path[-2]
+                        distance = frame.shortest_paths[e, other]
+                        distance_num = frame.shortest_paths_num[e, other]
+                        continue
 
             if track_id is None:
                 track_id = next_track_id
@@ -335,17 +348,17 @@ def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fat
 
 class TrackingMinimumTrackedPointCount(Tunable):
     """"""
-    value = 5
+    default = 5
 
 
 class TrackingMinimalMaximumLength(Tunable):
     """µm"""
-    value = 10.0
+    default = 10.0
 
 
 class TrackingMinimalGrownLength(Tunable):
     """µm"""
-    value = 5.0
+    default = 5.0
 
 
 # noinspection PyProtectedMember

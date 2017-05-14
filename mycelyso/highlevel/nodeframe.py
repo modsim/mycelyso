@@ -8,39 +8,36 @@ from scipy.sparse.csgraph import shortest_path, connected_components
 from scipy.spatial.ckdtree import cKDTree as KDTree
 
 from ..misc.util import calculate_length, clean_by_radius
-
-
-class Tunable(object):
-    pass
+from tunable import Tunable
 
 
 class NodeEndpointMergeRadius(Tunable):
     """ [µm] """
-    value = 0.5
+    default = 0.5
 
 
 class NodeJunctionMergeRadius(Tunable):
     """ [µm] """
-    value = 0.5
+    default = 0.5
 
 
 class NodeLookupRadius(Tunable):
     """ [µm] """
-    value = 0.5
+    default = 0.5
 
 class NodeLookupCutoffRadius(Tunable):
     """ [µm] """
-    value = 2.5
+    default = 2.5
 
 
 class NodeTrackingJunctionShiftRadius(Tunable):
     """"""
-    value = 3
+    default = 3
 
 
 class NodeTrackingEndpointShiftRadius(Tunable):
     """"""
-    value = 10
+    default = 10
 
 
 class NodeFrame(object):
@@ -64,6 +61,7 @@ class NodeFrame(object):
     every_endpoint = None
     every_junction = None
 
+    predecessors = None
     shortest_paths = None
     shortest_paths_num = None
 
@@ -156,7 +154,7 @@ class NodeFrame(object):
             except AttributeError:
                 continue
 
-            if l_distance > cutoff_radius or r_distance > cutoff_radius:  # TODO
+            if l_distance > cutoff_radius or r_distance > cutoff_radius:
                 # probably does not happen
                 continue
 
@@ -238,10 +236,21 @@ class NodeFrame(object):
         self.every_junction = range(self.junction_shift, self.junction_shift + len(self.junction_tree_data))
 
     def generate_derived_data(self):
-        self.shortest_paths = shortest_path(self.adjacency)
+        self.shortest_paths, self.predecessors = shortest_path(self.adjacency, return_predecessors=True)
         self.shortest_paths_num = shortest_path(self.adjacency, unweighted=True)
 
         self.connected_components_count, self.connected_components = connected_components(self.adjacency)
+
+    def get_path(self, start_node, end_node):
+        predecessor = end_node
+
+        path = [predecessor]
+
+        while predecessor != start_node:
+            predecessor = self.predecessors[start_node, predecessor]
+            path.append(predecessor)
+
+        return path[::-1]
 
     def is_endpoint(self, i):
         return i in self.every_endpoint
