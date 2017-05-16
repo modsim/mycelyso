@@ -39,6 +39,8 @@ def hdf5_node_name(s):
 def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
     def _inner_hdf5_output(meta, result):
 
+        lock_debugging = False
+
         meta_str = '_'.join(
             k + '_' + ('%09d' % v if type(v) == int else v.__name__)
             for k, v in sorted(meta._asdict().items(), key=lambda x: x[0])
@@ -90,11 +92,13 @@ def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
                     found_filename = True
 
             def acquire_lock(lock_file):
-                print("Process %d acquired lock %s." % (getpid(), lock_file))
+                if lock_debugging:
+                    print("Process %d acquired lock %s." % (getpid(), lock_file))
                 return fdopen(low_level_open(lock_file, O_CREAT | O_EXCL | O_WRONLY), 'w')
 
             def release_lock(lock_file):
-                print("Process %d released lock %s." % (getpid(), lock_file))
+                if lock_debugging:
+                    print("Process %d released lock %s." % (getpid(), lock_file))
                 try:
                     remove(lock_file)
                 except FileNotFoundError:
