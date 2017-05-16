@@ -36,7 +36,7 @@ def find_linear_window(
 
     filtered_results = [[b, e] for b, e, r in results if condition_check(r)]
 
-    if filtered_results:
+    if not filtered_results:
         if return_nan_if_impossible:
 
             regression = results[0][2]
@@ -48,6 +48,8 @@ def find_linear_window(
                 return float('nan'), float('nan'), regression
             else:
                 return regression
+        else:
+            raise RuntimeError('No optimal range for regression found.')
 
     if np.isnan(begin):
         begin = filtered_results[0][0]
