@@ -134,7 +134,7 @@ class CleanUpGaussianThreshold(Tunable):
 
 class CleanUpHoleFillSize(Tunable):
     """Clean up step: Maximum size of holes [µm²] which will be filled"""
-    default = 20
+    default = 1.0
 
 
 def clean_up(calibration, binary):
@@ -149,7 +149,7 @@ def clean_up(calibration, binary):
 
 class RemoveSmallStructuresSize(Tunable):
     """Remove structures up to this size [µm²]"""
-    default = 30
+    default = 10.0
 
 
 def remove_small_structures(calibration, binary):
@@ -160,7 +160,7 @@ def remove_small_structures(calibration, binary):
 
 class BorderArtifactRemovalBorderSize(Tunable):
     """Remove structures, whose centroid lies within that distance [µm] of a border"""
-    default = 10
+    default = 10.0
 
 
 def remove_border_artifacts(calibration, binary):
@@ -198,18 +198,23 @@ def track_multipoint(collected):
 
 
 class TrackingMaximumRelativeShrinkage(Tunable):
-    """"""
+    """ Tracking, maximal relative shrinkage """
     default = 0.2
 
 
 class TrackingMinimumTipElongationRate(Tunable):
-    """"""
-    default = -50.0
+    """ Tracking, minimum tip elongation rate [µm·h⁻¹]"""
+    default = -0.0
 
 
 class TrackingMaximumTipElongationRate(Tunable):
-    """"""
+    """ Tracking, maximum tip elongation rate [µm·h⁻¹] """
     default = 100.0
+
+
+class TrackingMaximumCoverage(Tunable):
+    """ Tracking, maximum covered area ratio at which tracking is still performed """
+    default = 0.2
 
 
 def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fates=None):
@@ -227,6 +232,8 @@ def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fat
     next_track_id = 0
 
     for i, (current_result, next_result) in enumerate(pairwise(collected.values())):
+        if current_result.covered_ratio > TrackingMaximumCoverage.value:
+            break
 
         frame, next_frame = current_result.node_frame, next_result.node_frame
 
@@ -347,17 +354,17 @@ def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fat
 
 
 class TrackingMinimumTrackedPointCount(Tunable):
-    """"""
+    """ Tracking, minimal timesteps in track filter [#] """
     default = 5
 
 
 class TrackingMinimalMaximumLength(Tunable):
-    """µm"""
+    """ Tracking, minimal hyphae end length in track filter [µm] """
     default = 10.0
 
 
 class TrackingMinimalGrownLength(Tunable):
-    """µm"""
+    """ Tracking, minimal hyphae gained length in track filter  [µm] """
     default = 5.0
 
 

@@ -6,73 +6,78 @@ import numpy as np
 from scipy.sparse import lil_matrix
 from scipy.sparse.csgraph import shortest_path, connected_components
 from scipy.spatial.ckdtree import cKDTree as KDTree
+from networkx import find_cycle, NetworkXNoCycle, from_scipy_sparse_matrix
 
 from ..misc.util import calculate_length, clean_by_radius
 from tunable import Tunable
 
 
 class NodeEndpointMergeRadius(Tunable):
-    """ [µm] """
+    """ Radius in which endpoints are going to be merged [µm] """
     default = 0.5
 
 
 class NodeJunctionMergeRadius(Tunable):
-    """ [µm] """
+    """ Radius in which junctions are going to be merged [µm] """
     default = 0.5
 
 
 class NodeLookupRadius(Tunable):
-    """ [µm] """
+    """ Radius in which nodes will be searched for found pixel structures [µm] """
     default = 0.5
 
 class NodeLookupCutoffRadius(Tunable):
-    """ [µm] """
+    """ Radius at which nodes will be ignored if they are further away [µm] """
     default = 2.5
 
 
 class NodeTrackingJunctionShiftRadius(Tunable):
-    """"""
-    default = 3
+    """ Maximum search radius for junctions [µm·h⁻¹] """
+    default = 5.0
 
 
 class NodeTrackingEndpointShiftRadius(Tunable):
-    """"""
-    default = 10
+    """ Maximum search radius for endpoints [µm·h⁻¹] """
+    default = 100.0
 
 
 class NodeFrame(object):
-
-    timepoint = None
-    calibration = None
-
-    junction_shift = None
-    endpoint_shift = None
-
-    data = None
-
-    endpoint_tree = None
-    junction_tree = None
-
-    endpoint_tree_data = None
-    junction_tree_data = None
-
-    adjacency = None
-
-    every_endpoint = None
-    every_junction = None
-
-    predecessors = None
-    shortest_paths = None
-    shortest_paths_num = None
-
-    connected_components_count = None
-    connected_components = None
-
-    self_to_successor = None
-    successor_to_self = None
-    self_to_successor_alternatives = None
-
     def __init__(self, pf):
+        # initializing vars
+        self.timepoint = None
+        self.calibration = None
+
+        self.junction_shift = None
+        self.endpoint_shift = None
+
+        self.data = None
+
+        self.endpoint_tree = None
+        self.junction_tree = None
+
+        self.endpoint_tree_data = None
+        self.junction_tree_data = None
+
+        self.adjacency = None
+
+        self.every_endpoint = None
+        self.every_junction = None
+
+        self.predecessors = None
+        self.shortest_paths = None
+        self.shortest_paths_num = None
+
+        self.connected_components_count = None
+        self.connected_components = None
+
+        self._cycles = None
+
+        self.self_to_successor = None
+        self.successor_to_self = None
+        self.self_to_successor_alternatives = None
+
+        # /initializing vars
+
         self.timepoint = pf.timepoint  # copy this information, so we can set pf to None for serialization
         self.calibration = pf.calibration
         self.prepare_graph(pf)
@@ -191,7 +196,6 @@ class NodeFrame(object):
         non_empty_mask = (self.adjacency.getnnz(axis=0) + self.adjacency.getnnz(axis=1)) > 0
         # noinspection PyTypeChecker
         empty_indices, = np.where(~non_empty_mask)
-        # these int casts can go away, once scipy #5026 is in
 
         # if this ever becomes multi threaded, we should lock the trees now
         # endpoint_tree, junction_tree = None, None
@@ -241,6 +245,18 @@ class NodeFrame(object):
 
         self.connected_components_count, self.connected_components = connected_components(self.adjacency)
 
+    @property
+    def cycles(self):
+        if self._cycles is None:
+            g = self.get_networkx_graph()
+            try:
+                find_cycle(g)
+                self._cycles = True
+            except NetworkXNoCycle:
+                self._cycles = False
+
+        return self._cycles
+
     def get_path(self, start_node, end_node):
         predecessor = end_node
 
@@ -263,8 +279,10 @@ class NodeFrame(object):
         return np.where(self.connected_components[self.connected_components == label])[0]
 
     def track(self, successor):
-        junction_shift_radius = NodeTrackingJunctionShiftRadius.value / self.calibration
-        endpoint_shift_radius = NodeTrackingEndpointShiftRadius.value / self.calibration
+        delta_t = (successor.timepoint - self.timepoint) / (60.0*60.0)
+
+        junction_shift_radius = (NodeTrackingJunctionShiftRadius.value / self.calibration) * delta_t
+        endpoint_shift_radius = (NodeTrackingEndpointShiftRadius.value / self.calibration) * delta_t
 
         ##
         self_len = len(self.data)
@@ -321,8 +339,6 @@ class NodeFrame(object):
         self.self_to_successor_alternatives = self_to_successor_alternatives
 
     def get_networkx_graph(self, with_z=0, return_positions=False):
-        from networkx import from_scipy_sparse_matrix
-
         g = from_scipy_sparse_matrix(self.adjacency)
 
         positions = {}
