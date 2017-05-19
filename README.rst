@@ -1,4 +1,4 @@
-.. image:: docs/_static/mycelyso-banner.png
+.. image:: docs/_static/mycelyso-banner.svg
 
 mycelyso
 ========

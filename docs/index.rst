@@ -1,5 +1,5 @@
-Welcome to mycelysos's documentation!
-=====================================
+Welcome to mycelyso's documentation!
+====================================
 
 See :doc:`readme` for information.
 
@@ -18,3 +18,4 @@ Contents:
 
     readme
     license
+    mycelyso

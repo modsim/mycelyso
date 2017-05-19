@@ -5,10 +5,11 @@ documentation
 
 from setuptools import setup, find_packages
 
+import mycelyso
 
 setup(
     name='mycelyso',
-    version='0.0.1',
+    version=mycelyso.__version__,
     description='MYCEl anaLYsis SOftware',
     long_description='see https://github.com/modsim/mycelyso',
     author='Christian C. Sachs',

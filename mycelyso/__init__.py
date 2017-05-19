@@ -3,6 +3,8 @@
 documentation
 """
 
+__version__ = '0.1.0'
+
 BANNER = """
   MYCElium   anaLYsis __ SOftware
   ___   __ _________ / /_ _____ ___         Developed  2015 - 2017 by

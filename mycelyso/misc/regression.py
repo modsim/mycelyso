@@ -17,6 +17,28 @@ def find_linear_window(
         return_begin_end=False,
         return_nan_if_impossible=True
 ):
+    """
+    Tries to find a continuous window in x/y which (mostly) follows a linear relation subject to condition.
+    
+    If window is a float, it is seen as relative length of the input lists.
+    Linear regressions will be performed on each window, then the windows will be filtered by the condition
+    (eg that they have a rvalue better than 0.95). Then the range between the first and the last window to
+    follow these conditions will be used to perform the overall regression.
+    
+    See also :py:func:`scipy.stats.linregress`
+    
+    :param x: Input data, independent value
+    :param y: Input data, dependent value
+    :param begin: 
+    :param end: 
+    :param window: Window, either 
+    :param condition: Condition to check, a tuple of three. The first must be a key of a 
+            linear regression result object, the second either 'gt' or 'lt', and the third the value to compare. 
+    :param return_begin_end: If true, return the found range as well
+    :param return_nan_if_impossible: If True, return NaN if no suitable region was found, otherwise throws RuntimeError
+    :return: 
+    
+    """
     data = np.c_[x, y]
 
     data[:, 1][~np.isfinite(data[:, 1])] = 0.0
