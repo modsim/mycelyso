@@ -19,7 +19,7 @@ setup(
     install_requires=[
         'numpy', 'scipy', 'scikit-image>=0.12', 'networkx', 'tables', 'numexpr', 'pandas',
         'tifffile', 'nd2file',
-        'mfisp_boxdetection', 'molyso',
+        'mfisp_boxdetection', 'molyso', 'tunable',
         'tqdm'  # nicer progress bars, using the MPLv2+MIT licensed version
     ],
     license='BSD',
