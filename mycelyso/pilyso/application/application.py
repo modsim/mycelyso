@@ -23,7 +23,8 @@ from ..pipeline import PipelineExecutor
 
 def parse_range(s, maximum=0):
     """
-
+    Parses a range string.
+    
     :param s:
     :param maximum:
     :return:
@@ -86,6 +87,9 @@ def prettify_numpy_array(arr, space_or_prefix):
 
 
 class AppInterface(object):
+    """
+    Interface to be implemented by Apps utilizing pilyso's App infrastructure.
+    """
     def options(self):
         return {}
 
@@ -99,6 +103,9 @@ Meta = namedtuple('Meta', ['pos', 't'])
 
 
 class App(AppInterface):
+    """
+    Base class implementing most of the App "in the back" works.
+    """
     @staticmethod
     def _internal_option_defaults():
         return {
@@ -155,6 +162,10 @@ class App(AppInterface):
     args = None
 
     def main(self):
+        """
+        Main entry point for App apps.
+        :return: 
+        """
         logging.basicConfig(level=logging.INFO, format="%(asctime)-15s %(name)s %(levelname)s %(message)s")
 
         install_maintenance_interrupt()

@@ -58,42 +58,102 @@ _INVERSE_NEIGHBORS = {
 
 
 def get_connectivity_map(binary):
+    """
+    Returns a 'connectivity map', where each value represents the count of neighbors at a position.
+    
+    :param binary: Binary input image 
+    :return: 
+    """
     return binary * ndi.correlate(binary.astype(np.uint8), _COUNTING_KERNEL, mode='constant')
 
 
 def get_neighborhood_map(binary):
+    """
+    Returns a 'neighborhood map', where each value binary encodes the connections at a point.
+    
+    :param binary: Binary input image 
+    :return: 
+    """
     return binary * ndi.correlate(binary.astype(np.uint8), _NEIGHBORHOOD_KERNEL, mode='constant')
 
 
 def get_next_neighbor(num):
+    """
+    Returns the coordinates represented by a numeric neighbor bit. 
+    
+    :param num: Neighbor bit 
+    :return: Shift (r, c)
+    """
     return _NEIGHBORS[num]
 
 
 def get_all_neighbor_nums(num):
+    """
+    Return all set neighbor bits in num.
+    
+    :param num: Neighborhood representation. 
+    :return: Array of values
+    """
     return [value for value, shift in _NEIGHBORS.items() if (num & value) == value]
 
 
 def get_all_neighbors(num):
+    """
+    Return positions for all set neighbor bits in num
+    
+    :param num: Neighborhood representation
+    :return: Array of shifts
+    """
     return [shift for value, shift in _NEIGHBORS.items() if (num & value) == value]
 
 
 def get_inverse_neighbor_shift(num):
+    """
+    Get the shift corresponding to the inverse direction represented by num. 
+    
+    :param num: Neighborhood bit
+    :return: Shift (r, c)
+    """
     return _INVERSE_NEIGHBORS[num]
 
 
 def is_edge(connectivity):
+    """
+    Returns True if connectivity corresponds an edge (is two).
+    
+    :param connectivity: Scalar or matrix 
+    :return: Boolean or matrix of boolean
+    """
     return connectivity == 2
 
 
 def is_junction(connectivity):
+    """
+    Returns True if connectivity corresponds a junction (is greater than two).
+    
+    :param connectivity: Scalar or matrix 
+    :return: Boolean or matrix of boolean
+    """
     return connectivity > 2
 
 
 def is_end(connectivity):
+    """
+    Returns True if connectivity corresponds to an endpoint (is one).
+    
+    :param connectivity: Scalar or matrix 
+    :return: Boolean or matrix of boolean 
+    """
     return connectivity == 1
 
 
 def where2d(image):
+    """
+    numpy.where for 2D matrices.
+    
+    :param image: Input images
+    :return: Coordinate list where image is non-zero
+    """
 
     hits = np.where(image.ravel())[0]
 

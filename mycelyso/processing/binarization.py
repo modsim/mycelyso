@@ -15,6 +15,13 @@ from skimage.feature import shape_index
 
 
 def mean_and_std(image, window_size=15):
+    """
+    Helper function returning mean and average images sped up using integral images / summed area tables.
+    
+    :param image: Input image 
+    :param window_size: Window size
+    :return: tuple (mean, std)
+    """
     enlarged = np.zeros((image.shape[0] + 2 * window_size, image.shape[1] + 2 * window_size), np.double)
 
     enlarged[window_size:-window_size, window_size:-window_size] = image
@@ -55,13 +62,25 @@ def mean_and_std(image, window_size=15):
 # I had highly optimized versions of sub functions of these, mainly
 # using cv2, however to keep installation easy, I've replaced them by slower scikit-image etc. functions
 
-def experimental_thresholding(image, window_size=15, gaussian_radius=3.0, shift=0.2, target=-0.5, quotient=1.2):
+def experimental_thresholding(image, window_size=15, gaussian_sigma=3.0, shift=0.2, target=-0.5, quotient=1.2):
+    """
+    A novel thresholding method basing upon the shape index as defined by Koenderink and van Doorn, and Bataineh
+    automatic adaptive thresholding. The method is due to be explained in detail in the future.
+    
+    :param image: Input image
+    :param window_size: Window size
+    :param gaussian_sigma: Sigma of the smoothing
+    :param shift: Shift parameter
+    :param target: Target shape index parameter
+    :param quotient: Quotient parameter
+    :return: 
+    """
     # novel method based upon shape index and Bataineh thresholding
 
     means, stddev = mean_and_std(image, window_size)
 
     with np.errstate(invalid='ignore'):
-        sim = shape_index(image, gaussian_radius)
+        sim = shape_index(image, gaussian_sigma)
 
     stddev_min, stddev_max = stddev.min(), stddev.max()
     stddev_delta = stddev_max - stddev_min

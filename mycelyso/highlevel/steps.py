@@ -35,7 +35,8 @@ except ImportError:
 
 def qimshow(image, cmap='gray'):
     """
-    debug function
+    Debug function, quickly shows the passed image via matplotlibs imshow-facilities.
+    
     :param image: 
     :param cmap: 
     :return: 
@@ -62,10 +63,27 @@ def qimshow(image, cmap='gray'):
 
 
 def set_empty_crops(image, crop_t=None, crop_b=None, crop_l=None, crop_r=None):
+    """
+    Defines crop parameters based upon image size, effectively not cropping at all.
+    
+    :param image: 
+    :param crop_t: 
+    :param crop_b: 
+    :param crop_l: 
+    :param crop_r: 
+    :return: 
+    """
     return 0, image.shape[0], 0, image.shape[1]
 
 
 def skip_if_image_is_below_size(min_height=4, min_width=4):
+    """
+    Raises a Skip exception if the image size falls below the set image size.
+    
+    :param min_height: 
+    :param min_width: 
+    :return: 
+    """
     def _inner(image, meta):
         if image.shape[0] < min_height or image.shape[1] < min_width:
             raise Skip(Meta(pos=meta.pos, t=Collected)) from None
@@ -76,14 +94,36 @@ def skip_if_image_is_below_size(min_height=4, min_width=4):
 
 
 def binarize(image, binary=None):
+    """
+    Binarizes the input image using the experimental thresholding technique.
+    
+    :param image: 
+    :param binary: 
+    :return: 
+    """
     return experimental_thresholding(image)
 
 
 def skeletonize(binary, skeleton=None):
+    """
+    Skeletonizes the image using scikit-image's skeletonize function.
+    
+    :param binary: 
+    :param skeleton: 
+    :return: 
+    """
     return sk_skeletonize(binary)
 
 
 def image_statistics(image, calibration, result=None):
+    """
+    Adds some numeric image parameters (i.e. size) to the results.
+    
+    :param image: 
+    :param calibration: 
+    :param result: 
+    :return: 
+    """
     return {
         'input_width': image.shape[1] * calibration,
         'input_height': image.shape[0] * calibration,
@@ -95,6 +135,13 @@ def image_statistics(image, calibration, result=None):
 
 
 def quantify_binary(binary, calibration, result=None):
+    """
+    Adds some informations about the binary image (i.e. covered ratio, area ...) to the results.
+    :param binary: 
+    :param calibration: 
+    :param result: 
+    :return: 
+    """
     ones = np.sum(binary)
     total = binary.shape[0] * binary.shape[1]
     return {
@@ -105,6 +152,13 @@ def quantify_binary(binary, calibration, result=None):
 
 
 def graph_statistics(node_frame, result=None):
+    """
+    Adds some information about the graph to the results.
+    
+    :param node_frame: 
+    :param result: 
+    :return: 
+    """
     # everything / 2 because it's a digraph/graph structure
     graph_edge_length = node_frame.adjacency.sum() / 2
     graph_edge_count = node_frame.adjacency.nnz / 2
@@ -138,6 +192,13 @@ class CleanUpHoleFillSize(Tunable):
 
 
 def clean_up(calibration, binary):
+    """
+    Cleans up the image by removing holes smaller than the configured size.
+    
+    :param calibration: 
+    :param binary: 
+    :return: 
+    """
     binary = ndi.gaussian_filter(binary * 1.0, CleanUpGaussianSigma.value / calibration) > CleanUpGaussianThreshold.value
 
     with warnings.catch_warnings():
@@ -153,6 +214,13 @@ class RemoveSmallStructuresSize(Tunable):
 
 
 def remove_small_structures(calibration, binary):
+    """
+    Cleans up the image by removing structures smaller than the configured size.
+    
+    :param calibration: 
+    :param binary: 
+    :return: 
+    """
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
         return remove_small_objects(binary, min_size=int(RemoveSmallStructuresSize.value / calibration**2), connectivity=2)  # TODO
@@ -164,7 +232,13 @@ class BorderArtifactRemovalBorderSize(Tunable):
 
 
 def remove_border_artifacts(calibration, binary):
-
+    """
+    Removes structures, which are most likely artifacts because their centroid lies near the border.
+    
+    :param calibration: 
+    :param binary: 
+    :return: 
+    """
     border = BorderArtifactRemovalBorderSize.value / calibration
 
     labeled = label(binary)
@@ -186,12 +260,28 @@ def remove_border_artifacts(calibration, binary):
 
 
 def convert_to_nodes(skeleton, timepoint, calibration, pixel_frame=None, node_frame=None):
+    """
+    Passes the input skeleton into a PixelFrame and instantiates a NodeFrame based upon that.
+    
+    :param skeleton: 
+    :param timepoint: 
+    :param calibration: 
+    :param pixel_frame: 
+    :param node_frame: 
+    :return: 
+    """
     pixel_frame = PixelFrame(skeleton, timepoint, calibration=calibration)
     node_frame = NodeFrame(pixel_frame)
     return pixel_frame, node_frame
 
 
 def track_multipoint(collected):
+    """
+    Initiates tracking between consecutive NodeFrames.
+    
+    :param collected: 
+    :return: 
+    """
     for result1, result2 in pairwise(collected.values()):
         result1.node_frame.track(result2.node_frame)
     return collected
@@ -218,6 +308,14 @@ class TrackingMaximumCoverage(Tunable):
 
 
 def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fates=None):
+    """
+    After correspondence has been established by NodeFrame#track, reconstructs growing paths over time.
+    
+    :param collected: 
+    :param tracked_fragments: 
+    :param tracked_fragments_fates: 
+    :return: 
+    """
     def any_in(needles, haystack):
         for needle in needles:
             if needle in haystack:
@@ -371,6 +469,16 @@ class TrackingMinimalGrownLength(Tunable):
 # noinspection PyProtectedMember
 def prepare_tracked_fragments(collected, tracked_fragments, tracked_fragments_fates, track_table=None,
                               track_table_aux_tables=None):
+    """
+    Filters and converts tracked growing segments to result datasets.
+    
+    :param collected: 
+    :param tracked_fragments: 
+    :param tracked_fragments_fates: 
+    :param track_table: 
+    :param track_table_aux_tables: 
+    :return: 
+    """
     key_list = list(collected.keys())
     calibration = next(iter(collected.values()))['calibration']
 
@@ -470,6 +578,13 @@ def prepare_tracked_fragments(collected, tracked_fragments, tracked_fragments_fa
 
 
 def prepare_position_regressions(collected, result):
+    """
+    Prepares some regressions over parameters collected per position over time.
+    
+    :param collected: 
+    :param result: 
+    :return: 
+    """
     fields = ['covered_ratio', 'covered_area', 'graph_edge_length', 'graph_edge_count', 'graph_node_count',
               'graph_junction_count', 'graph_endpoint_count']
 
@@ -504,6 +619,13 @@ def prepare_position_regressions(collected, result):
 
 
 def generate_graphml(node_frame, result):
+    """
+    Generates a GraphML representation of a particular frame.
+    
+    :param node_frame: 
+    :param result: 
+    :return: 
+    """
     return {
         'graphml': to_graphml_string(node_frame.get_networkx_graph())
     }
@@ -511,6 +633,13 @@ def generate_graphml(node_frame, result):
 
 # noinspection PyTypeChecker
 def generate_overall_graphml(collected, result):
+    """
+    Generates a GraphML representation of the whole graph of one image stack.
+    
+    :param collected: 
+    :param result: 
+    :return: 
+    """
     time_to_z_scale = 1.0
 
     graphs_list = {}

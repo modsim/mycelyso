@@ -91,6 +91,13 @@ def find_linear_window(
 
 
 def prepare_optimized_regression(x, y):
+    """
+    First finds an optimal window using :py:func:`find_linear_window`, than performs a linear regression.
+    
+    :param x: independent variable 
+    :param y: dependent variable
+    :return: 
+    """
     condition = ('rvalue', 'gt', 0.9)
     begin, end, regression = find_linear_window(x, y, condition=condition, return_begin_end=True)
     # noinspection PyProtectedMember

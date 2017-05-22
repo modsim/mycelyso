@@ -17,6 +17,9 @@ from .. import BANNER
 
 
 class Mycelyso(App):
+    """
+    The Mycelyso App, implementing a pilyso App.
+    """
     def options(self):
         return {
             'name': "mycelyso",
@@ -36,6 +39,9 @@ class Mycelyso(App):
 
 
 class MycelysoPipeline(PipelineExecutionContext):
+    """
+    The MycelysoPipeline, defining the pipeline (with slight alterations based upon arguments passed via command line).
+    """
     def __init__(self, args):
         absolute_input = abspath(args.input)
         h5nodename = hdf5_node_name(absolute_input)

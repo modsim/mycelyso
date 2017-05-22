@@ -13,7 +13,17 @@ from ..processing.pixelgraphs import \
 
 
 class PixelFrame(object):
+    """
+    A PixelFrame represents the pixel graph of one (skeletonized) image stack frame.
+    """
     def __init__(self, image, timepoint=0.0, calibration=1.0):
+        """
+        Initializes the PixelFrame
+        
+        :param image: Input image (skeletonized) 
+        :param timepoint: Experiment time  (in seconds) 
+        :param calibration: Voxel size (in µm)
+        """
         self.timepoint = timepoint
         self.calibration = calibration
 
@@ -41,6 +51,11 @@ class PixelFrame(object):
         self.create_graph()
 
     def create_graph(self):
+        """
+        Creates the graph from the pixel skeleton.
+        
+        :return: 
+        """
         conn = self.connectivity
         nm = self.neighborhood_map.copy()
 

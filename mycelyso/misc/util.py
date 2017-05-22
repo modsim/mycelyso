@@ -5,6 +5,18 @@ from scipy.spatial.ckdtree import cKDTree as KDTree
 
 
 def calculate_length(points, times=1, w=5):
+    """
+    Calculates the length of a path.
+    
+    Paths sampled from pixel grids may contain notable measuring error, if euclidean distances are calculated
+    naively. This method uses an adapted approach from Cornelisse and van den Berg, by repeatedly smothing
+    the coordinates with a moving average filter before calculating the euclidean distance.
+    
+    :param points: Input points, a numpy array (X, 2) 
+    :param times: Times smoothing should be applied
+    :param w: window width of the moving average filter
+    :return: Length of the input path
+    """
     # adapted method from Cornelisse and van den Berg
     if (len(points) - 2) > w:
         for _ in range(times):
@@ -17,6 +29,13 @@ def calculate_length(points, times=1, w=5):
 
 
 def clean_by_radius(points, radius=15.0):
+    """
+    Bins points by radius and returns only one per radius, removing duplicates.
+    
+    :param points: Input points 
+    :param radius: Radius
+    :return: Filtered points
+    """
     if len(points) == 0:
         return points
     tree = KDTree(points)

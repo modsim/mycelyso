@@ -42,7 +42,15 @@ class NodeTrackingEndpointShiftRadius(Tunable):
 
 
 class NodeFrame(object):
+    """
+    Node frame is a representation of an image stack frame on the graph/node level, it populates its values from
+    a PixelFrame passed.
+    """
     def __init__(self, pf):
+        """
+        Initializes the NodeFrame
+        :param pf: PixelFrame the NodeFrame corresponds to
+        """
         # initializing vars
         self.timepoint = None
         self.calibration = None
@@ -83,6 +91,11 @@ class NodeFrame(object):
         self.prepare_graph(pf)
 
     def prepare_graph(self, pf):
+        """
+        Prepares the graph from the data stored in the PixelFrame pf. 
+        :param pf: PixelFrame
+        :return: 
+        """
         endpoint_tree_data = clean_by_radius(pf.endpoints, NodeEndpointMergeRadius.value / self.calibration)
         junction_tree_data = clean_by_radius(pf.junctions, NodeJunctionMergeRadius.value / self.calibration)
 
@@ -193,6 +206,11 @@ class NodeFrame(object):
         self.generate_derived_data()
 
     def cleanup_adjacency(self):
+        """
+        Cleans up the adjacency matrix after alterations on the node level have been performed.
+        
+        :return: 
+        """
         non_empty_mask = (self.adjacency.getnnz(axis=0) + self.adjacency.getnnz(axis=1)) > 0
         # noinspection PyTypeChecker
         empty_indices, = np.where(~non_empty_mask)
@@ -240,6 +258,13 @@ class NodeFrame(object):
         self.every_junction = range(self.junction_shift, self.junction_shift + len(self.junction_tree_data))
 
     def generate_derived_data(self):
+        """
+        Generates derived data from the current adjacency matrix.
+        
+        Derived data are shortest paths, as well as connected components.
+        
+        :return: 
+        """
         self.shortest_paths, self.predecessors = shortest_path(self.adjacency, return_predecessors=True)
         self.shortest_paths_num = shortest_path(self.adjacency, unweighted=True)
 
@@ -247,6 +272,11 @@ class NodeFrame(object):
 
     @property
     def cycles(self):
+        """
+        Detects whether a cycle exists in the graph.
+        
+        :return: 
+        """
         if self._cycles is None:
             g = self.get_networkx_graph()
             try:
@@ -258,6 +288,13 @@ class NodeFrame(object):
         return self._cycles
 
     def get_path(self, start_node, end_node):
+        """
+        Walks from start_node to end_node in the graph and returns the list of nodes (including both).
+        
+        :param start_node: 
+        :param end_node: 
+        :return: 
+        """
         predecessor = end_node
 
         path = [predecessor]
@@ -269,16 +306,40 @@ class NodeFrame(object):
         return path[::-1]
 
     def is_endpoint(self, i):
+        """
+        Returns whether node i is an endpoint.
+        
+        :param i: 
+        :return: 
+        """
         return i in self.every_endpoint
 
     def is_junction(self, i):
+        """
+        Returns whether node i is a junction.
+        
+        :param i: 
+        :return: 
+        """
         return i in self.every_junction
 
     def get_connected_nodes(self, some_node):
+        """
+        Get all nodes which are (somehow) connected to node some_node.
+        
+        :param some_node: 
+        :return: 
+        """
         label = self.connected_components[some_node]
         return np.where(self.connected_components[self.connected_components == label])[0]
 
     def track(self, successor):
+        """
+        Tracks nodes on this frame to nodes on a successor frame.
+        
+        :param successor: 
+        :return: 
+        """
         delta_t = (successor.timepoint - self.timepoint) / (60.0*60.0)
 
         junction_shift_radius = (NodeTrackingJunctionShiftRadius.value / self.calibration) * delta_t
@@ -339,6 +400,15 @@ class NodeFrame(object):
         self.self_to_successor_alternatives = self_to_successor_alternatives
 
     def get_networkx_graph(self, with_z=0, return_positions=False):
+        """
+        Convert the adjacency matrix based internal graph representation to a networkx graph representation.
+        
+        Positions are additionally set based upon the pixel coordinate based positions of the nodes.
+        
+        :param with_z: Whether z values should be set based upon the timepoint the nodes appear on
+        :param return_positions: Whether positions should be returned jointly with the graph 
+        :return: 
+        """
         g = from_scipy_sparse_matrix(self.adjacency)
 
         positions = {}
