@@ -9,7 +9,7 @@ import multiprocessing
 import sys
 import numpy as np
 
-from tunable import Tunable
+from tunable import TunableManager
 from ..misc.hacks.maintenance_interrupt import install_maintenance_interrupt
 from ..misc.hacks.recursionlimit_raise import *
 from ..misc.hacks.multiprocessing_patch import *
@@ -139,7 +139,6 @@ class App(AppInterface):
         argparser = argparse.ArgumentParser(description=self.internal_options['description'])
 
         def _error(message=''):
-            self.log.info(self.internal_options['banner'])
             argparser.print_help()
             self.log.error("command line argument error: %s", message)
             sys.exit(1)
@@ -157,7 +156,7 @@ class App(AppInterface):
         argparser.add_argument('-tp', '--timepoints', dest='timepoints', default='0-', type=str)
         argparser.add_argument('-mp', '--positions', dest='positions', default='0-', type=str)
 
-        Tunable.Manager.register_argparser(argparser)
+        TunableManager.register_argparser(argparser)
 
     args = None
 
@@ -175,12 +174,12 @@ class App(AppInterface):
         self._arguments(argparser)
         self.arguments(argparser)
 
+        self.log.info(self.internal_options['banner'])
         self.args = argparser.parse_args()
 
         if self.args.wait_on_start:
             _ = input("Press enter to continue.")
 
-        self.log.info(self.internal_options['banner'])
         self.log.info("Started %s.", self.internal_options['name'])
 
         ims = ImageStack(self.args.input).view(Dimensions.PositionXY, Dimensions.Time)
@@ -189,6 +188,8 @@ class App(AppInterface):
 
         self.positions = parse_range(self.args.positions, maximum=ims.size[Dimensions.PositionXY])
         self.timepoints = parse_range(self.args.timepoints, maximum=ims.size[Dimensions.Time])
+
+        self.log.info("Tunable Hash: %s" % (TunableManager.get_hash()))
 
         self.log.info(
             "Beginning Processing:\n%s\n%s",

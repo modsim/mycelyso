@@ -13,7 +13,7 @@ from os.path import basename, abspath
 from .steps import *
 
 from ..pilyso.misc.h5writer import hdf5_output, hdf5_node_name
-from .. import BANNER
+from .. import __banner__
 
 
 class Mycelyso(App):
@@ -24,7 +24,7 @@ class Mycelyso(App):
         return {
             'name': "mycelyso",
             'description': "",
-            'banner': BANNER,
+            'banner': __banner__,
             'pipeline': MycelysoPipeline
         }
 

@@ -12,7 +12,7 @@ setup(
     version=mycelyso.__version__,
     description='MYCEl anaLYsis SOftware',
     long_description='see https://github.com/modsim/mycelyso',
-    author='Christian C. Sachs',
+    author=mycelyso.__author__,
     author_email='c.sachs@fz-juelich.de',
     url='https://github.com/modsim/mycelyso',
     packages=find_packages(),
