@@ -21,6 +21,7 @@ from tunable import Tunable
 from ..misc.graphml import to_graphml_string
 from ..misc.util import pairwise
 from ..misc.regression import prepare_optimized_regression
+from ..pilyso.application import Every, Collected, Meta, Skip
 
 from ..processing.binarization import experimental_thresholding
 
@@ -83,6 +84,10 @@ def skip_if_image_is_below_size(min_height=4, min_width=4):
     :param min_height: 
     :param min_width: 
     :return: 
+    >>> skip_if_image_is_below_size(32, 32)(np.zeros((16,16)), Meta(0, 0))
+    Traceback (most recent call last):
+     ...
+    mycelyso.pilyso.pipeline.executor.Skip: Meta(pos=0, t=<class 'mycelyso.pilyso.pipeline.executor.Collected'>)
     """
     def _inner(image, meta):
         if image.shape[0] < min_height or image.shape[1] < min_width:
@@ -110,7 +115,15 @@ def skeletonize(binary, skeleton=None):
     
     :param binary: 
     :param skeleton: 
-    :return: 
+    :return:
+    >>> skeletonize(np.array([[0, 0, 1, 1],
+    ...                       [0, 0, 1, 1],
+    ...                       [0, 0, 1, 1],
+    ...                       [0, 0, 1, 1]]))
+    array([[False, False, False, False],
+           [False, False,  True, False],
+           [False, False,  True, False],
+           [False, False, False, False]], dtype=bool)
     """
     return sk_skeletonize(binary)
 
@@ -123,6 +136,11 @@ def image_statistics(image, calibration, result=None):
     :param calibration: 
     :param result: 
     :return: 
+    
+    >>> sorted(image_statistics(np.array([[0, 0, 0],
+    ...                                   [0, 0, 0],
+    ...                                   [0, 0, 0]]), calibration=15.0).items())
+    [('area', 2025.0), ('area_pixel', 9), ('input_height', 45.0), ('input_height_pixel', 3), ('input_width', 45.0), ('input_width_pixel', 3)]
     """
     return {
         'input_width': image.shape[1] * calibration,
@@ -137,10 +155,15 @@ def image_statistics(image, calibration, result=None):
 def quantify_binary(binary, calibration, result=None):
     """
     Adds some informations about the binary image (i.e. covered ratio, area ...) to the results.
+    
     :param binary: 
     :param calibration: 
     :param result: 
     :return: 
+    >>> sorted(quantify_binary(np.array([[0, 0, 0],
+    ...                                  [1, 1, 1],
+    ...                                  [0, 0, 0]]), calibration=15.0).items())
+    [('covered_area', 675.0), ('covered_area_pixel', 3), ('covered_ratio', 0.33333333333333331)]
     """
     ones = np.sum(binary)
     total = binary.shape[0] * binary.shape[1]
@@ -158,7 +181,13 @@ def graph_statistics(node_frame, result=None):
     :param node_frame: 
     :param result: 
     :return: 
+    >>> pf = PixelFrame(np.array([[0, 0, 0],
+    ...                           [1, 1, 1],
+    ...                           [0, 0, 0]]), calibration=15.0)
+    >>> sorted(graph_statistics(NodeFrame(pf)).items())
+    [('graph_edge_count', 1.0), ('graph_edge_length', 30.0), ('graph_endpoint_count', 2), ('graph_junction_count', 0), ('graph_node_count', 2)]
     """
+
     # everything / 2 because it's a digraph/graph structure
     graph_edge_length = node_frame.adjacency.sum() / 2
     graph_edge_count = node_frame.adjacency.nnz / 2
@@ -198,6 +227,12 @@ def clean_up(calibration, binary):
     :param calibration: 
     :param binary: 
     :return: 
+    >>> clean_up(0.1, np.array([[ True,  True,  True],
+    ...                         [ True, False,  True],
+    ...                         [ True,  True,  True]]))
+    array([[ True,  True,  True],
+           [ True,  True,  True],
+           [ True,  True,  True]], dtype=bool)
     """
     binary = ndi.gaussian_filter(binary * 1.0, CleanUpGaussianSigma.value / calibration) > CleanUpGaussianThreshold.value
 
@@ -220,6 +255,12 @@ def remove_small_structures(calibration, binary):
     :param calibration: 
     :param binary: 
     :return: 
+    >>> remove_small_structures(0.1, np.array([[ False, False, False],
+    ...                                        [ False, False,  True],
+    ...                                        [ False, False,  True]]))
+    array([[False, False, False],
+           [False, False, False],
+           [False, False, False]], dtype=bool)
     """
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
@@ -238,6 +279,12 @@ def remove_border_artifacts(calibration, binary):
     :param calibration: 
     :param binary: 
     :return: 
+    >>> remove_border_artifacts(0.1, np.array([[ False, False, False],
+    ...                                        [ False, False,  True],
+    ...                                        [ False, False,  True]]))
+    array([[False, False, False],
+           [False, False, False],
+           [False, False, False]], dtype=bool)
     """
     border = BorderArtifactRemovalBorderSize.value / calibration
 

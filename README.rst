@@ -21,13 +21,13 @@ mycelyso Readme
 .. image:: https://zenodo.org/badge/doi/coming/soon.svg
    :target: https://dx.doi.org/
 
-mycelyso Inspector
-------------------
-Want to quickly get a grasp wat results can be generated with *mycelyso*?
+Screenshot
+----------
 
 .. image:: https://modsim.github.io/mycelyso/screenshot.png
    :target: https://modsim.github.io/mycelyso/demo/static/
 
+Want to quickly get a grasp what results can be generated with *mycelyso*?
 `Take a look at the static demo page of mycelyso Inspector with the example dataset <https://modsim.github.io/mycelyso/demo/static/>`_.
 
 Publication
@@ -63,8 +63,8 @@ To install *mycelyso-inspector* with the current github Version of *mycelyso*, r
 
     > pip install --user https://github.com/modsim/mycelyso/archive/master.zip mycelyso-inspector
 
-Using mycelyso
---------------
+mycelyso Quickstart
+-------------------
 
 *mycelyso* is packaged as a Python module, to run it, use the following syntax:
 
@@ -133,14 +133,17 @@ Otherwise, the software will use the whole image, or cropping values as set via 
 
    > python -m mycelyso S_lividans_TK24_Complex_Medium_nd046_138.ome.tiff --detect-box-structure
 
-*mycelyso* stores all data in HDF5 files. You can start *mycelyso-inspector* as a helper to take a look at the results:
+*mycelyso* stores all data in HDF5 files, by default it will write a file called `output.h5`.
+Multiple datasets/positions can be stored in the same file, it will only make problems if the same position is about
+to be analyzed twice.
+You can start *mycelyso-inspector* as a helper to take a look at the results:
 
 .. code-block:: bash
 
    > python -m mycelyso_inspector
 
-WARNING: *mycelyso_inspector* will serve all HDF5 (`.h5`) files found in the current directory via a webserver.
-FURTHERMORE, as a research tool, no special focus was laid on security, as such, you are assumed to prevent unauthorized
+WARNING: *mycelyso_inspector* will serve results from all HDF5 (`.h5`) files found in the current directory via an embedded webserver.
+Furthermore as a research tool, no special focus was laid on security, as such, you are assumed to prevent unauthorized
 access to the tool if you choose to use an address accessible by third parties.
 
 Third Party Licenses
