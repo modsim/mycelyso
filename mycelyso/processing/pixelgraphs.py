@@ -153,6 +153,12 @@ def where2d(image):
     
     :param image: Input images
     :return: Coordinate list where image is non-zero
+    
+    >>> where2d(np.array([[ 0, 0, 0],
+    ...                   [ 0, 1, 1],
+    ...                   [ 0, 0, 0]]))
+    array([[1, 1],
+           [1, 2]])
     """
 
     hits = np.where(image.ravel())[0]
