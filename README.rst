@@ -1,4 +1,4 @@
-.. image:: docs/_static/mycelyso-banner.svg
+.. image:: docs/_static/mycelyso-banner.png
 
 mycelyso Readme
 ===============
