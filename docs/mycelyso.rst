@@ -9,7 +9,6 @@ Subpackages
 
     mycelyso.highlevel
     mycelyso.misc
-    mycelyso.pilyso
     mycelyso.processing
 
 Module contents
