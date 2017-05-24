@@ -14,21 +14,6 @@ from molyso.generic.registration import translation_2x1d, shift_image
 from ..pipeline.executor import Skip, Collected
 
 
-def add_result(**kwargs):
-    def _inner(result):
-        result.update(kwargs)
-        return result
-
-
-def remove_result(**kwargs):
-    def _inner(result):
-        for k, v in kwargs.items():
-            del result[k]
-        return result
-
-    return _inner
-
-
 class Delete(object):
     pass
 
@@ -64,8 +49,7 @@ def substract_start_frame(meta, ims, reference_timepoint, image, subtracted_imag
     gaussian_blur_radius = 15.0
 
     if meta.pos not in _substract_start_frame_start_images:
-        reference = image_source(ims, Meta(t=reference_timepoint, pos=meta.pos))  # TODO proper sub pipeline
-        # reference = self.embedded_pipeline([ImageSource], Meta(t=reference_timepoint, pos=meta.pos)).image
+        reference = image_source(ims, Meta(t=reference_timepoint, pos=meta.pos))
         blurred = ndi.gaussian_filter(reference, gaussian_blur_radius)
         _substract_start_frame_start_images[meta.pos] = blurred
     else:
@@ -87,8 +71,7 @@ _box_cache_angles = {}
 
 
 def _box_detection_get_parameters(ims, timepoint, pos):
-    reference = image_source(ims, Meta(t=timepoint, pos=pos))  # TODO proper sub pipeline
-    #        reference = self.embedded_pipeline([ImageSource], Meta(t=timepoint, pos=pos)).image
+    reference = image_source(ims, Meta(t=timepoint, pos=pos))
     angle = find_rotation(reference)
     reference = rotate_image(reference, angle)
 
