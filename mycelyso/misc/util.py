@@ -9,13 +9,19 @@ def calculate_length(points, times=1, w=5):
     Calculates the length of a path.
     
     Paths sampled from pixel grids may contain notable measuring error, if euclidean distances are calculated
-    naively. This method uses an adapted approach from Cornelisse and van den Berg, by repeatedly smothing
+    naively. This method uses an adapted approach from [Cornelisse1984]_, by repeatedly smothing
     the coordinates with a moving average filter before calculating the euclidean distance.
+    
+    .. [Cornelisse1984] Cornelisse and van den Berg (1984) Journal of Microscopy `10.1111/j.1365-2818.1984.tb00544.x <https://dx.doi.org/10.1111/j.1365-2818.1984.tb00544.x>`_
     
     :param points: Input points, a numpy array (X, 2) 
     :param times: Times smoothing should be applied
     :param w: window width of the moving average filter
     :return: Length of the input path
+    
+    >>> calculate_length(np.array([[1.0, 1.0],
+    ...                            [5.0, 5.0]]))
+    5.6568542494923806
     """
     # adapted method from Cornelisse and van den Berg
     if (len(points) - 2) > w:
@@ -35,6 +41,12 @@ def clean_by_radius(points, radius=15.0):
     :param points: Input points 
     :param radius: Radius
     :return: Filtered points
+    
+    >>> clean_by_radius(np.array([[1.0, 1.0],
+    ...                           [1.1, 1.1],
+    ...                           [9.0, 9.0]]), radius=1.5)
+    array([[ 1.,  1.],
+           [ 9.,  9.]])
     """
     if len(points) == 0:
         return points

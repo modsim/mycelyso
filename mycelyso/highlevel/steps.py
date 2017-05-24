@@ -84,6 +84,7 @@ def skip_if_image_is_below_size(min_height=4, min_width=4):
     :param min_height: 
     :param min_width: 
     :return: 
+    
     >>> skip_if_image_is_below_size(32, 32)(np.zeros((16,16)), Meta(0, 0))
     Traceback (most recent call last):
      ...
@@ -116,6 +117,7 @@ def skeletonize(binary, skeleton=None):
     :param binary: 
     :param skeleton: 
     :return:
+    
     >>> skeletonize(np.array([[0, 0, 1, 1],
     ...                       [0, 0, 1, 1],
     ...                       [0, 0, 1, 1],
@@ -160,6 +162,7 @@ def quantify_binary(binary, calibration, result=None):
     :param calibration: 
     :param result: 
     :return: 
+    
     >>> sorted(quantify_binary(np.array([[0, 0, 0],
     ...                                  [1, 1, 1],
     ...                                  [0, 0, 0]]), calibration=15.0).items())
@@ -181,6 +184,7 @@ def graph_statistics(node_frame, result=None):
     :param node_frame: 
     :param result: 
     :return: 
+    
     >>> pf = PixelFrame(np.array([[0, 0, 0],
     ...                           [1, 1, 1],
     ...                           [0, 0, 0]]), calibration=15.0)
@@ -227,6 +231,7 @@ def clean_up(calibration, binary):
     :param calibration: 
     :param binary: 
     :return: 
+    
     >>> clean_up(0.1, np.array([[ True,  True,  True],
     ...                         [ True, False,  True],
     ...                         [ True,  True,  True]]))
@@ -255,6 +260,7 @@ def remove_small_structures(calibration, binary):
     :param calibration: 
     :param binary: 
     :return: 
+    
     >>> remove_small_structures(0.1, np.array([[ False, False, False],
     ...                                        [ False, False,  True],
     ...                                        [ False, False,  True]]))
@@ -279,6 +285,7 @@ def remove_border_artifacts(calibration, binary):
     :param calibration: 
     :param binary: 
     :return: 
+    
     >>> remove_border_artifacts(0.1, np.array([[ False, False, False],
     ...                                        [ False, False,  True],
     ...                                        [ False, False,  True]]))
@@ -316,6 +323,7 @@ def convert_to_nodes(skeleton, timepoint, calibration, pixel_frame=None, node_fr
     :param pixel_frame: 
     :param node_frame: 
     :return: 
+    
     """
     pixel_frame = PixelFrame(skeleton, timepoint, calibration=calibration)
     node_frame = NodeFrame(pixel_frame)

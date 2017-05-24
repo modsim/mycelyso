@@ -1,4 +1,4 @@
 # -*- coding: utf-8 -*-
 """
-documentation
+The misc package contains various helper functions.
 """

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-documentation
+The pipeline module contains the mycelyso-Pipeline, assembled from various functions.
 """
 
 from ..pilyso.application import App, PipelineExecutionContext, PipelineEnvironment, Every, Collected, Meta, Skip

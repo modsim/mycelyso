@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-documentation
+The entrypoint of the mycelyso program.
 """
 
 from .highlevel.pipeline import Mycelyso

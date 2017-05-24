@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-documentation
+mycelyso, the MYCElium anaLYsis SOftware
 """
 
 __license__ = """

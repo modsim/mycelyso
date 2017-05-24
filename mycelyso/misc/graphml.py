@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-documentation
+The graphml module contains output routines to output GraphML structured data from internal graph representations.
 """
 
 import numpy as np

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-documentation
+The pixelgraphs module contains various functions to work with skeleton images, and treating the paths of the
+skeleton as graphs, which can be walked along.
 """
 
 import numpy as np

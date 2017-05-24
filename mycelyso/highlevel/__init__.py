@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-documentation
+The highlevel package contains highlevel functionality of mycelyso.
 """
 
 from .nodeframe import NodeFrame

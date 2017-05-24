@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-documentation
+The pixelframe module contains the PixelFrame class, a representation of one time lapse frame
+at the binary mask/pixel level.
 """
 
 import numpy as np
