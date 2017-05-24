@@ -10,8 +10,11 @@ from itertools import product, chain
 import numpy as np
 from scipy.stats import linregress
 
-from skimage.morphology import remove_small_holes, remove_small_objects, skeletonize as sk_skeletonize
-from skimage.measure import label, regionprops
+try:
+    from skimage.morphology import remove_small_holes, remove_small_objects, skeletonize as sk_skeletonize
+    from skimage.measure import label, regionprops
+except ImportError:  # just for documentation building, skimage IS necessary to run it
+    remove_small_holes = remove_small_objects = sk_skeletonize = label = regionprops = None
 
 from scipy import ndimage as ndi
 
