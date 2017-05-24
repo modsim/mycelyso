@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-documentation
+The steps module contains most of the individual, albeit mycelyso-specific processing steps.
 """
 
 
