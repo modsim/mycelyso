@@ -5,6 +5,9 @@ documentation
 
 from setuptools import setup, find_packages
 
+import sys
+sys.path.index(0, '.')
+
 import mycelyso
 
 setup(
