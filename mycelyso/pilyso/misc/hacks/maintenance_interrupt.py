@@ -3,7 +3,11 @@
 documentation
 """
 
-from signal import signal, SIGUSR2
+try:
+    from signal import signal, SIGUSR2
+except ImportError:
+    SIGUSR2 = None
+
 import traceback
 
 
@@ -22,5 +26,7 @@ def maintenance_interrupt(the_signal, frame):
 
 
 def install_maintenance_interrupt():
+    if SIGUSR2 is None:
+        return  # no functionality in windows
     signal(SIGUSR2, maintenance_interrupt)
 
