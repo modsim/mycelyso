@@ -38,6 +38,14 @@ def _normalize(d):
     return tuple([(k, v,) for k, v in sorted(d.items()) if _is_dimension_oi(k)])
 
 
+def _only_existing_dim(reference, test):
+    test = test.copy()
+    for k in list(test.keys()):
+        if k not in reference:
+            del test[k]
+    return test
+
+
 class CziImageStack(ImageStack):
     extensions = ('.czi',)
 
@@ -93,7 +101,7 @@ class CziImageStack(ImageStack):
 
         self.set_dimensions_and_sizes(
             [Dimensions.Time, Dimensions.PositionXY, Dimensions.PositionZ, Dimensions.Channel],
-            [self.size['T'], self.size['S'], 1, self.size['C']]
+            [self.size.get('T', 1), self.size.get('S', 1), 1, self.size.get('C', 1)]
         )
 
     def notify_fork(self):
@@ -101,28 +109,32 @@ class CziImageStack(ImageStack):
         self.czi._fh.open()
 
     def get_data(self, what):
-        try:
-            channel = what[Dimensions.Channel]
-        except KeyError:
-            channel = 0
+        channel = what.get(Dimensions.Channel, 0)
+        position = what.get(Dimensions.PositionXY, 0)
+        time = what.get(Dimensions.Time, 0)
+
         return _get_image_from_subblock(self.frames[_normalize(
-            dict(C=channel, S=what[Dimensions.PositionXY], T=what[Dimensions.Time])
+            _only_existing_dim(self.size, dict(C=channel, S=position, T=time))
         )])
 
     def get_meta(self, what):
-
         try:
             time = float(self.timestamps[what[Dimensions.Time]])
         except TypeError:
             time = what[Dimensions.Time]
 
-        meta = self.__class__.Metadata(
-            time=time,
-            position=(
+        try:
+            position = (
                 self.positions[what[Dimensions.PositionXY]][0],
                 self.positions[what[Dimensions.PositionXY]][1],
                 0.0,
-            ),
+            )
+        except KeyError:
+            position = (float('nan'), float('nan'), 0.0)
+
+        meta = self.__class__.Metadata(
+            time=time,
+            position=position,
             calibration=self.calibration)
 
         return meta
