@@ -1,6 +1,7 @@
 # coding=utf-8
 
 import numpy as np
+import os
 from os import getpid
 from collections import namedtuple
 from itertools import product
@@ -342,6 +343,13 @@ class ImageStack(ImageStackAPI):
 
         what = args[0]
         to_open = urlparse(what)
+
+        if os.name == 'nt':
+            # windows peculiarity
+            drive_prefix = "%s:" % (to_open.scheme,)
+            if len(to_open.scheme) == 1 and os.path.isdir(drive_prefix):
+                to_open = to_open._replace(scheme='')._replace(path=drive_prefix + to_open.path)
+
         if to_open.scheme == '':
             to_open = to_open._replace(scheme='file')
 
