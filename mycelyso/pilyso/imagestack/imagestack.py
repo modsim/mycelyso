@@ -469,7 +469,16 @@ class ImageStack(ImageStackAPI):
 
     def perform_get_meta(self, what):
         self.check_fork()
-        return self.get_meta(what)
+        meta = self.get_meta(what)
+
+        if isinstance(meta, Metadata):
+            # time_offset allows to shift all times by an offset,
+            # eg. when multiple files belong to one experiment, but all start at 0 albeit consecutive
+            time_offset_str = 'time_offset'
+            if time_offset_str in self.parameters:
+                meta = meta._replace(time=meta.time + float(self.parameters[time_offset_str]))
+
+        return meta
 
     def check_fork(self):
         if self.pid != getpid():
