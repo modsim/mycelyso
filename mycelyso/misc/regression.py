@@ -41,7 +41,7 @@ def find_linear_window(
     """
     data = np.c_[x, y]
 
-    data[:, 1][~np.isfinite(data[:, 1])] = 0.0
+    data[:, 1][~np.isfinite(data[:, 1])] = np.log(np.finfo(data.dtype).eps)
 
     if type(window) == float:
         window = int(window * data.shape[0])
