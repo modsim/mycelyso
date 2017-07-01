@@ -1,4 +1,4 @@
 # -*- coding: utf-8 -*-
 """
-documentation
+The hacks submodule contains various little functions necessary to subtly add/alter behavior of the running process.
 """

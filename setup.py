@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-documentation
+The setup.py file contains meta-information about the package, such as name, description and dependencies.
 """
 
 from setuptools import setup, find_packages

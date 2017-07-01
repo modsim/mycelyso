@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-documentation
+The h5writer submodule contains the hdf5_output function, which accepts various datatypes (binary, image, tabular),
+and adds them to a (possibly pre-existing) HDF5 file.
 """
 
 from pandas import HDFStore, DataFrame

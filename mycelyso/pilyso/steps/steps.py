@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-documentation
+The steps file contains various generally reusable image processing steps.
 """
 
 import numpy as np

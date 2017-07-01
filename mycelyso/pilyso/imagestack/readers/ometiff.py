@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-documentation
+The OME-TIFF reader module implements an ImageStack able to open OME-TIFF images, by using the tifffile module
+to open the particular tiff file in general and custom XML processing code to parse the OME annotation in particular.
 """
 
 from ..imagestack import Dimensions

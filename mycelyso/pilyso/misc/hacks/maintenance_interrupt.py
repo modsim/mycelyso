@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-documentation
+The maintenance_interrupt submodule provides the install_maintenance_interrupt function, which allows under *NIX systems
+to interrupt the running process and spawn a IPython shell within the running process.
 """
 
 try:

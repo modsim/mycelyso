@@ -1,3 +1,8 @@
+"""
+The CZI reader module implements an ImageStack able to open CZI (Carl Zeiss Imaging) image stacks,
+by using the czifile module.
+"""
+
 from __future__ import division, unicode_literals, print_function
 
 from ..imagestack import ImageStack, Dimensions

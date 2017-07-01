@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-documentation
+The application submodule contains the base class for applications, as well auxilliary functions.
 """
 
 import argparse

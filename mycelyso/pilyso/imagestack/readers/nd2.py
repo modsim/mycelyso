@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-documentation
+The ND2 reader module implements an ImageStack able to open Nikon ND2 images, using the nd2file module.
 """
 
 from ..imagestack import ImageStack, Dimensions

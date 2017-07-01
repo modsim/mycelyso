@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-documentation
+The processpool submodule contains a custom process-pool, with some additional features not present in standard
+Python processpool management, e.g. timeouts.
 """
 
 from time import sleep

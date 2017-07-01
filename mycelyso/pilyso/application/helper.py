@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-documentation
+The helper sub-module contains some auxiliary functions to quickly create and run App objects.
 """
 
 from .application import App

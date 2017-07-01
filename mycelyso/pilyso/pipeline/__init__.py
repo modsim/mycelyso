@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-documentation
+The pipeline submodule contains the infrastructure for building image processing pipelines.
 """
 
 from .executor import PipelineExecutor, Every, Collected

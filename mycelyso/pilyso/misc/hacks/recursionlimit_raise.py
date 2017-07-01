@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-documentation
+The recursionlimit_raise submodule raises the recursion limit of the Python interpreter upon import.
+(Currently to 10**9)
 """
 
 import sys

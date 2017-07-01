@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-documentation
+The steps submodule contains various generally reusable image processing steps.
 """
 
 from .steps import *

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-documentation
+The TIFF reader module implements an ImageStack able to open TIFF image stacks, by using the tifffile module.
 """
 
 from ..imagestack import ImageStack, Dimensions

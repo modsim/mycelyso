@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-documentation
+The multiprocessing_patch module monkey-patches the send/receive functions of Python's multiprocessing module,
+so they work properly if blocks larger than 2**31 have to be transferred.
 """
 
 # thank you python, in times of exascale computing someone thought 2**31 bytes oughta be enough ...

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-documentation
+The executor submodule contains the PipelineExecutor, which runs an image processing pipeline.
 """
 
 import logging
