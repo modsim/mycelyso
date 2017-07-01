@@ -16,6 +16,52 @@ from fnmatch import fnmatch
 
 import numpy as np
 
+lock_debugging = False
+
+
+def wait_for_lock_and_prepare_filename(base_filename, local_timeout):
+    found_filename = False
+    filename = base_filename
+    while not found_filename:
+
+        lock_file = '%s.lock' % (filename,)
+
+        begin_time = datetime.now()
+
+        while isfile(lock_file) or local_timeout == 0:
+            # print(lock_file, isfile(lock_file), local_timeout)
+            sleep(1.0)
+            current_time = datetime.now()
+            if (current_time - begin_time).total_seconds() > local_timeout:
+                newfilename = '%s_%s.h5' % (base_filename, current_time.strftime("%Y%m%d%H%M%S_%f"),)
+                print(
+                    "WARNING: Waited %d seconds to acquire a lock for \"%s\", "
+                    "but failed. Will now try to write data to new file \"%s\"." %
+                    (local_timeout, filename, newfilename,)
+                )
+                filename = newfilename
+                lock_file = '%s.lock' % (filename,)
+                break
+
+        if not isfile(lock_file):
+            found_filename = True
+    return filename, lock_file
+
+
+def acquire_lock(lock_file):
+    if lock_debugging:
+        print("Process %d acquired lock %s." % (getpid(), lock_file))
+    return fdopen(low_level_open(lock_file, O_CREAT | O_EXCL | O_WRONLY), 'w')
+
+
+def release_lock(lock_file):
+    if lock_debugging:
+        print("Process %d released lock %s." % (getpid(), lock_file))
+    try:
+        remove(lock_file)
+    except FileNotFoundError:
+        pass
+
 timeout = 5 * 60.0
 
 
@@ -40,8 +86,6 @@ def hdf5_node_name(s):
 def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
     def _inner_hdf5_output(meta, result):
 
-        lock_debugging = False
-
         meta_str = '_'.join(
             k + '_' + ('%09d' % v if type(v) == int else v.__name__)
             for k, v in sorted(meta._asdict().items(), key=lambda x: x[0])
@@ -60,50 +104,9 @@ def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
 
         base_filename = _filename
 
-        def release_lock(*args, **kwargs):
-            pass
-
         while not success:
 
-            found_filename = False
-            filename = base_filename
-
-            while not found_filename:
-
-                lock_file = '%s.lock' % (filename,)
-
-                begin_time = datetime.now()
-
-                while isfile(lock_file) or local_timeout == 0:
-                    # print(lock_file, isfile(lock_file), local_timeout)
-                    sleep(1.0)
-                    current_time = datetime.now()
-                    if (current_time - begin_time).total_seconds() > local_timeout:
-                        newfilename = '%s_%s.h5' % (base_filename, current_time.strftime("%Y%m%d%H%M%S_%f"),)
-                        print(
-                            "WARNING: Waited %d seconds to acquire a lock for \"%s\", "
-                            "but failed. Will now try to write data to new file \"%s\"." %
-                            (local_timeout, filename, newfilename,)
-                        )
-                        filename = newfilename
-                        lock_file = '%s.lock' % (filename,)
-                        break
-
-                if not isfile(lock_file):
-                    found_filename = True
-
-            def acquire_lock(lock_file):
-                if lock_debugging:
-                    print("Process %d acquired lock %s." % (getpid(), lock_file))
-                return fdopen(low_level_open(lock_file, O_CREAT | O_EXCL | O_WRONLY), 'w')
-
-            def release_lock(lock_file):
-                if lock_debugging:
-                    print("Process %d released lock %s." % (getpid(), lock_file))
-                try:
-                    remove(lock_file)
-                except FileNotFoundError:
-                    pass
+            filename, lock_file = wait_for_lock_and_prepare_filename(base_filename, local_timeout)
 
             compression_type = 'zlib'
             compression_level = 6
@@ -113,6 +116,7 @@ def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
             try:
                 # race conditions
                 # open(lock_file, 'w+')
+                # noinspection PyUnusedLocal
                 with acquire_lock(lock_file) as lock:
                     store = HDFStore(filename, complevel=compression_level, complib=compression_type)
 
@@ -274,7 +278,7 @@ def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
                     store.close()
 
                 success = True
-            except NodeError as e:
+            except NodeError:
                 print("NodeError Exception occurred while writing, " +
                       "apparently the file has already been used to store similar results.")
                 # print("Leaving it LOCKED (remove manually!) and trying to write to another file!")
@@ -288,6 +292,7 @@ def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
         release_lock(lock_file)
 
         return result
+
 
     return _inner_hdf5_output
 
