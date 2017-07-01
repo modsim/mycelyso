@@ -35,10 +35,7 @@ take a look at the static demo page of mycelyso Inspector generated with the exa
 
 Publication
 ###########
-The accompanying publication is currently in submission/review, its citation will be added here once it has been published.
-
-Submitted was at commit 9b1f26932f7b4536440b8a9b1fa5ae9d5345e54f. We however have found some os-specific bugs (Windows), which have been fixed
-in the meanwhile. Using the current version should mitigate these issues.
+The accompanying publication is currently in revision, its citation will be added here once it has been published.
 
 Documentation
 #############
