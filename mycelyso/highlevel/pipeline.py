@@ -35,6 +35,8 @@ class Mycelyso(App):
         argparser.add_argument('--meta', '--meta', dest='meta', default='')
         argparser.add_argument('--box', '--detect-box-structure', dest='box_detection',
                                default=False, action='store_true')
+        argparser.add_argument('--sb', '--skip-binarization', dest='skip_binarization',
+                               default=False, action='store_true')
         argparser.add_argument('--cw', '--crop-width', dest='crop_width', default=0, type=int)
         argparser.add_argument('--ch', '--crop-height', dest='crop_height', default=0, type=int)
         argparser.add_argument('--si', '--store-image', dest='store_image', default=False, action='store_true')
@@ -62,7 +64,6 @@ class MycelysoPipeline(PipelineExecutionContext):
         per_image |= lambda image, raw_unrotated_image=None: image
 
         per_image |= set_empty_crops
-
 
         # define what we want (per image) as results
 
@@ -122,8 +123,14 @@ class MycelysoPipeline(PipelineExecutionContext):
         # generate statistics of the image
         per_image |= image_statistics
 
-        # binarize
-        per_image |= binarize
+        if not args.skip_binarization:
+            # binarize
+            per_image |= binarize
+        else:
+            def _image_to_binary(image, binary=None):
+                return image.astype(bool)
+
+            per_image |= _image_to_binary
 
         # ... and cleanup
         per_image |= clean_up
