@@ -30,6 +30,7 @@ class NodeLookupRadius(Tunable):
     """ Radius in which nodes will be searched for found pixel structures [µm] """
     default = 0.5
 
+
 class NodeLookupCutoffRadius(Tunable):
     """ Radius at which nodes will be ignored if they are further away [µm] """
     default = 2.5

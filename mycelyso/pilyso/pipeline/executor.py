@@ -191,13 +191,13 @@ class PipelineExecutor(object):
 
                     token = (reverse_todo[op], op,)
                     if self.in_cache(token):
+                        cache_originated.add(op)
                         raise RuntimeError('TODO')  # TODO
                         # result = self.pool.advanced_apply(
                         #     command=singleton_class_mapper,
                         #     args=(self.__class__, 'get_cache', (token,), {},),
                         #     priority=priority
                         # )
-                        cache_originated.add(op)
 
                     else:
                         result = self.pool.advanced_apply(

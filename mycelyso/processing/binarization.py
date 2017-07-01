@@ -71,8 +71,10 @@ def experimental_thresholding(image, window_size=15, gaussian_sigma=3.0, shift=0
     A novel thresholding method basing upon the shape index as defined by [Koenderink1992]_, and [Bataineh2011]_
     automatic adaptive thresholding. The method is due to be explained in detail in the future.
     
-    .. [Koenderink1992] Koenderink and van Doorn (1992) Image Vision Comput. `10.1016/0262-8856(92)90076-F <https://dx.doi.org/10.1016/0262-8856(92)90076-F>`_ 
-    .. [Bataineh2011] Bataineh et al. (2011) Pattern Recognit. Lett. `10.1016/j.patrec.2011.08.001 <https://dx.doi.org/10.1016/j.patrec.2011.08.001>`_
+    .. [Koenderink1992] Koenderink and van Doorn (1992) Image Vision Comput.
+       `10.1016/0262-8856(92)90076-F <https://dx.doi.org/10.1016/0262-8856(92)90076-F>`_
+    .. [Bataineh2011] Bataineh et al. (2011) Pattern Recognit. Lett.
+       `10.1016/j.patrec.2011.08.001 <https://dx.doi.org/10.1016/j.patrec.2011.08.001>`_
       
     
     :param image: Input image

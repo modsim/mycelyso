@@ -12,7 +12,8 @@ def calculate_length(points, times=1, w=5):
     naively. This method uses an adapted approach from [Cornelisse1984]_, by repeatedly smothing
     the coordinates with a moving average filter before calculating the euclidean distance.
     
-    .. [Cornelisse1984] Cornelisse and van den Berg (1984) Journal of Microscopy `10.1111/j.1365-2818.1984.tb00544.x <https://dx.doi.org/10.1111/j.1365-2818.1984.tb00544.x>`_
+    .. [Cornelisse1984] Cornelisse and van den Berg (1984) Journal of Microscopy
+       `10.1111/j.1365-2818.1984.tb00544.x <https://dx.doi.org/10.1111/j.1365-2818.1984.tb00544.x>`_
     
     :param points: Input points, a numpy array (X, 2) 
     :param times: Times smoothing should be applied

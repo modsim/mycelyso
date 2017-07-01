@@ -33,21 +33,24 @@ def set_result(**kwargs):
     return _inner
 
 
+# noinspection PyUnusedLocal
 def image_source(ims, meta, image=None):
     return ims.view(Dimensions.Position, Dimensions.Time)[meta.pos, meta.t]
 
 
+# noinspection PyUnusedLocal
 def calculate_image_sha256_hash(image, image_sha256_hash=None):
     hasher = hashlib.sha256()
     hasher.update(image.tobytes())
-    hash = b64encode(hasher.digest()).decode()
-    return hash
+    hash_value = b64encode(hasher.digest()).decode()
+    return hash_value
 
 
 def image_to_ndarray(image):
     return np.array(image)
 
 
+# noinspection PyUnusedLocal
 def pull_metadata_from_image(image, timepoint=None, position=None, calibration=None):
     return image, image.meta.time, image.meta.position, image.meta.calibration
 
@@ -55,6 +58,7 @@ def pull_metadata_from_image(image, timepoint=None, position=None, calibration=N
 _substract_start_frame_start_images = {}
 
 
+# noinspection PyUnusedLocal
 def substract_start_frame(meta, ims, reference_timepoint, image, subtracted_image=None):
     gaussian_blur_radius = 15.0
 
@@ -110,6 +114,7 @@ def _box_detection_get_parameters(ims, timepoint, pos):
     return angle, fft_a, crop
 
 
+# noinspection PyUnusedLocal
 def box_detection(ims, image, meta, reference_timepoint, shift=None, crop=None, angle=None):
         # probably implement a voting scheme?
 

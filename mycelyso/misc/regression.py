@@ -102,7 +102,8 @@ def prepare_optimized_regression(x, y):
     >>> y = x * 5 + 10
     >>> y[0:10] = 0  # break our nice linear curve
     >>> prepare_optimized_regression(x, y)
-    OrderedDict([('slope', 5.0), ('intercept', 10.0), ('rvalue', 0.99999999999999989), ('pvalue', 0.0), ('stderr', 7.9423456026468591e-09), ('begin_index', 10), ('end_index', 100), ('begin', 11.0), ('end', 100.0)])
+    OrderedDict([('slope', 5.0), ('intercept', 10.0), ('rvalue', 0.99999999999999989), ('pvalue', 0.0), \
+('stderr', 7.9423456026468591e-09), ('begin_index', 10), ('end_index', 100), ('begin', 11.0), ('end', 100.0)])
     """
     condition = ('rvalue', 'gt', 0.9)
     begin, end, regression = find_linear_window(x, y, condition=condition, return_begin_end=True)

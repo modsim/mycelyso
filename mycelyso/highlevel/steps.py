@@ -66,6 +66,7 @@ def qimshow(image, cmap='gray'):
     matplotlib.pyplot.show()
 
 
+# noinspection PyUnusedLocal
 def set_empty_crops(image, crop_t=None, crop_b=None, crop_l=None, crop_r=None):
     """
     Defines crop parameters based upon image size, effectively not cropping at all.
@@ -102,6 +103,7 @@ def skip_if_image_is_below_size(min_height=4, min_width=4):
     return _inner
 
 
+# noinspection PyUnusedLocal
 def binarize(image, binary=None):
     """
     Binarizes the input image using the experimental thresholding technique.
@@ -113,6 +115,7 @@ def binarize(image, binary=None):
     return experimental_thresholding(image)
 
 
+# noinspection PyUnusedLocal
 def skeletonize(binary, skeleton=None):
     """
     Skeletonizes the image using scikit-image's skeletonize function.
@@ -133,6 +136,7 @@ def skeletonize(binary, skeleton=None):
     return sk_skeletonize(binary)
 
 
+# noinspection PyUnusedLocal
 def image_statistics(image, calibration, result=None):
     """
     Adds some numeric image parameters (i.e. size) to the results.
@@ -145,7 +149,8 @@ def image_statistics(image, calibration, result=None):
     >>> sorted(image_statistics(np.array([[0, 0, 0],
     ...                                   [0, 0, 0],
     ...                                   [0, 0, 0]]), calibration=15.0).items())
-    [('area', 2025.0), ('area_pixel', 9), ('input_height', 45.0), ('input_height_pixel', 3), ('input_width', 45.0), ('input_width_pixel', 3)]
+    [('area', 2025.0), ('area_pixel', 9), ('input_height', 45.0), ('input_height_pixel', 3), \
+('input_width', 45.0), ('input_width_pixel', 3)]
     """
     return {
         'input_width': image.shape[1] * calibration,
@@ -157,6 +162,7 @@ def image_statistics(image, calibration, result=None):
     }
 
 
+# noinspection PyUnusedLocal
 def quantify_binary(binary, calibration, result=None):
     """
     Adds some informations about the binary image (i.e. covered ratio, area ...) to the results.
@@ -175,11 +181,12 @@ def quantify_binary(binary, calibration, result=None):
     total = binary.shape[0] * binary.shape[1]
     return {
         'covered_ratio': ones / total,
-        'covered_area': ones * calibration **2,
+        'covered_area': ones * calibration ** 2,
         'covered_area_pixel': ones
     }
 
 
+# noinspection PyUnusedLocal
 def graph_statistics(node_frame, result=None):
     """
     Adds some information about the graph to the results.
@@ -192,7 +199,8 @@ def graph_statistics(node_frame, result=None):
     ...                           [1, 1, 1],
     ...                           [0, 0, 0]]), calibration=15.0)
     >>> sorted(graph_statistics(NodeFrame(pf)).items())
-    [('graph_edge_count', 1.0), ('graph_edge_length', 30.0), ('graph_endpoint_count', 2), ('graph_junction_count', 0), ('graph_node_count', 2)]
+    [('graph_edge_count', 1.0), ('graph_edge_length', 30.0), ('graph_endpoint_count', 2), \
+('graph_junction_count', 0), ('graph_node_count', 2)]
     """
 
     # everything / 2 because it's a digraph/graph structure
@@ -242,7 +250,8 @@ def clean_up(calibration, binary):
            [ True,  True,  True],
            [ True,  True,  True]], dtype=bool)
     """
-    binary = ndi.gaussian_filter(binary * 1.0, CleanUpGaussianSigma.value / calibration) > CleanUpGaussianThreshold.value
+    binary = ndi.gaussian_filter(binary * 1.0, CleanUpGaussianSigma.value / calibration) \
+             > CleanUpGaussianThreshold.value
 
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
@@ -316,6 +325,7 @@ def remove_border_artifacts(calibration, binary):
     return binary
 
 
+# noinspection PyUnusedLocal
 def convert_to_nodes(skeleton, timepoint, calibration, pixel_frame=None, node_frame=None):
     """
     Passes the input skeleton into a PixelFrame and instantiates a NodeFrame based upon that.
@@ -365,6 +375,7 @@ class TrackingMaximumCoverage(Tunable):
     default = 0.2
 
 
+# noinspection PyUnusedLocal
 def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fates=None):
     """
     After correspondence has been established by NodeFrame#track, reconstructs growing paths over time.
@@ -488,7 +499,9 @@ def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fat
                 if next_frame.is_endpoint(e_on_next) and next_frame.is_endpoint(other_on_next):
                     if len(path) > 2:
                         other = path[-2]
+                        # noinspection PyUnusedLocal
                         distance = frame.shortest_paths[e, other]
+                        # noinspection PyUnusedLocal
                         distance_num = frame.shortest_paths_num[e, other]
                         continue
 
@@ -524,7 +537,7 @@ class TrackingMinimalGrownLength(Tunable):
     default = 5.0
 
 
-# noinspection PyProtectedMember
+# noinspection PyProtectedMember,PyUnusedLocal
 def prepare_tracked_fragments(collected, tracked_fragments, tracked_fragments_fates, track_table=None,
                               track_table_aux_tables=None):
     """
@@ -676,6 +689,7 @@ def prepare_position_regressions(collected, result):
     return result
 
 
+# noinspection PyUnusedLocal
 def generate_graphml(node_frame, result):
     """
     Generates a GraphML representation of a particular frame.
@@ -689,7 +703,7 @@ def generate_graphml(node_frame, result):
     }
 
 
-# noinspection PyTypeChecker
+# noinspection PyTypeChecker,PyUnusedLocal
 def generate_overall_graphml(collected, result):
     """
     Generates a GraphML representation of the whole graph of one image stack.
