@@ -3,6 +3,9 @@
 The steps file contains various generally reusable image processing steps.
 """
 
+import hashlib
+from base64 import b64encode
+
 import numpy as np
 import scipy.ndimage as ndi
 from ..imagestack.imagestack import Dimensions
@@ -32,6 +35,13 @@ def set_result(**kwargs):
 
 def image_source(ims, meta, image=None):
     return ims.view(Dimensions.Position, Dimensions.Time)[meta.pos, meta.t]
+
+
+def calculate_image_sha256_hash(image, image_sha256_hash=None):
+    hasher = hashlib.sha256()
+    hasher.update(image.tobytes())
+    hash = b64encode(hasher.digest()).decode()
+    return hash
 
 
 def image_to_ndarray(image):

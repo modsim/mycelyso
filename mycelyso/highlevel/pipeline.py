@@ -3,11 +3,14 @@
 The pipeline module contains the mycelyso-Pipeline, assembled from various functions.
 """
 
+from tunable import TunableManager
+from .. import __version__, __banner__
+
 from ..pilyso.application import App, PipelineExecutionContext, PipelineEnvironment, Every, Collected, Meta, Skip
 from ..pilyso.imagestack import ImageStack
 from ..pilyso.steps import \
     image_source, pull_metadata_from_image, substract_start_frame, rescale_image_to_uint8, set_result, Delete, \
-    box_detection, create_boxcrop_from_subtracted_image
+    box_detection, create_boxcrop_from_subtracted_image, calculate_image_sha256_hash
 from os.path import basename, abspath
 
 from .steps import *
@@ -52,6 +55,7 @@ class MycelysoPipeline(PipelineExecutionContext):
 
         # read the image
         per_image |= image_source
+        per_image |= calculate_image_sha256_hash
         per_image |= pull_metadata_from_image
 
         per_image |= lambda image, raw_image=None: image
@@ -69,7 +73,8 @@ class MycelysoPipeline(PipelineExecutionContext):
                 'graph_edge_length', 'graph_edge_count', 'graph_node_count',
                 'graph_junction_count', 'graph_endpoint_count',
                 'filename', 'metadata', 'shift_x', 'shift_y',
-                'crop_t', 'crop_b', 'crop_l', 'crop_r'
+                'crop_t', 'crop_b', 'crop_l', 'crop_r',
+                'image_sha256_hash'
             ],
             'graphml': 'data',
             # 'image': 'image',
@@ -161,17 +166,23 @@ class MycelysoPipeline(PipelineExecutionContext):
             filename_complete=absolute_input,
             filename=basename(absolute_input),
             metadata=args.meta,
+            tunables=TunableManager.get_serialization(),
+            version=__version__,
+            banner=__banner__,
             result_table={
-               '_plain': [
-                   'metadata',
-                   'filename_complete',
-                   'filename',
-                   'meta_pos',
-                   '*_regression_*'
-               ],
-               'overall_graphml': 'data',
-               'track_table': 'table',
-               'track_table_aux_tables': 'table'
+                '_plain': [
+                    'metadata',
+                    'filename_complete',
+                    'filename',
+                    'meta_pos',
+                    '*_regression_*'
+                ],
+                'tunables': 'data',
+                'version': 'data',
+                'banner': 'data',
+                'overall_graphml': 'data',
+                'track_table': 'table',
+                'track_table_aux_tables': 'table'
             }
         )
 
