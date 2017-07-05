@@ -14,7 +14,7 @@ from collections import OrderedDict
 from copy import deepcopy
 
 
-from ..misc.processpool import cpu_count, SimpleProcessPool, WrappedException
+from ..misc.processpool import cpu_count, SimpleProcessPool, InProcessFakePool, WrappedException
 from .pipeline import PipelineEnvironment
 
 
@@ -80,14 +80,19 @@ class PipelineExecutor(object):
 
         complete_args = (self.pec, '__init__', args, kwargs,)
 
+        self.complete_args = complete_args
+
         singleton_class_mapper(*complete_args)
 
-        self.pool = SimpleProcessPool(
-            processes=self.multiprocessing,
-            initializer=singleton_class_mapper,
-            initargs=complete_args,
-            future_timeout=30.0 * 60,  # five minute timeout, only works with the self-written pool
-        )
+        if self.multiprocessing:
+            self.pool = SimpleProcessPool(
+                processes=self.multiprocessing,
+                initializer=singleton_class_mapper,
+                initargs=complete_args,
+                future_timeout=30.0 * 60,  # five minute timeout, only works with the self-written pool
+            )
+        else:
+            self.pool = InProcessFakePool()
 
     def set_progress_total(self, l):
         self.progress_indicator = get_progress_bar(l)
@@ -274,4 +279,7 @@ class PipelineExecutor(object):
 
         self.progress_tick()
 
+        self.close()
+
+    def close(self):
         self.pool.close()

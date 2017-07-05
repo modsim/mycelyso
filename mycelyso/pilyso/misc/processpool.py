@@ -341,7 +341,7 @@ class InProcessFakePool(object):
     def advanced_apply(command, args, **kwargs):
         def _bind_it(inner_args):
             def _perform():
-                return command(inner_args)
+                return command(*inner_args)
 
             return _perform
 
