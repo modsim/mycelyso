@@ -60,6 +60,8 @@ class MycelysoPipeline(PipelineExecutionContext):
 
         per_image = self.add_stage(Meta(pos=Every, t=Every))
 
+        per_image |= set_result(tunables_hash=TunableManager.get_hash())
+
         # read the image
         per_image |= image_source
         per_image |= calculate_image_sha256_hash
@@ -80,7 +82,7 @@ class MycelysoPipeline(PipelineExecutionContext):
                 'graph_junction_count', 'graph_endpoint_count',
                 'filename', 'metadata', 'shift_x', 'shift_y',
                 'crop_t', 'crop_b', 'crop_l', 'crop_r',
-                'image_sha256_hash'
+                'image_sha256_hash', 'tunables_hash'
             ],
             'graphml': 'data',
             # 'image': 'image',
