@@ -42,12 +42,17 @@ class Mycelyso(App):
         argparser.add_argument('--si', '--store-image', dest='store_image', default=False, action='store_true')
         argparser.add_argument('--output', '--output', dest='output', default='output.h5')
 
+    def handle_args(self):
+        self.args.tunables = TunableManager.get_representation()
+
 
 class MycelysoPipeline(PipelineExecutionContext):
     """
     The MycelysoPipeline, defining the pipeline (with slight alterations based upon arguments passed via command line).
     """
     def __init__(self, args):
+        TunableManager.load(args.tunables)
+
         absolute_input = abspath(args.input)
         h5nodename = hdf5_node_name(absolute_input)
 
