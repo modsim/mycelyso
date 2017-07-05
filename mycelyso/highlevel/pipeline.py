@@ -19,6 +19,31 @@ from ..pilyso.misc.h5writer import hdf5_output, hdf5_node_name
 from .. import __banner__
 
 
+class CropWidth(Tunable):
+    """ Crop value (horizontal) of the image [pixels] """
+    default = 0
+
+
+class CropHeight(Tunable):
+    """ Crop value (vertical) of the image [pixels] """
+    default = 0
+
+
+class BoxDetection(Tunable):
+    """ Whether to run the rectangular microfluidic growth structure detection as ROI detection """
+    default = False
+
+
+class StoreImage(Tunable):
+    """ Whether to store images in the resulting HDF5. This leads to a potentially much larger output file. """
+    default = False
+
+
+class SkipBinarization(Tunable):
+    """ Whether to directly use the input image as binary mask. Use in case external binarization is desired. """
+    default = False
+
+
 class Mycelyso(App):
     """
     The Mycelyso App, implementing a pilyso App.
@@ -92,7 +117,7 @@ class MycelysoPipeline(PipelineExecutionContext):
             'binary': 'image'
         }
 
-        if args.store_image:
+        if StoreImage.value:
             result_table['image'] = 'image'
 
         per_image |= set_result(
@@ -105,7 +130,7 @@ class MycelysoPipeline(PipelineExecutionContext):
 
         per_image |= substract_start_frame
 
-        if args.box_detection:
+        if BoxDetection.value:
             per_image |= box_detection
             per_image |= create_boxcrop_from_subtracted_image
 
@@ -114,15 +139,15 @@ class MycelysoPipeline(PipelineExecutionContext):
         per_image |= set_result(raw_unrotated_image=Delete, raw_image=Delete, subtracted_image=Delete)
 
         per_image |= lambda image: image[
-                                   args.crop_height:-(args.crop_height if args.crop_height > 0 else 1),
-                                   args.crop_width:-(args.crop_width if args.crop_width > 0 else 1)
+                                   CropHeight.value:-(CropHeight.value if CropHeight.value > 0 else 1),
+                                   CropWidth.value:-(CropWidth.value if CropWidth.value > 0 else 1)
                                    ]
 
         per_image |= lambda crop_t, crop_b, crop_l, crop_r: (
-            crop_t + args.crop_height,
-            crop_b - args.crop_height,
-            crop_l + args.crop_width,
-            crop_r - args.crop_width
+            crop_t + CropHeight.value,
+            crop_b - CropHeight.value,
+            crop_l + CropWidth.value,
+            crop_r - CropWidth.value
         )
 
         per_image |= skip_if_image_is_below_size(4, 4)
@@ -130,7 +155,7 @@ class MycelysoPipeline(PipelineExecutionContext):
         # generate statistics of the image
         per_image |= image_statistics
 
-        if not args.skip_binarization:
+        if not SkipBinarization.value:
             # binarize
             per_image |= binarize
         else:
@@ -154,7 +179,7 @@ class MycelysoPipeline(PipelineExecutionContext):
         # 'binary', 'skeleton' are kept!
         per_image |= convert_to_nodes
 
-        if not args.store_image:
+        if not StoreImage.value:
             per_image |= set_result(image=Delete)
 
         per_image |= set_result(pixel_frame=Delete)
