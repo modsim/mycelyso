@@ -158,6 +158,9 @@ class App(AppInterface):
 
         TunableManager.register_argparser(argparser)
 
+    def handle_args(self):
+        pass
+
     args = None
 
     def main(self):
@@ -176,6 +179,8 @@ class App(AppInterface):
 
         self.log.info(self.internal_options['banner'])
         self.args = argparser.parse_args()
+
+        self.handle_args()
 
         if self.args.wait_on_start:
             _ = input("Press enter to continue.")
@@ -202,17 +207,22 @@ class App(AppInterface):
         elif self.args.processes == 0:
             self.args.processes = False
 
-        pe = PipelineExecutor()
+        self.pe = PipelineExecutor()
 
-        pe.multiprocessing = self.args.processes
+        self.pe.multiprocessing = self.args.processes
 
-        pe.set_workload(Meta, Meta(pos=self.positions, t=self.timepoints), Meta(t=1, pos=2))
+        self.pe.set_workload(Meta, Meta(pos=self.positions, t=self.timepoints), Meta(t=1, pos=2))
 
-        self.setup(pe)
+        self.setup(self.pe)
 
-        pe.run()
+        self.run()
+
+        self.pe.close()
 
         self.log.info("Finished %s.", self.internal_options['name'])
+
+    def run(self):
+        self.pe.run()
 
     # default implementation
     def setup(self, pipeline_executor):
