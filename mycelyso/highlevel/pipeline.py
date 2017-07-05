@@ -7,6 +7,7 @@ from tunable import TunableManager
 from .. import __version__, __banner__
 
 from ..pilyso.application import App, PipelineExecutionContext, PipelineEnvironment, Every, Collected, Meta, Skip
+from ..pilyso.pipeline.pipeline import NeatDict
 from ..pilyso.imagestack import ImageStack
 from ..pilyso.steps import \
     image_source, pull_metadata_from_image, substract_start_frame, rescale_image_to_uint8, set_result, Delete, \
@@ -58,17 +59,106 @@ class Mycelyso(App):
 
     def arguments(self, argparser):
         argparser.add_argument('--meta', '--meta', dest='meta', default='')
-        argparser.add_argument('--box', '--detect-box-structure', dest='box_detection',
+        argparser.add_argument('--interactive', '--interactive', dest='interactive',
                                default=False, action='store_true')
-        argparser.add_argument('--sb', '--skip-binarization', dest='skip_binarization',
-                               default=False, action='store_true')
-        argparser.add_argument('--cw', '--crop-width', dest='crop_width', default=0, type=int)
-        argparser.add_argument('--ch', '--crop-height', dest='crop_height', default=0, type=int)
-        argparser.add_argument('--si', '--store-image', dest='store_image', default=False, action='store_true')
         argparser.add_argument('--output', '--output', dest='output', default='output.h5')
 
     def handle_args(self):
         self.args.tunables = TunableManager.get_representation()
+
+        if self.args.interactive:
+            # if interactive, don't spawn workers
+            self.args.processes = 0
+            self.run = self.interactive_run
+
+    def interactive_run(self):
+        pipeline, fun, args, kwargs = self.pe.complete_args
+        assert fun == '__init__'
+        pipeline = pipeline(*args, **kwargs)
+
+        import matplotlib.pyplot as plt
+        from matplotlib.widgets import Slider
+
+        fig, ax = plt.subplots()
+
+        plt.subplots_adjust(left=0.25, bottom=0.25)
+
+        fig.canvas.set_window_title("Image Viewer")
+
+        slider_background = '#e7af12'
+        slider_foreground = '#005b82'
+
+        ax_mp = plt.axes([0.25, 0.1, 0.65, 0.03], facecolor=slider_background)
+        ax_tp = plt.axes([0.25, 0.15, 0.65, 0.03], facecolor=slider_background)
+
+        mp_max = max(self.positions)
+        tp_max = max(self.timepoints)
+
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore')
+            multipoint = Slider(ax_mp, 'Multipoint', 0, mp_max, valinit=0, valfmt="%d", color=slider_foreground)
+            timepoint = Slider(ax_tp, 'Timepoint', 0, tp_max, valinit=0, valfmt="%d", color=slider_foreground)
+
+        env = {'show': True}
+
+        def update(_):
+            t = int(timepoint.val)
+            pos = int(multipoint.val)
+
+            fig.canvas.set_window_title("Image Viewer - [BUSY]")
+
+            plt.rcParams['image.cmap'] = 'gray'
+
+            plt.sca(ax)
+            plt.cla()
+
+            plt.suptitle('[left/right] timepoint [up/down] multipoint [h] hide analysis')
+
+            result = pipeline.dispatch(Meta(pos=Every, t=Every), meta=Meta(pos=pos, t=t))
+
+            result = NeatDict(result)
+
+            if env['show']:
+                plt.imshow(result.binary)
+            else:
+                plt.imshow(result.binary)
+
+            fig.canvas.set_window_title("Image Viewer - %s timepoint #%d %d/%d multipoint #%d %d/%d" %
+                                        (self.args.input, t, 1 + t, 1 + tp_max, pos, 1 + pos, 1 + mp_max))
+
+            plt.draw()
+
+        update(None)
+
+        multipoint.on_changed(update)
+        timepoint.on_changed(update)
+
+        def key_press(event):
+            if event.key == 'left':
+                timepoint.set_val(max(1, int(timepoint.val) - 1))
+            elif event.key == 'right':
+                timepoint.set_val(min(tp_max, int(timepoint.val) + 1))
+            elif event.key == 'ctrl+left':
+                timepoint.set_val(max(1, int(timepoint.val) - 10))
+            elif event.key == 'ctrl+right':
+                timepoint.set_val(min(tp_max, int(timepoint.val) + 10))
+            elif event.key == 'down':
+                multipoint.set_val(max(1, int(multipoint.val) - 1))
+            elif event.key == 'up':
+                multipoint.set_val(min(mp_max, int(multipoint.val) + 1))
+            elif event.key == 'h':
+                env['show'] = not env['show']
+                update(None)
+            elif event.key == 'q':
+                raise SystemExit
+
+        fig.canvas.mpl_connect('key_press_event', key_press)
+
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore')
+            fig.tight_layout()
+
+        plt.show()
 
 
 class MycelysoPipeline(PipelineExecutionContext):
