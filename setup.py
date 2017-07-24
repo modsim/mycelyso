@@ -4,9 +4,18 @@ The setup.py file contains meta-information about the package, such as name, des
 """
 
 from setuptools import setup, find_packages
-
+import os
 import sys
 sys.path.insert(0, '.')
+
+on_rtd = os.environ.get('READTHEDOCS') == 'true'
+
+install_requires = [
+    'numpy', 'scipy', 'networkx', 'tables', 'numexpr', 'pandas',
+    'tifffile', 'nd2file',
+    'mfisp_boxdetection', 'molyso', 'tunable',
+    'tqdm'  # nicer progress bars, using the MPLv2+MIT licensed version
+] + (['scikit-image>=0.12'] if not on_rtd else [])
 
 import mycelyso
 
@@ -19,12 +28,7 @@ setup(
     author_email='c.sachs@fz-juelich.de',
     url='https://github.com/modsim/mycelyso',
     packages=find_packages(),
-    install_requires=[
-        'numpy', 'scipy', 'scikit-image>=0.12', 'networkx', 'tables', 'numexpr', 'pandas',
-        'tifffile', 'nd2file',
-        'mfisp_boxdetection', 'molyso', 'tunable',
-        'tqdm'  # nicer progress bars, using the MPLv2+MIT licensed version
-    ],
+    install_requires=install_requires,
     license='BSD',
     classifiers=[
         'Development Status :: 4 - Beta',

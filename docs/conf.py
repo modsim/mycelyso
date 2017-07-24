@@ -20,18 +20,16 @@ from unittest.mock import MagicMock
 
 class Mock(MagicMock):
     @classmethod
-    def __getattr__(self, item):
+    def __getattr__(cls, item):
         return MagicMock()
 
 # from setup.py
 
 MOCK_MODULES = [
-    'numpy', 'scipy', 'scipy.sparse', 'scipy.sparse.csgraph', 'scipy.spatial',
-    'scipy.spatial.ckdtree', 'scipy.ndimage', 'scipy.ndimage.interpolation', 'scipy.stats',
     'skimage', 'skimage.morphology', 'skimage.measure', 'networkx', 'networkx.readwrite',
     'tables', 'tables.nodes', 'numexpr', 'pandas',
     'tifffile', 'nd2file', 'mfisp_boxdetection', 'molyso', 'molyso.generic', 'molyso.generic.rotation',
-    'molyso.generic.registration', 'tunable', 'tqdm'
+    'molyso.generic.registration', 'tqdm'
 ]
 
 sys.modules.update((module_name, Mock()) for module_name in MOCK_MODULES)
