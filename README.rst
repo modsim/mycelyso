@@ -86,12 +86,13 @@ as well, but as most packages included in Anaconda are needed anyways, it does h
 
 You have to enable the necessary channels (we aim to add mycelyso to `bioconda <https://bioconda.github.io>`_ lateron):
 
-.. code-block::
-   > conda config --add channels conda-forge
-   > conda config --add channels bioconda
-   > conda config --add channels csachs
+.. code-block:: bash
 
-   > conda install -y mycelyso mycelyso-inspector
+    > conda config --add channels conda-forge
+    > conda config --add channels bioconda
+    > conda config --add channels csachs
+
+    > conda install -y mycelyso mycelyso-inspector
 
 Packages from PyPI (for advanced users)
 ---------------------------------------
@@ -245,7 +246,6 @@ Individual tunables are documented within the API documentation as well.
 
 Docker
 ------
-.. _Docker:
 
 `Docker <https://www.docker.com/>`_ a tool allowing for software to be run in pre-defined, encapsulated environments called containers.
 To run *mycelyso* via Docker, an image is used which is a self-contained Linux system with *mycelyso* installed, which can either be preloaded or will be downloaded on the fly.

@@ -15,11 +15,8 @@ from ..tunables import CleanUpGaussianSigma, CleanUpGaussianThreshold, CleanUpHo
     TrackingMinimumTipElongationRate, TrackingMaximumTipElongationRate, TrackingMaximumCoverage, \
     TrackingMinimumTrackedPointCount, TrackingMinimalMaximumLength, TrackingMinimalGrownLength
 
-try:
-    from skimage.morphology import remove_small_holes, remove_small_objects, skeletonize as sk_skeletonize
-    from skimage.measure import label, regionprops
-except ImportError:  # just for documentation building, skimage IS necessary to run it
-    remove_small_holes = remove_small_objects = sk_skeletonize = label = regionprops = None
+from skimage.morphology import remove_small_holes, remove_small_objects, skeletonize as sk_skeletonize
+from skimage.measure import label, regionprops
 
 from scipy import ndimage as ndi
 
