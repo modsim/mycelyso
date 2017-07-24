@@ -3,7 +3,7 @@
 """
 This file contains all the tunables available in mycelyso.
 
-You can set them via -t Name=value on the command line.
+You can set them via :code:`-t Name=value` on the command line.
 """
 
 from tunable import Tunable

@@ -1,3 +1,5 @@
+.. If you read this on hub.docker.com, maybe visit the github page https://github.com/modsim/mycelyso
+.. as dockerhub currently has problems displaying reStructuredText properly.
 .. image:: docs/_static/mycelyso-banner.png
 
 mycelyso Readme
@@ -11,6 +13,12 @@ mycelyso Readme
 
 .. image:: https://travis-ci.org/modsim/mycelyso.svg?branch=master
    :target: https://travis-ci.org/modsim/mycelyso
+
+.. image:: https://ci.appveyor.com/api/projects/status/0jcyc25y81tp4iua/branch/master?svg=true
+   :target: https://ci.appveyor.com/project/csachs/mycelyso/branch/master
+
+.. image:: https://img.shields.io/docker/build/modsim/mycelyso.svg
+   :target: https://hub.docker.com/r/modsim/mycelyso
 
 .. image:: https://img.shields.io/pypi/l/mycelyso.svg
    :target: https://opensource.org/licenses/BSD-2-Clause
@@ -52,23 +60,56 @@ Example Datasets
 ################
 You can find an example dataset deposited at zenodo `DOI: 10.5281/zenodo.376281 <https://dx.doi.org/10.5281/zenodo.376281>`_.
 
-Prerequisites
-#############
-*mycelyso* needs Python 3, if you are running Windows, we suggest a ready to use Python environment like WinPython or conda.
-
-
 Ways to install mycelyso
 ########################
 
-*mycelyso* is split into two packages, the analysis command line tool *mycelyso* and *mycelyso-inspector* which will serve the frontend.
+Pre-Bundled Windows Application
+-------------------------------
 
-Once the paper is accepted, a release version will be pushed to PyPI, easing the installation further.
+If you don't have a Python 3 installation ready, and want to just run *mycelyso*, we you can download a pre-packaged version
+for 64-bit versions of Windows (mycelyso-win64.zip) from `AppVeyor <https://ci.appveyor.com/project/csachs/mycelyso/branch/master>`_.
 
-To install *mycelyso-inspector* with the current github Version of *mycelyso*, run the following command:
+Please note, that, instead of `python -m mycelyso` or `python -m mycelyso_inspector`, the calls would then be `mycelyso.exe` or `mycelyso_inspector.exe`.
+
+Docker
+------
+
+Please see the Docker_ section near the end.
+
+Packages for the conda Package manager
+--------------------------------------
+
+While *mycelyso* is a pure Python package, it has some dependencies which are a bit more complex to build and might
+not be present in the PyPI (Python Package Index). Thankfully the conda Package manager / Anaconda environment
+provides all packages necessary in an easy to use manner. To use it, please `download Anaconda <https://www.continuum.io/downloads>`_ (Miniconda could be downloaded
+as well, but as most packages included in Anaconda are needed anyways, it does hardly provide a size benefit).
+
+You have to enable the necessary channels (we aim to add mycelyso to `bioconda <https://bioconda.github.io>`_ lateron):
+
+.. code-block::
+   > conda config --add channels conda-forge
+   > conda config --add channels bioconda
+   > conda config --add channels csachs
+
+   > conda install -y mycelyso mycelyso-inspector
+
+Packages from PyPI (for advanced users)
+---------------------------------------
+
+If you have a working Python 3 installation and can eventually fix missing dependencies, you can as well use the PyPI version:
+
+.. code-block:: bash
+
+    > pip install --user mycelyso mycelyso-inspector
+
+
+Directly from github (for advanced users)
+-----------------------------------------
 
 .. code-block:: bash
 
     > pip install --user https://github.com/modsim/mycelyso/archive/master.zip mycelyso-inspector
+
 
 mycelyso Quickstart
 -------------------
@@ -102,9 +143,8 @@ Which will produce the help screen:
    usage: __main__.py [-h] [-m MODULES] [-n PROCESSES] [--prompt]
                       [-tp TIMEPOINTS] [-mp POSITIONS] [-t TUNABLE]
                       [--tunables-show] [--tunables-load TUNABLES_LOAD]
-                      [--tunables-save TUNABLES_SAVE] [--meta META] [--box]
-                      [--cw CROP_WIDTH] [--ch CROP_HEIGHT] [--si]
-                      [--output OUTPUT]
+                      [--tunables-save TUNABLES_SAVE] [--meta META]
+                      [--interactive] [--output OUTPUT]
                       input
 
    positional arguments:
@@ -122,10 +162,7 @@ Which will produce the help screen:
      --tunables-load TUNABLES_LOAD
      --tunables-save TUNABLES_SAVE
      --meta META, --meta META
-     --box, --detect-box-structure
-     --cw CROP_WIDTH, --crop-width CROP_WIDTH
-     --ch CROP_HEIGHT, --crop-height CROP_HEIGHT
-     --si, --store-image
+    --interactive, --interactive
      --output OUTPUT, --output OUTPUT
 
 To run an analysis, just pass the appropriate filename as a parameter. The desired timepoints can be selected via the
@@ -136,12 +173,13 @@ Running an analysis
 ###################
 
 To analyze the example dataset, run:
-(:code:`--detect-box-structure` is used, as the spores were grown in rectangular growth chambers, which are to be detected.
-Otherwise, the software will use the whole image, or cropping values as set via :code:`--cw`/:code:`--ch`.
+(:code:`-t BoxDetection=1` is used, as the spores were grown in rectangular growth chambers, which are to be detected.
+Otherwise, the software will use the whole image, or cropping values as set via :code:`-t CropWidth=...`/:code:`-t CropHeight=...`.
+If the data is pre-segmented (i.e. input is a binary image stack), choose :code:`-t SkipBinarization=1`.
 
 .. code-block:: bash
 
-   > python -m mycelyso S_lividans_TK24_Complex_Medium_nd046_138.ome.tiff --detect-box-structure
+   > python -m mycelyso S_lividans_TK24_Complex_Medium_nd046_138.ome.tiff -t BoxDetection=1
 
 *mycelyso* stores all data compressed in HDF5 files, by default it will write a file called :code:`output.h5` (can be changed with :code:`--output`).
 
@@ -170,6 +208,13 @@ visualization tool *mycelyso Inspector* as a helper to take a look at the result
 *mycelyso Inspector* will output the URL it is serving content at, and by default automatically open a browser window
 with it.
 
+In *mycelyso Inspector*, you have various information displays: On the top, the HDF5 file / analyzed dataset / position can be selected.
+On the left, there is a list of graphs available. In the middle, there is the currently selected graph displayed. On the right, there is general information
+about the whole position (colony level statistics), below the main part is a table with information about individual tracks, and scrolled further down
+is the possiblity to show individual graph tracking in 2D or a colony growth oversight in 3D. Sticky at the bottom is binarized or skeletonized timeline of the position.
+
+The data to all graphs can be downloaded as tab separated text by pressing the right mouse button on a certain graph link (in the left menu) and chosing 'Save As'.
+
 **WARNING**: *mycelyso Inspector* will serve results from all HDF5 (:code:`.h5`) files found in the current directory via an embedded webserver.
 Furthermore as a research tool, no special focus was laid on security, as such, you are assumed to prevent unauthorized
 access to the tool if you choose to use an address accessible by third parties.
@@ -187,7 +232,8 @@ a pixel size of 0.09 µm/pixel and an acquisition interval of 600 s (10 min) use
 Tunable Parameters
 ##################
 
-The analysis' internal workings are dependent upon some tunable parameters. To check their current value, you can
+The analysis' internal workings are dependent upon some tunable parameters.
+All tunables are listed in the :doc:`tunables <mycelyso.tunables>` documentation subpage. To check their current value, you can
 view them all using the :code:`--tunables-show` command line option, which will as well print documentation.
 To set individual ones to a different values one can use :code:`-t SomeTunable=NewValue`.
 Individual tunables are documented within the API documentation as well.
@@ -197,6 +243,37 @@ Individual tunables are documented within the API documentation as well.
    > python -m mycelyso --tunables-show
    > python -m mycelyso -t SomeTunable=42
 
+Docker
+------
+.. _Docker:
+
+`Docker <https://www.docker.com/>`_ a tool allowing for software to be run in pre-defined, encapsulated environments called containers.
+To run *mycelyso* via Docker, an image is used which is a self-contained Linux system with *mycelyso* installed, which can either be preloaded or will be downloaded on the fly.
+
+Use the following commands to run mycelyso via Docker:
+
+To analyze:
+
+.. code-block:: bash
+
+   > docker run --tty --interactive --rm --volume `pwd`:/data --user `id -u` modsim/mycelyso <parameters ...>
+
+To run *mycelyso Inspector*:
+
+.. code-block:: bash
+
+   > docker run --tty --interactive --rm --volume `pwd`:/data --user `id -u` --publish 8888:8888 --entrypoint python modsim/mycelyso -m mycelyso_inspector <parameters ...>
+
+To run interactive mode (display on local X11, under Linux):
+
+.. code-block:: bash
+
+   > docker run --tty --interactive --rm --volume `pwd`:/data --user `id -u` --env DISPLAY=$DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix modsim/mycelyso --interactive <parameters ...>
+
+General remarks: :code:`--tty` is used to allocate a tty, necessary for interactive usage, like :code:`--interactive` which connects to stdin/stdout.
+The :code:`--rm` switch tells docker to remove the container (not image) again after use.
+As aforementioned, docker is containerized, i.e. unless explicitly stated, no communication with the outside is possible.
+Therefore via :code:`--volume` the current working directory is mapped into the container.
 
 Third Party Licenses
 --------------------
