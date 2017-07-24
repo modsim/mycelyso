@@ -162,7 +162,7 @@ Which will produce the help screen:
      --tunables-load TUNABLES_LOAD
      --tunables-save TUNABLES_SAVE
      --meta META, --meta META
-    --interactive, --interactive
+     --interactive, --interactive
      --output OUTPUT, --output OUTPUT
 
 To run an analysis, just pass the appropriate filename as a parameter. The desired timepoints can be selected via the
