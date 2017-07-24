@@ -13,7 +13,7 @@ import mycelyso
 setup(
     name='mycelyso',
     version=mycelyso.__version__,
-    description='MYCEl anaLYsis SOftware',
+    description='MYCElium anaLYsis SOftware',
     long_description='see https://github.com/modsim/mycelyso',
     author=mycelyso.__author__,
     author_email='c.sachs@fz-juelich.de',
