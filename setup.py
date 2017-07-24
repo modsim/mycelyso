@@ -8,7 +8,7 @@ import os
 import sys
 sys.path.insert(0, '.')
 
-on_rtd = os.environ.get('READTHEDOCS') == 'true'
+on_rtd = os.environ.get('READTHEDOCS') == 'True'
 
 install_requires = [
     'numpy', 'scipy', 'networkx', 'tables', 'numexpr', 'pandas',
