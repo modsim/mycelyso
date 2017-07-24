@@ -1,6 +1,8 @@
 .idea/
 build/
 dist/
+examples/*.tif
+examples/*.tiff
 *.egg-info/
 
 __pycache__/

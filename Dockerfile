@@ -1,17 +1,20 @@
 FROM continuumio/anaconda3
 LABEL maintainer c.sachs@fz-juelich.de
-RUN apt-get update && apt-get install -y gcc libgomp1 unzip libgl1-mesa-glx && \
+RUN apt-get update && apt-get install -y unzip libgl1-mesa-glx && \
     # opengl for qt...
     apt-get clean && \
-    #conda install -y numpy scipy opencv matplotlib jupyter pandas && \
-    #conda install -y opencv && \
-    pip install "git+https://github.com/modsim/mycelyso#egg=mycelyso" mycelyso-inspector && \
+    conda config --add channels conda-forge && \
+    conda config --add channels bioconda && \
+    conda config --add channels csachs && \
+    conda install -y mycelyso mycelyso-inspector && \
+    pip uninstall -y mycelyso && \
+    pip install "git+https://github.com/modsim/mycelyso#egg=mycelyso" && \
     adduser --disabled-password user && \
     mkdir /data /examples && \
-    #wget https://github.com/modsim/mycelyso/archive/master.zip -O /tmp/mycelyso.zip && \ 
-    #unzip -j /tmp/mycelyso.zip 'mycelyso-master/examples/*' -d /examples && \
-    #rm /tmp/mycelyso.zip && \
-    apt-get remove -y gcc unzip && \
+    wget https://github.com/modsim/mycelyso/archive/master.zip -O /tmp/mycelyso.zip && \
+    unzip -j /tmp/mycelyso.zip 'mycelyso-master/examples/*' -d /examples && \
+    rm /tmp/mycelyso.zip && \
+    apt-get remove -y unzip && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* && \
     ln -s /examples /home/user && \
