@@ -3,46 +3,21 @@
 The pipeline module contains the mycelyso-Pipeline, assembled from various functions.
 """
 
-from tunable import TunableManager
-from .. import __version__, __banner__
+from os.path import basename, abspath
 
-from ..pilyso.application import App, PipelineExecutionContext, PipelineEnvironment, Every, Collected, Meta, Skip
-from ..pilyso.pipeline.pipeline import NeatDict
+from tunable import TunableManager
+
+from ..tunables import CropWidth, CropHeight, BoxDetection, StoreImage, SkipBinarization
+from .steps import *
+from .. import __banner__
+from .. import __version__
+from ..pilyso.application import App, PipelineExecutionContext, PipelineEnvironment
 from ..pilyso.imagestack import ImageStack
+from ..pilyso.misc.h5writer import hdf5_output, hdf5_node_name
+from ..pilyso.pipeline.pipeline import NeatDict
 from ..pilyso.steps import \
     image_source, pull_metadata_from_image, substract_start_frame, rescale_image_to_uint8, set_result, Delete, \
     box_detection, create_boxcrop_from_subtracted_image, calculate_image_sha256_hash
-from os.path import basename, abspath
-
-from .steps import *
-
-from ..pilyso.misc.h5writer import hdf5_output, hdf5_node_name
-from .. import __banner__
-
-
-class CropWidth(Tunable):
-    """ Crop value (horizontal) of the image [pixels] """
-    default = 0
-
-
-class CropHeight(Tunable):
-    """ Crop value (vertical) of the image [pixels] """
-    default = 0
-
-
-class BoxDetection(Tunable):
-    """ Whether to run the rectangular microfluidic growth structure detection as ROI detection """
-    default = False
-
-
-class StoreImage(Tunable):
-    """ Whether to store images in the resulting HDF5. This leads to a potentially much larger output file. """
-    default = False
-
-
-class SkipBinarization(Tunable):
-    """ Whether to directly use the input image as binary mask. Use in case external binarization is desired. """
-    default = False
 
 
 class Mycelyso(App):

@@ -7,43 +7,15 @@ The nodeframe module contains the NodeFrame class, a representation of the graph
 from itertools import chain
 
 import numpy as np
+from networkx import find_cycle, NetworkXNoCycle, from_scipy_sparse_matrix
 from scipy.sparse import lil_matrix
 from scipy.sparse.csgraph import shortest_path, connected_components
 from scipy.spatial.ckdtree import cKDTree as KDTree
-from networkx import find_cycle, NetworkXNoCycle, from_scipy_sparse_matrix
+
+from ..tunables import NodeEndpointMergeRadius, NodeJunctionMergeRadius, NodeLookupRadius, \
+    NodeLookupCutoffRadius, NodeTrackingJunctionShiftRadius, NodeTrackingEndpointShiftRadius
 
 from ..misc.util import calculate_length, clean_by_radius
-from tunable import Tunable
-
-
-class NodeEndpointMergeRadius(Tunable):
-    """ Radius in which endpoints are going to be merged [µm] """
-    default = 0.5
-
-
-class NodeJunctionMergeRadius(Tunable):
-    """ Radius in which junctions are going to be merged [µm] """
-    default = 0.5
-
-
-class NodeLookupRadius(Tunable):
-    """ Radius in which nodes will be searched for found pixel structures [µm] """
-    default = 0.5
-
-
-class NodeLookupCutoffRadius(Tunable):
-    """ Radius at which nodes will be ignored if they are further away [µm] """
-    default = 2.5
-
-
-class NodeTrackingJunctionShiftRadius(Tunable):
-    """ Maximum search radius for junctions [µm·h⁻¹] """
-    default = 5.0
-
-
-class NodeTrackingEndpointShiftRadius(Tunable):
-    """ Maximum search radius for endpoints [µm·h⁻¹] """
-    default = 100.0
 
 
 class NodeFrame(object):

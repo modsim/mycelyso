@@ -10,6 +10,11 @@ from itertools import product, chain
 import numpy as np
 from scipy.stats import linregress
 
+from ..tunables import CleanUpGaussianSigma, CleanUpGaussianThreshold, CleanUpHoleFillSize, \
+    RemoveSmallStructuresSize, BorderArtifactRemovalBorderSize, TrackingMaximumRelativeShrinkage, \
+    TrackingMinimumTipElongationRate, TrackingMaximumTipElongationRate, TrackingMaximumCoverage, \
+    TrackingMinimumTrackedPointCount, TrackingMinimalMaximumLength, TrackingMinimalGrownLength
+
 try:
     from skimage.morphology import remove_small_holes, remove_small_objects, skeletonize as sk_skeletonize
     from skimage.measure import label, regionprops
@@ -20,11 +25,10 @@ from scipy import ndimage as ndi
 
 import networkx as nx
 
-from tunable import Tunable
 from ..misc.graphml import to_graphml_string
 from ..misc.util import pairwise
 from ..misc.regression import prepare_optimized_regression
-from ..pilyso.application import Every, Collected, Meta, Skip
+from ..pilyso.application import Collected, Meta, Skip
 
 from ..processing.binarization import experimental_thresholding
 
@@ -220,21 +224,6 @@ def graph_statistics(node_frame, result=None):
     }
 
 
-class CleanUpGaussianSigma(Tunable):
-    """Clean up step: Sigma [µm] used for Gaussian filter"""
-    default = 0.075
-
-
-class CleanUpGaussianThreshold(Tunable):
-    """Clean up step: Threshold used after Gaussian filter (values range from 0 to 1)"""
-    default = 0.5
-
-
-class CleanUpHoleFillSize(Tunable):
-    """Clean up step: Maximum size of holes [µm²] which will be filled"""
-    default = 1.0
-
-
 def clean_up(calibration, binary):
     """
     Cleans up the image by removing holes smaller than the configured size.
@@ -255,14 +244,9 @@ def clean_up(calibration, binary):
 
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
-        binary = remove_small_holes(binary, min_size=int(CleanUpHoleFillSize.value / calibration**2), connectivity=2)
+        binary = remove_small_holes(binary, min_size=int(CleanUpHoleFillSize.value / calibration ** 2), connectivity=2)
 
     return binary
-
-
-class RemoveSmallStructuresSize(Tunable):
-    """Remove structures up to this size [µm²]"""
-    default = 10.0
 
 
 def remove_small_structures(calibration, binary):
@@ -282,12 +266,7 @@ def remove_small_structures(calibration, binary):
     """
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
-        return remove_small_objects(binary, min_size=int(RemoveSmallStructuresSize.value / calibration**2), connectivity=2)  # TODO
-
-
-class BorderArtifactRemovalBorderSize(Tunable):
-    """Remove structures, whose centroid lies within that distance [µm] of a border"""
-    default = 10.0
+        return remove_small_objects(binary, min_size=int(RemoveSmallStructuresSize.value / calibration ** 2), connectivity=2)  # TODO
 
 
 def remove_border_artifacts(calibration, binary):
@@ -353,26 +332,6 @@ def track_multipoint(collected):
     for result1, result2 in pairwise(collected.values()):
         result1.node_frame.track(result2.node_frame)
     return collected
-
-
-class TrackingMaximumRelativeShrinkage(Tunable):
-    """ Tracking, maximal relative shrinkage """
-    default = 0.2
-
-
-class TrackingMinimumTipElongationRate(Tunable):
-    """ Tracking, minimum tip elongation rate [µm·h⁻¹]"""
-    default = -0.0
-
-
-class TrackingMaximumTipElongationRate(Tunable):
-    """ Tracking, maximum tip elongation rate [µm·h⁻¹] """
-    default = 100.0
-
-
-class TrackingMaximumCoverage(Tunable):
-    """ Tracking, maximum covered area ratio at which tracking is still performed """
-    default = 0.2
 
 
 # noinspection PyUnusedLocal
@@ -520,21 +479,6 @@ def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fat
 
         last_valid = valid
     return tracks, fates
-
-
-class TrackingMinimumTrackedPointCount(Tunable):
-    """ Tracking, minimal timesteps in track filter [#] """
-    default = 5
-
-
-class TrackingMinimalMaximumLength(Tunable):
-    """ Tracking, minimal hyphae end length in track filter [µm] """
-    default = 10.0
-
-
-class TrackingMinimalGrownLength(Tunable):
-    """ Tracking, minimal hyphae gained length in track filter  [µm] """
-    default = 5.0
 
 
 # noinspection PyProtectedMember,PyUnusedLocal

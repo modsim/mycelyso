@@ -7,6 +7,7 @@ Subpackages
 .. toctree::
     :maxdepth: 4
 
+    mycelyso.tunables
     mycelyso.highlevel
     mycelyso.misc
     mycelyso.processing
