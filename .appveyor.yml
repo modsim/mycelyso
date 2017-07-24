@@ -1,0 +1,68 @@
+version: 1.0.0-{build}
+
+image: Visual Studio 2017
+
+clone_depth: 1
+
+environment:
+  CONDA: C:\Miniconda36-x64
+
+before_build:
+  - cmd: set PATH=%CONDA%;%CONDA%\Scripts;%CONDA%\Library\bin;%PATH%
+  - cmd: conda config --add channels conda-forge
+  - cmd: conda config --add channels bioconda
+  - cmd: conda config --add channels csachs
+  - cmd: conda update -y conda
+  # unfortunately current pyinstaller in conda does not work with python 3.6
+  - cmd: pip install git+https://github.com/pyinstaller/pyinstaller
+
+build_script:
+  # first install the latest version, that fetches all deps
+  - cmd: conda install -y mycelyso mycelyso-inspector
+  # there seems to be an old version around
+  - cmd: conda update -y pyasn1
+  # ... then install the git version. if deps would be missing pip would now try to get'em
+  - cmd: python setup.py install
+  # this is the starter, full of implicit exports to steer pyinstaller into the right direction
+  - cmd: echo import multiprocessing >> runmycelyso.py
+  - cmd: echo import pyasn1 >> runmycelyso.py
+  - cmd: echo from pyasn1.codec.der.encoder import encode as der_encode >> runmycelyso.py
+  - cmd: echo from pyasn1.codec.der.decoder import decode as der_decode >> runmycelyso.py
+  - cmd: echo from pyasn1.codec import native >> runmycelyso.py
+  - cmd: echo from pyasn1.codec.native.encoder import encode as native_encode >> runmycelyso.py
+  - cmd: echo from tunable.schema import tunable_schema as schema, ASN1_SCHEMA_VERSION >> runmycelyso.py
+  - cmd: echo import molyso >> runmycelyso.py
+  - cmd: echo import pywt._extensions._cwt >> runmycelyso.py
+  - cmd: echo from mycelyso.__main__ import main >> runmycelyso.py
+  - cmd: "echo if __name__ == '__main__': >> runmycelyso.py"
+  - cmd: "echo     multiprocessing.freeze_support() >> runmycelyso.py"
+  - cmd: "echo     main() >> runmycelyso.py"
+  #
+  - cmd: echo import sys >> runmycelysoinspector.py
+  - cmd: echo import png.png >> runmycelysoinspector.py
+  - cmd: echo import png.pngfilters >> runmycelysoinspector.py
+  - cmd: echo from mycelyso_inspector.__main__ import main >> runmycelysoinspector.py
+  - cmd: "echo if __name__ == '__main__': >> runmycelysoinspector.py"
+  - cmd: "echo     main() >> runmycelysoinspector.py"
+  #
+  - cmd: pyinstaller runmycelyso.py -n mycelyso --exclude-module tcl --exclude-module tk --exclude-module _tkinter --exclude-module tkinter --exclude-module Tkinter --exclude-module opencv --exclude-module cv2
+  - cmd: pyinstaller runmycelysoinspector.py -n mycelyso_inspector --exclude-module tcl --exclude-module tk --exclude-module _tkinter --exclude-module tkinter --exclude-module Tkinter --exclude-module opencv --exclude-module cv2
+  #--exclude-module PyQt5 --exclude-module PySide
+  - cmd: rd /s /q .\dist\mycelyso\Include
+  - cmd: rd /s /q .\dist\mycelyso_inspector\Include
+  - ps: Copy-Item -Recurse $env:CONDA\Lib\site-packages\mycelyso_inspector\static .\dist\mycelyso_inspector\
+  - ps: Copy-Item -Recurse $env:CONDA\Lib\site-packages\mpld3 .\dist\mycelyso_inspector\
+  # rather silly
+  - ps: Copy-Item -Recurse -Force .\dist\mycelyso\* .\dist\mycelyso_inspector\
+  - ps: Copy-Item -Recurse -Force .\dist\mycelyso_inspector\* .\dist\mycelyso\
+  # would be nice to get rid of more unnecessary parts of the bundle, but pyinstaller bundled programs seem to be very fragile
+
+after_build:
+  - cmd: >
+          7z
+          a
+          mycelyso-win64.zip
+          .\dist\mycelyso
+
+artifacts:
+  - path: mycelyso-win64.zip
