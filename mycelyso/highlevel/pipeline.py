@@ -4,6 +4,7 @@ The pipeline module contains the mycelyso-Pipeline, assembled from various funct
 """
 
 from os.path import basename, abspath
+import networkx as nx
 
 from tunable import TunableManager
 
@@ -13,7 +14,7 @@ from .. import __banner__
 from .. import __version__
 from ..pilyso.application import App, PipelineExecutionContext, PipelineEnvironment, Every, Collected, Meta, Skip
 from ..pilyso.imagestack import ImageStack
-from ..pilyso.misc.h5writer import hdf5_output, hdf5_node_name
+from ..pilyso.misc.h5writer import hdf5_output, hdf5_node_name, return_or_uncompress
 from ..pilyso.pipeline.pipeline import NeatDict
 from ..pilyso.steps import \
     image_source, pull_metadata_from_image, substract_start_frame, rescale_image_to_uint8, set_result, Delete, \
@@ -78,7 +79,7 @@ class Mycelyso(App):
 
         def update(_):
             t = int(timepoint.val)
-            pos = int(multipoint.val)
+            position = int(multipoint.val)
 
             fig.canvas.set_window_title("Image Viewer - [BUSY]")
 
@@ -89,17 +90,31 @@ class Mycelyso(App):
 
             plt.suptitle('[left/right] timepoint [up/down] multipoint [h] hide analysis')
 
-            result = pipeline.dispatch(Meta(pos=Every, t=Every), meta=Meta(pos=pos, t=t))
+            result = pipeline.dispatch(Meta(pos=Every, t=Every), meta=Meta(pos=position, t=t))
 
             result = NeatDict(result)
 
+            binary = return_or_uncompress(result.binary)
+            skeleton = return_or_uncompress(result.skeleton)
+
+            node_draw_parameters = dict(node_size=25, node_color='darkgray', linewidths=0, edge_color='darkgray')
+
+            graph, pos = result.node_frame.get_networkx_graph(return_positions=True)
+
+            nx.draw_networkx(
+                graph,
+                with_labels=False,
+                pos=pos,
+                **node_draw_parameters
+            )
+
             if env['show']:
-                plt.imshow(result.binary)
+                plt.imshow(binary, cmap='gray_r')
             else:
-                plt.imshow(result.binary)
+                plt.imshow(skeleton, cmap='gray_r')
 
             fig.canvas.set_window_title("Image Viewer - %s timepoint #%d %d/%d multipoint #%d %d/%d" %
-                                        (self.args.input, t, 1 + t, 1 + tp_max, pos, 1 + pos, 1 + mp_max))
+                                        (self.args.input, t, 1 + t, 1 + tp_max, position, 1 + position, 1 + mp_max))
 
             plt.draw()
 
