@@ -3,6 +3,7 @@
 The executor submodule contains the PipelineExecutor, which runs an image processing pipeline.
 """
 
+import gc
 import logging
 try:
     import tqdm
@@ -45,8 +46,11 @@ def singleton_class_mapper(class_, what, args, kwargs):
         if class_ not in singleton_class_mapper_local_cache:
             singleton_class_mapper_local_cache[class_] = class_.__new__(class_)
 
-        # print(class_, args, kwargs)
-        return getattr(singleton_class_mapper_local_cache[class_], what)(*args, **kwargs)
+        gc.collect()
+        result = getattr(singleton_class_mapper_local_cache[class_], what)(*args, **kwargs)
+        gc.collect()
+
+        return result
     except Exception as _:
         raise
 
