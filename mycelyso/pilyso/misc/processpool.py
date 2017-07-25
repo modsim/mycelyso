@@ -13,6 +13,8 @@ from multiprocessing import Process, Pipe, cpu_count
 
 from multiprocessing.pool import Pool
 
+exception_debugging = False
+
 
 class Future(object):
     command = None
@@ -326,6 +328,9 @@ class DuckTypedApplyResult(object):
             try:
                 self.value = self.callable()
             except Exception as e:
+                if exception_debugging:
+                    raise
+
                 raise WrappedException(e, traceback.format_exc())
 
         return self.value

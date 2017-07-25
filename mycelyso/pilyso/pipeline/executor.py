@@ -38,6 +38,8 @@ class NotDispatchedYet(object):
     pass
 
 
+exception_debugging = False
+
 singleton_class_mapper_local_cache = {}
 
 
@@ -264,6 +266,9 @@ class PipelineExecutor(object):
                                 self.skip_callback(op, new_invalid)
 
                             else:
+                                if exception_debugging:
+                                    raise
+
                                 self.log.exception("Exception occurred at op=%s: %s",
                                                    repr(reverse_todo[op]) + ' ' + repr(op), ee.message)
 
