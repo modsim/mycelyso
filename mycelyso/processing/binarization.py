@@ -11,11 +11,8 @@ try:
 except ImportError:
     numexpr = None
 
-try:
-    from skimage.transform import integral_image
-    from skimage.feature import shape_index
-except ImportError:  # just for documentation building, skimage IS necessary to run it
-    integral_image = shape_index = None
+from skimage.transform import integral_image
+from skimage.feature import shape_index
 
 
 def mean_and_std(image, window_size=15):

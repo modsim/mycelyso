@@ -16,6 +16,7 @@ install_requires = [
     'mfisp_boxdetection', 'molyso', 'tunable',
     'tqdm'  # nicer progress bars, using the MPLv2+MIT licensed version
 ] + (['scikit-image>=0.12'] if not on_rtd else [])
+# read the docs has a problem installing scikit-image, but doc building will fail if all packages are just mockups ...
 
 import mycelyso
 

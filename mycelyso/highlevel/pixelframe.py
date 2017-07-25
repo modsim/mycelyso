@@ -6,10 +6,7 @@ at the binary mask/pixel level.
 
 import numpy as np
 
-try:
-    from skimage.measure import label
-except ImportError:  # just for documentation building, skimage IS necessary to run it
-    label = None
+from skimage.measure import label
 
 from ..processing.pixelgraphs import \
     where2d, get_connectivity_map, get_neighborhood_map, is_edge, is_end, is_junction, \
