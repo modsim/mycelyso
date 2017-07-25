@@ -15,17 +15,22 @@ from mfisp_boxdetection import find_box
 from molyso.generic.rotation import find_rotation, rotate_image
 from molyso.generic.registration import translation_2x1d, shift_image
 from ..pipeline.executor import Skip, Collected
-
+from ..misc.h5writer import CompressedObject
 
 class Delete(object):
     pass
 
+
+class Compress(object):
+    pass
 
 def set_result(**kwargs):
     def _inner(result):
         for k, v in kwargs.items():
             if v is Delete:
                 del result[k]
+            elif v is Compress:
+                result[k] = CompressedObject(result[k])
             else:
                 result[k] = v
         return result

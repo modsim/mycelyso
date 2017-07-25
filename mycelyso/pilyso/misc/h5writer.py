@@ -15,6 +15,15 @@ from os import remove, fdopen, open as low_level_open, O_CREAT, O_EXCL, O_WRONLY
 from fnmatch import fnmatch
 
 import numpy as np
+import zlib
+import bz2
+try:
+    import lzma
+except ImportError:
+    lzma = None
+
+import pickle
+import time
 
 lock_debugging = False
 
@@ -81,6 +90,60 @@ def hdf5_node_name(s):
         s = s[1:]
 
     return s
+
+
+class CompressedObject(object):
+    __slots__ = 'data', 'compression'
+
+    debug = False
+    default_compression = 'bz2'
+
+    compressions = {
+        'zlib': (lambda _: zlib.compress(_, 6), lambda _: zlib.decompress(_)),
+        'bz2': (lambda _: bz2.compress(_, 9), lambda _: bz2.decompress(_)),
+        'lzma': (lambda _: lzma.compress(_, check=lzma.CHECK_NONE), lambda _: lzma.decompress(_)),
+    }
+
+    def __init__(self, data, compression=None):
+        before = time.time()
+        if compression is None:
+            compression = self.default_compression
+
+        serialized = pickle.dumps(data, pickle.HIGHEST_PROTOCOL)
+        before_len = len(serialized)
+
+        assert compression in self.compressions
+
+        compress, uncompress = self.compressions[compression]
+
+        serialized = compress(serialized)
+
+        self.compression = compression
+        self.data = serialized
+
+        del serialized
+        del data
+
+        after_len = len(self.data)
+        after = time.time()
+
+        if self.debug:
+            print(
+                "... serialized and compressed object using %s from %d to %d (%.3f) took %.3fs" % (
+                    compression, before_len, after_len, after_len/before_len, (after-before)
+                )
+            )
+
+    def get(self):
+        compress, uncompress = self.compressions[self.compression]
+        return pickle.loads(uncompress(self.data))
+
+
+def return_or_uncompress(something):
+    if isinstance(something, CompressedObject):
+        return something.get()
+    else:
+        return something
 
 
 def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
@@ -240,7 +303,7 @@ def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
                                 if k in row:
                                     new_path = '/images/%s' % (k,)
                                     new_name = '%s_%09d' % (k, image_counter[k])
-                                    store_image(prefix + new_path, new_name, row[k])
+                                    store_image(prefix + new_path, new_name, return_or_uncompress(row[k]))
                                 tmp[k] = image_counter[k]
 
                                 image_counter[k] += 1
@@ -251,7 +314,7 @@ def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
                                 if k in row:
                                     new_path = '/data/%s' % (k,)
                                     new_name = '%s_%09d' % (k, data_counter[k])
-                                    store_data(prefix + new_path, new_name, row[k])
+                                    store_data(prefix + new_path, new_name, return_or_uncompress(row[k]))
                                 tmp[k] = data_counter[k]
 
                                 data_counter[k] += 1
