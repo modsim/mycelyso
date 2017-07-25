@@ -48,7 +48,6 @@ def singleton_class_mapper(class_, what, args, kwargs):
         if class_ not in singleton_class_mapper_local_cache:
             singleton_class_mapper_local_cache[class_] = class_.__new__(class_)
 
-        gc.collect()
         result = getattr(singleton_class_mapper_local_cache[class_], what)(*args, **kwargs)
         gc.collect()
 
