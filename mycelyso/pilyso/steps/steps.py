@@ -17,6 +17,7 @@ from molyso.generic.registration import translation_2x1d, shift_image
 from ..pipeline.executor import Skip, Collected
 from ..misc.h5writer import CompressedObject
 
+
 class Delete(object):
     pass
 
