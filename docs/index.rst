@@ -18,4 +18,5 @@ Contents:
 
     readme
     license
+    Example_HDF5_Insights
     mycelyso

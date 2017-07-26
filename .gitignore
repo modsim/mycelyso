@@ -1,3 +1,5 @@
+.ipynb_checkpoints/
+docs/_build/
 .idea/
 build/
 dist/
