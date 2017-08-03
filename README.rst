@@ -187,6 +187,9 @@ If the data is pre-segmented (i.e. input is a binary image stack), choose :code:
 
    > python -m mycelyso S_lividans_TK24_Complex_Medium_nd046_138.ome.tiff -t BoxDetection=1
 
+Optionally, you can inspect the segmentation and produced graph on a per-frame basis before running a complete analysis, by
+adding the :code:`--interactive` flag, in which case *mycelyso* will start an interactive viewer.
+
 *mycelyso* stores all data compressed in HDF5 files, by default it will write a file called :code:`output.h5` (can be changed with :code:`--output`).
 
 .. code-block:: bash
