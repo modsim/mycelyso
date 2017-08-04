@@ -1,0 +1,154 @@
+{
+  "100": {
+    "edges": [
+      {
+        "data": {
+          "source": 7, 
+          "target": 0, 
+          "weight": 3.353868683516
+        }
+      }, 
+      {
+        "data": {
+          "source": 6, 
+          "target": 1, 
+          "weight": 1.7707716446615
+        }
+      }, 
+      {
+        "data": {
+          "source": 8, 
+          "target": 2, 
+          "weight": 0.845
+        }
+      }, 
+      {
+        "data": {
+          "source": 7, 
+          "target": 4, 
+          "weight": 44.8367420332
+        }
+      }, 
+      {
+        "data": {
+          "source": 9, 
+          "target": 5, 
+          "weight": 40.98867637501
+        }
+      }, 
+      {
+        "data": {
+          "source": 7, 
+          "target": 6, 
+          "weight": 1.6296194077735
+        }
+      }, 
+      {
+        "data": {
+          "source": 8, 
+          "target": 6, 
+          "weight": 18.144703089435
+        }
+      }, 
+      {
+        "data": {
+          "source": 9, 
+          "target": 8, 
+          "weight": 2.236923881556
+        }
+      }
+    ], 
+    "nodes": [
+      {
+        "data": {
+          "id": 0
+        }, 
+        "position": {
+          "x": 12.0, 
+          "y": 404.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 1
+        }, 
+        "position": {
+          "x": 71.0, 
+          "y": 410.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 2
+        }, 
+        "position": {
+          "x": 303.0, 
+          "y": 523.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 3
+        }, 
+        "position": {
+          "x": 342.0, 
+          "y": 529.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 4
+        }, 
+        "position": {
+          "x": 333.0, 
+          "y": 898.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 5
+        }, 
+        "position": {
+          "x": 725.0, 
+          "y": 941.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 6
+        }, 
+        "position": {
+          "x": 69.0, 
+          "y": 437.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 7
+        }, 
+        "position": {
+          "x": 43.0, 
+          "y": 443.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 8
+        }, 
+        "position": {
+          "x": 302.0, 
+          "y": 537.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 9
+        }, 
+        "position": {
+          "x": 338.0, 
+          "y": 537.0
+        }
+      }
+    ]
+  }
+}

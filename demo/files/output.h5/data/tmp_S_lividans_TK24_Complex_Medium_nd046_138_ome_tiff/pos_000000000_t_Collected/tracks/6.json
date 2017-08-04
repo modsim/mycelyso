@@ -1,0 +1,148 @@
+{
+  "results": [
+    {
+      "distance": 0.09192388155425119, 
+      "distance_num": 1.0, 
+      "graph": 109, 
+      "meta_t": 109, 
+      "node_id_a": 9, 
+      "node_id_b": 21, 
+      "node_next_id_a": 10, 
+      "node_next_id_b": 22, 
+      "timepoint": 65741.77884772909, 
+      "track_table_number": 6
+    }, 
+    {
+      "distance": 0.7419238815542513, 
+      "distance_num": 1.0, 
+      "graph": 110, 
+      "meta_t": 110, 
+      "node_id_a": 10, 
+      "node_id_b": 22, 
+      "node_next_id_a": 14, 
+      "node_next_id_b": 31, 
+      "timepoint": 66340.18921945406, 
+      "track_table_number": 6
+    }, 
+    {
+      "distance": 1.495, 
+      "distance_num": 1.0, 
+      "graph": 111, 
+      "meta_t": 111, 
+      "node_id_a": 14, 
+      "node_id_b": 31, 
+      "node_next_id_a": 12, 
+      "node_next_id_b": 28, 
+      "timepoint": 66943.78353342903, 
+      "track_table_number": 6
+    }, 
+    {
+      "distance": 3.059619407771256, 
+      "distance_num": 1.0, 
+      "graph": 112, 
+      "meta_t": 112, 
+      "node_id_a": 12, 
+      "node_id_b": 28, 
+      "node_next_id_a": 13, 
+      "node_next_id_b": 29, 
+      "timepoint": 67544.22472252905, 
+      "track_table_number": 6
+    }, 
+    {
+      "distance": 4.743086578651014, 
+      "distance_num": 1.0, 
+      "graph": 113, 
+      "meta_t": 113, 
+      "node_id_a": 13, 
+      "node_id_b": 29, 
+      "node_next_id_a": 15, 
+      "node_next_id_b": 32, 
+      "timepoint": 68144.22321497905, 
+      "track_table_number": 6
+    }, 
+    {
+      "distance": 6.706944801964782, 
+      "distance_num": 1.0, 
+      "graph": 114, 
+      "meta_t": 114, 
+      "node_id_a": 15, 
+      "node_id_b": 32, 
+      "node_next_id_a": 15, 
+      "node_next_id_b": 32, 
+      "timepoint": 68741.1535078541, 
+      "track_table_number": 6
+    }, 
+    {
+      "distance": 9.016194077712559, 
+      "distance_num": 1.0, 
+      "graph": 115, 
+      "meta_t": 115, 
+      "node_id_a": 15, 
+      "node_id_b": 32, 
+      "node_next_id_a": 16, 
+      "node_next_id_b": 36, 
+      "timepoint": 69343.336710904, 
+      "track_table_number": 6
+    }, 
+    {
+      "distance": 11.596595590351836, 
+      "distance_num": 1.0, 
+      "graph": 116, 
+      "meta_t": 116, 
+      "node_id_a": 16, 
+      "node_id_b": 36, 
+      "node_next_id_a": 16, 
+      "node_next_id_b": 35, 
+      "timepoint": 69940.6861505791, 
+      "track_table_number": 6
+    }, 
+    {
+      "distance": 14.143540392316618, 
+      "distance_num": 1.0, 
+      "graph": 117, 
+      "meta_t": 117, 
+      "node_id_a": 16, 
+      "node_id_b": 35, 
+      "node_next_id_a": 16, 
+      "node_next_id_b": 35, 
+      "timepoint": 70540.38639862907, 
+      "track_table_number": 6
+    }, 
+    {
+      "distance": 17.22121020504763, 
+      "distance_num": 1.0, 
+      "graph": 118, 
+      "meta_t": 118, 
+      "node_id_a": 16, 
+      "node_id_b": 35, 
+      "node_next_id_a": 17, 
+      "node_next_id_b": 37, 
+      "timepoint": 71141.75386312902, 
+      "track_table_number": 6
+    }, 
+    {
+      "distance": 20.272810588474925, 
+      "distance_num": 1.0, 
+      "graph": 119, 
+      "meta_t": 119, 
+      "node_id_a": 17, 
+      "node_id_b": 37, 
+      "node_next_id_a": 20, 
+      "node_next_id_b": 40, 
+      "timepoint": 71748.77877115404, 
+      "track_table_number": 6
+    }, 
+    {
+      "distance": 23.474374798210963, 
+      "distance_num": 1.0, 
+      "graph": 120, 
+      "meta_t": 120, 
+      "node_id_a": 20, 
+      "node_id_b": 40, 
+      "node_next_id_a": 21, 
+      "node_next_id_b": 44, 
+      "timepoint": 72342.28854122912, 
+      "track_table_number": 6
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "plots": [
+    [
+      "Covered Area", 
+      "plots/covered_area.json"
+    ], 
+    [
+      "Covered Area Relative", 
+      "plots/covered_area_relative.json"
+    ], 
+    [
+      "Graph Edge Length", 
+      "plots/graph_edge_length.json"
+    ], 
+    [
+      "Graph Hyphal Growth Unit", 
+      "plots/graph_hyphal_growth_unit.json"
+    ], 
+    [
+      "Graph Node Count", 
+      "plots/graph_node_count.json"
+    ], 
+    [
+      "Tracked Hyphae", 
+      "plots/tracked_hyphae.json"
+    ], 
+    [
+      "Tracked Hyphae Absolute", 
+      "plots/tracked_hyphae_absolute.json"
+    ], 
+    [
+      "Tracked Segments", 
+      "plots/tracked_segments.json"
+    ]
+  ]
+}

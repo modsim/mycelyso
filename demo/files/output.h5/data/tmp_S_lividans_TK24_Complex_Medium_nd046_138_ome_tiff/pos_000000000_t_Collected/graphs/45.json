@@ -1,0 +1,257 @@
+{
+  "45": {
+    "edges": [
+      {
+        "data": {
+          "source": 7, 
+          "target": 0, 
+          "weight": 2.1607716446615
+        }
+      }, 
+      {
+        "data": {
+          "source": 14, 
+          "target": 0, 
+          "weight": 2.8757716446615
+        }
+      }, 
+      {
+        "data": {
+          "source": 13, 
+          "target": 1, 
+          "weight": 0.78
+        }
+      }, 
+      {
+        "data": {
+          "source": 14, 
+          "target": 1, 
+          "weight": 0.09192388155405001
+        }
+      }, 
+      {
+        "data": {
+          "source": 13, 
+          "target": 2, 
+          "weight": 0.52461940777155
+        }
+      }, 
+      {
+        "data": {
+          "source": 4, 
+          "target": 3, 
+          "weight": 1.1969238815560002
+        }
+      }, 
+      {
+        "data": {
+          "source": 15, 
+          "target": 3, 
+          "weight": 0.48192388155404997
+        }
+      }, 
+      {
+        "data": {
+          "source": 6, 
+          "target": 4, 
+          "weight": 3.8238477631055
+        }
+      }, 
+      {
+        "data": {
+          "source": 8, 
+          "target": 5, 
+          "weight": 3.406923881556
+        }
+      }, 
+      {
+        "data": {
+          "source": 13, 
+          "target": 5, 
+          "weight": 8.741543289310002
+        }
+      }, 
+      {
+        "data": {
+          "source": 11, 
+          "target": 6, 
+          "weight": 1.261923881556
+        }
+      }, 
+      {
+        "data": {
+          "source": 12, 
+          "target": 7, 
+          "weight": 7.92808657862
+        }
+      }, 
+      {
+        "data": {
+          "source": 9, 
+          "target": 8, 
+          "weight": 0.455
+        }
+      }, 
+      {
+        "data": {
+          "source": 10, 
+          "target": 9, 
+          "weight": 0.78
+        }
+      }, 
+      {
+        "data": {
+          "source": 15, 
+          "target": 10, 
+          "weight": 6.011543289323
+        }
+      }
+    ], 
+    "nodes": [
+      {
+        "data": {
+          "id": 0
+        }, 
+        "position": {
+          "x": 156.0, 
+          "y": 273.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 1
+        }, 
+        "position": {
+          "x": 201.0, 
+          "y": 275.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 2
+        }, 
+        "position": {
+          "x": 222.0, 
+          "y": 275.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 3
+        }, 
+        "position": {
+          "x": 527.0, 
+          "y": 276.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 4
+        }, 
+        "position": {
+          "x": 551.0, 
+          "y": 276.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 5
+        }, 
+        "position": {
+          "x": 349.0, 
+          "y": 279.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 6
+        }, 
+        "position": {
+          "x": 612.0, 
+          "y": 279.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 7
+        }, 
+        "position": {
+          "x": 120.0, 
+          "y": 280.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 8
+        }, 
+        "position": {
+          "x": 403.0, 
+          "y": 280.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 9
+        }, 
+        "position": {
+          "x": 415.0, 
+          "y": 280.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 10
+        }, 
+        "position": {
+          "x": 426.0, 
+          "y": 280.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 11
+        }, 
+        "position": {
+          "x": 632.0, 
+          "y": 282.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 12
+        }, 
+        "position": {
+          "x": 2.0, 
+          "y": 285.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 13
+        }, 
+        "position": {
+          "x": 217.0, 
+          "y": 281.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 14
+        }, 
+        "position": {
+          "x": 202.0, 
+          "y": 282.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 15
+        }, 
+        "position": {
+          "x": 520.0, 
+          "y": 282.0
+        }
+      }
+    ]
+  }
+}

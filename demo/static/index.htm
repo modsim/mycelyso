@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>mycelyso Inspector</title>
+
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
+
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+
+    <link href="bower_components/jquery-ui/themes/smoothness/jquery-ui.css" rel="stylesheet">
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/angular-ui-slider/src/slider.js"></script>
+
+    <link href="bower_components/angular-ui-grid/ui-grid.min.css" rel="stylesheet">
+    <script src="bower_components/angular-ui-grid/ui-grid.min.js"></script>
+
+    <link href="bower_components/lightbox2/dist/css/lightbox.css" rel="stylesheet">
+    <script src="bower_components/lightbox2/dist/js/lightbox.min.js"></script>
+
+    <script src="bower_components/pdfmake/build/pdfmake.min.js"></script>
+    <script src="bower_components/pdfmake/build/vfs_fonts.js"></script>
+
+    <script src="bower_components/cytoscape/dist/cytoscape.min.js"></script>
+
+    <script src="bower_components/mathbox/build/mathbox-bundle.js"></script>
+
+    <script src="bower_components/d3/d3.min.js"></script>
+    <script src="../mpld3.js"></script>
+
+    <script src="script.js"></script>
+
+    <style>
+        .nav-sidebar > .active > a,
+        .nav-sidebar > .active > a:focus,
+        .nav-sidebar > .active > a:hover {
+            background-color: #428bca;
+            color: white;
+        }
+
+        #graphContainer div {
+            display: inline-block;
+            width: 400px;
+            height: 800px;
+        }
+
+        #visualizationContainer {
+            display: inline-block;
+            width: 100%;
+            height: 800px;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: white;
+        }
+
+        pre {
+            color: black;
+        }
+    </style>
+
+</head>
+<body ng-app="mycelysoApp">
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#"><img src="mycelyso.svg" style="height: 1.0em; width: 4.29em; display: inline;"
+                                                  alt="mycelyso "/> Inspector</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1"
+             ng-controller="mycelysoPositionManagement">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">{{file ? file : 'Select result file'}} <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="file in files"><a href="" ng-click="$parent.file = file; loadFileIndex(file)">{{file}}</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">{{data_file ? data_file : 'Select experiment image file'}} <span
+                            class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="(data_file, positions) in fileIndex"><a href=""
+                                                                               ng-click="$parent.data_file = data_file; $parent.position = fileIndex[data_file][0]; broadcastPosition()">{{data_file}}</a>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <li><a href="" ng-click="previousPosition()"><span class="glyphicon glyphicon-menu-left"></span></a>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">{{position ? prettifyNumber(position) : 'Select position'}} <span
+                            class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="position in fileIndex[data_file]"><a href=""
+                                                                            ng-click="$parent.position = position; broadcastPosition()"
+                        >{{prettifyNumber(position)}}</a></li>
+                    </ul>
+                </li>
+                <li><a href="" ng-click="nextPosition()"><span class="glyphicon glyphicon-menu-right"></span></a></li>
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#" onclick="$('#about').toggle();">About</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#" onclick="$('#infotunables').toggle();">Analysis Information &amp; Tunables</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+
+<div class="container-fluid">
+    <div class="jumbotron" id="about" style="display: none;">
+        <h1><img src="mycelyso.svg" style="height: 1.0em; display: inline;" alt="mycelyso "/> Inspector</h1>
+        <h2>About</h2>
+        <p>MYCElium anaLYsis SOftware &mdash; Inspector</p>
+        <p>Developed  2015&ndash;2017 by <a href="https://github.com/csachs">Christian C. Sachs</a> at <a href="https://github.com/modsim">Modeling &amp; Simulation Group</a> at <a href="https://www.fz-juelich.de/">Research  Center  Juelich</a>.<br/>
+            Visit <a href="https://github.com/modsim/mycelyso">mycelyso</a> at github for more information.<br />
+            Licensed under the BSD License. Using various open source libraries under their respective licenses.
+        </p>
+    </div>
+    <div class="jumbotron" id="infotunables" style="display: none;" ng-controller="mycelysoTunables">
+        <h2>Tunables and Information</h2>
+        <p>The position was analyzed with version {{version}}</p>
+        <pre>{{banner}}</pre>
+        <h3>Tunables</h3>
+        <pre>{{tunables}}</pre>
+    </div>
+    <div class="row">
+        <div class="col-md-2 sidebar">
+            <h4>Plots:</h4>
+            <ul class="nav nav-sidebar" ng-controller="mycelysoPlotlist" style="height: 600px; overflow-y:scroll;">
+                <li ng-repeat="plot in plots" ng-class="{active: plotIndex == $index}"><a
+                        href="{{url}}/{{plot[1].replace('.json', '.tsv')}}"
+                        ng-click="$parent.plotIndex = $index; showPlot(); $event.preventDefault();">{{plot[0]}}</a></li>
+            </ul>
+        </div>
+        <div ng-controller="mycelysoResultGrid">
+            <div class="col-md-7 main">
+                <h1>File: {{prettifyFilename(results.filename)}} Position: {{results.meta_pos}} Metadata:
+                    {{results.metadata}} <span ng-controller="mycelysoUrlAndIntervalController"><a
+                            href="{{url}}/original_snapshot.png" data-lightbox="snapshot"><img
+                            ng-src="{{url}}/original_snapshot.png" id="snapshot" src="" style="height: 100px;"/></a></span>
+                </h1>
+                <div ng-controller="mycelysoPlotwidget">
+                    <div id="plot"></div>
+                </div>
+
+            </div>
+            <div class="col-md-3">
+                <div class="sidebar-module sidebar-module-inset">
+                    <h4>Remarks:</h4>
+                    <form>
+                        <div class="form-group">
+                            <label for="remarks">Remarks</label>
+                            <input type="text" class="form-control" id="remarks" placeholder="" ng-model="remarks"
+                                   ng-change="store()"/>
+                        </div>
+                        <button type="button" class="btn btn-default" ng-click="getAll()">Get All</button>
+                    </form>
+                    <h4>Properties:</h4>
+                    <div ui-grid="grid" ui-grid-auto-resize ui-grid-resize-columns
+                         style="width:100%; height: 600px; "></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div ng-controller="mycelysoTrackingGrid">
+    <div ui-grid="grid" ui-grid-auto-resize ui-grid-resize-columns ui-grid-selection ui-grid-move-columns
+         ui-grid-exporter style=""></div>
+</div>
+
+<div style="padding: 10px;">
+    <ul class="nav nav-tabs nav-tabs-justified">
+        <li class="active"><a data-toggle="tab" href="#3dvis">3D Visualization</a></li>
+        <li><a data-toggle="tab" href="#2dvis">2D Tracking Visualization</a></li>
+    </ul>
+
+    <div class="tab-content" style="padding: 10px;">
+        <div id="3dvis" class="tab-pane fade in active">
+            <div ng-controller="mycelyso3DVis">
+                <button type="button" class="btn btn-default" ng-click="vis()">Load 3D Visualization</button><br />
+                Selected visible time frame:
+                <div ui-slider="timeSliderOptions" tick min="0" max="{{maxTime}}" step="1" ng-model="timeSlider"></div>
+                Loading might take a while. Use <code>g</code>/<code>h</code>/<code>l</code> to hide graph/binarization/labels.
+                <br/><br />
+                <div id="visualizationContainer"></div>
+            </div>
+
+        </div>
+        <div id="2dvis" class="tab-pane fade">
+            <div ng-controller="mycelysoGraph">
+                <button type="button" class="btn btn-default" ng-click="getGraphsForTrack()">Get Graphs for Selected Track Row</button>
+                <div id="graphContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="height: 500px;">
+    &nbsp;
+</div>
+
+<footer ng-controller="mycelysoUrlAndIntervalController" class="footer">
+    <ul class="nav nav-pills">
+        <li ng-class="{active: what == 'binary'}"><a href="" ng-click="what = 'binary'">Binarization</a></li>
+        <li ng-class="{active: what == 'skeleton'}"><a href="" ng-click="what = 'skeleton'">Skeletonization</a></li>
+        <li>Every {{n}}. frame
+            <div ui-slider min="1" max="100" step="1" ng-model="n" style="width: 400px;"></div>
+        </li>
+    </ul>
+    <div style="overflow-x: scroll; direction: rtl;" id="timeline">
+        <a href="{{url}}/collage_{{what}}_every_{{n}}.png" data-lightbox="longPreview"><img
+                ng-src="{{url}}/collage_{{what}}_every_{{n}}.png" id="longPreview" src="" style="height: 150px;"/></a>
+    </div>
+</footer>
+</body>
+</html>

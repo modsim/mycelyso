@@ -1,0 +1,113 @@
+{
+  "8": {
+    "edges": [
+      {
+        "data": {
+          "source": 1, 
+          "target": 0, 
+          "weight": 1.495
+        }
+      }, 
+      {
+        "data": {
+          "source": 5, 
+          "target": 0, 
+          "weight": 2.6
+        }
+      }, 
+      {
+        "data": {
+          "source": 6, 
+          "target": 1, 
+          "weight": 5.1238477631055
+        }
+      }, 
+      {
+        "data": {
+          "source": 3, 
+          "target": 2, 
+          "weight": 0.7150000000000001
+        }
+      }, 
+      {
+        "data": {
+          "source": 4, 
+          "target": 2, 
+          "weight": 6.623467170905
+        }
+      }, 
+      {
+        "data": {
+          "source": 5, 
+          "target": 4, 
+          "weight": 4.4626955262175
+        }
+      }
+    ], 
+    "nodes": [
+      {
+        "data": {
+          "id": 0
+        }, 
+        "position": {
+          "x": 524.0, 
+          "y": 277.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 1
+        }, 
+        "position": {
+          "x": 548.0, 
+          "y": 277.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 2
+        }, 
+        "position": {
+          "x": 307.0, 
+          "y": 278.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 3
+        }, 
+        "position": {
+          "x": 294.0, 
+          "y": 279.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 4
+        }, 
+        "position": {
+          "x": 411.0, 
+          "y": 279.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 5
+        }, 
+        "position": {
+          "x": 480.0, 
+          "y": 280.0
+        }
+      }, 
+      {
+        "data": {
+          "id": 6
+        }, 
+        "position": {
+          "x": 629.0, 
+          "y": 282.0
+        }
+      }
+    ]
+  }
+}

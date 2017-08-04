@@ -1,0 +1,31 @@
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <key attr.name="weight" attr.type="double" for="edge" id="d2" />
+  <key attr.name="y" attr.type="double" for="node" id="d1" />
+  <key attr.name="x" attr.type="double" for="node" id="d0" />
+  <graph edgedefault="undirected">
+    <node id="0">
+      <data key="d0">404.0</data>
+      <data key="d1">568.0</data>
+    </node>
+    <node id="1">
+      <data key="d0">499.0</data>
+      <data key="d1">612.0</data>
+    </node>
+    <node id="2">
+      <data key="d0">492.0</data>
+      <data key="d1">616.0</data>
+    </node>
+    <edge source="0" target="2">
+      <data key="d2">111.568542495</data>
+    </edge>
+    <edge source="1" target="1">
+      <data key="d2">4.41421356237</data>
+    </edge>
+    <edge source="1" target="2">
+      <data key="d2">1.41421356237</data>
+    </edge>
+    <edge source="2" target="2">
+      <data key="d2">1.0</data>
+    </edge>
+  </graph>
+</graphml>

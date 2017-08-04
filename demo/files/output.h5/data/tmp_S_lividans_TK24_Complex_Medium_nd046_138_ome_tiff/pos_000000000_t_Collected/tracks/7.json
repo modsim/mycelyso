@@ -1,0 +1,112 @@
+{
+  "results": [
+    {
+      "distance": 0.9953910524340096, 
+      "distance_num": 1.0, 
+      "graph": 110, 
+      "meta_t": 110, 
+      "node_id_a": 9, 
+      "node_id_b": 21, 
+      "node_next_id_a": 12, 
+      "node_next_id_b": 29, 
+      "timepoint": 66340.18921945406, 
+      "track_table_number": 7
+    }, 
+    {
+      "distance": 1.9480865786510142, 
+      "distance_num": 1.0, 
+      "graph": 111, 
+      "meta_t": 111, 
+      "node_id_a": 12, 
+      "node_id_b": 29, 
+      "node_next_id_a": 10, 
+      "node_next_id_b": 26, 
+      "timepoint": 66943.78353342903, 
+      "track_table_number": 7
+    }, 
+    {
+      "distance": 2.748477631085023, 
+      "distance_num": 1.0, 
+      "graph": 112, 
+      "meta_t": 112, 
+      "node_id_a": 10, 
+      "node_id_b": 26, 
+      "node_next_id_a": 11, 
+      "node_next_id_b": 27, 
+      "timepoint": 67544.22472252905, 
+      "track_table_number": 7
+    }, 
+    {
+      "distance": 3.8088686835190324, 
+      "distance_num": 1.0, 
+      "graph": 113, 
+      "meta_t": 113, 
+      "node_id_a": 11, 
+      "node_id_b": 27, 
+      "node_next_id_a": 13, 
+      "node_next_id_b": 30, 
+      "timepoint": 68144.22321497905, 
+      "track_table_number": 7
+    }, 
+    {
+      "distance": 4.896183617507294, 
+      "distance_num": 1.0, 
+      "graph": 114, 
+      "meta_t": 114, 
+      "node_id_a": 13, 
+      "node_id_b": 30, 
+      "node_next_id_a": 11, 
+      "node_next_id_b": 29, 
+      "timepoint": 68741.1535078541, 
+      "track_table_number": 7
+    }, 
+    {
+      "distance": 5.301955262170048, 
+      "distance_num": 1.0, 
+      "graph": 115, 
+      "meta_t": 115, 
+      "node_id_a": 11, 
+      "node_id_b": 29, 
+      "node_next_id_a": 10, 
+      "node_next_id_b": 32, 
+      "timepoint": 69343.336710904, 
+      "track_table_number": 7
+    }, 
+    {
+      "distance": 5.393879143724298, 
+      "distance_num": 1.0, 
+      "graph": 116, 
+      "meta_t": 116, 
+      "node_id_a": 10, 
+      "node_id_b": 32, 
+      "node_next_id_a": 13, 
+      "node_next_id_b": 30, 
+      "timepoint": 69940.6861505791, 
+      "track_table_number": 7
+    }, 
+    {
+      "distance": 9.367690733141542, 
+      "distance_num": 2.0, 
+      "graph": 117, 
+      "meta_t": 117, 
+      "node_id_a": 13, 
+      "node_id_b": 30, 
+      "node_next_id_a": 15, 
+      "node_next_id_b": 30, 
+      "timepoint": 70540.38639862907, 
+      "track_table_number": 7
+    }, 
+    {
+      "distance": 12.486204537917823, 
+      "distance_num": 2.0, 
+      "graph": 118, 
+      "meta_t": 118, 
+      "node_id_a": 15, 
+      "node_id_b": 30, 
+      "node_next_id_a": 16, 
+      "node_next_id_b": 32, 
+      "timepoint": 71141.75386312902, 
+      "track_table_number": 7
+    }
+  ]
+}

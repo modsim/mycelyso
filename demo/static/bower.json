@@ -1,0 +1,30 @@
+{
+  "name": "mycelyso-frontend",
+  "authors": [
+    "Christian C. Sachs <c.sachs@fz-juelich.de>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "BSD",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-ui-grid": "~4.0.4",
+    "angular-ui-slider": "~0.4.0",
+    "angular": "~1.5.8",
+    "cytoscape": "~2.7.18",
+    "d3": "~3.5.17",
+    "pdfmake": "~0.1.28",
+    "lightbox2": "~2.9.0",
+    "bootstrap": "~3.3.7",
+    "mathbox": "~0.0.5"
+  }
+}

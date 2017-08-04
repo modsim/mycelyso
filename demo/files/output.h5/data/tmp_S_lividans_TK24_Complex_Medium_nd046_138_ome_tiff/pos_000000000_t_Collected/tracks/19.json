@@ -1,0 +1,88 @@
+{
+  "results": [
+    {
+      "distance": 1.9796298679765216, 
+      "distance_num": 1.0, 
+      "graph": 128, 
+      "meta_t": 128, 
+      "node_id_a": 41, 
+      "node_id_b": 91, 
+      "node_next_id_a": 50, 
+      "node_next_id_b": 105, 
+      "timepoint": 77143.27999620402, 
+      "track_table_number": 19
+    }, 
+    {
+      "distance": 4.414259735953042, 
+      "distance_num": 1.0, 
+      "graph": 129, 
+      "meta_t": 129, 
+      "node_id_a": 50, 
+      "node_id_b": 105, 
+      "node_next_id_a": 54, 
+      "node_next_id_b": 123, 
+      "timepoint": 77739.27736417901, 
+      "track_table_number": 19
+    }, 
+    {
+      "distance": 6.129270196158308, 
+      "distance_num": 1.0, 
+      "graph": 130, 
+      "meta_t": 130, 
+      "node_id_a": 54, 
+      "node_id_b": 123, 
+      "node_next_id_a": 58, 
+      "node_next_id_b": 131, 
+      "timepoint": 78338.28778427899, 
+      "track_table_number": 19
+    }, 
+    {
+      "distance": 7.812737367038067, 
+      "distance_num": 1.0, 
+      "graph": 131, 
+      "meta_t": 131, 
+      "node_id_a": 58, 
+      "node_id_b": 131, 
+      "node_next_id_a": 55, 
+      "node_next_id_b": 134, 
+      "timepoint": 78943.24605330407, 
+      "track_table_number": 19
+    }, 
+    {
+      "distance": 9.507356774809324, 
+      "distance_num": 1.0, 
+      "graph": 132, 
+      "meta_t": 132, 
+      "node_id_a": 55, 
+      "node_id_b": 134, 
+      "node_next_id_a": 66, 
+      "node_next_id_b": 141, 
+      "timepoint": 79540.78848482907, 
+      "track_table_number": 19
+    }, 
+    {
+      "distance": 11.997747827243332, 
+      "distance_num": 1.0, 
+      "graph": 133, 
+      "meta_t": 133, 
+      "node_id_a": 66, 
+      "node_id_b": 141, 
+      "node_next_id_a": 79, 
+      "node_next_id_b": 161, 
+      "timepoint": 80140.70410970402, 
+      "track_table_number": 19
+    }, 
+    {
+      "distance": 15.595844866099615, 
+      "distance_num": 1.0, 
+      "graph": 134, 
+      "meta_t": 134, 
+      "node_id_a": 79, 
+      "node_id_b": 161, 
+      "node_next_id_a": 89, 
+      "node_next_id_b": 201, 
+      "timepoint": 80741.8681861291, 
+      "track_table_number": 19
+    }
+  ]
+}

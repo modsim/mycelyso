@@ -1,0 +1,84 @@
+{
+  "plots": [
+    [
+      "Track 0000", 
+      "track_plots/0.json"
+    ], 
+    [
+      "Track 0001", 
+      "track_plots/1.json"
+    ], 
+    [
+      "Track 0002", 
+      "track_plots/2.json"
+    ], 
+    [
+      "Track 0003", 
+      "track_plots/3.json"
+    ], 
+    [
+      "Track 0004", 
+      "track_plots/4.json"
+    ], 
+    [
+      "Track 0005", 
+      "track_plots/5.json"
+    ], 
+    [
+      "Track 0006", 
+      "track_plots/6.json"
+    ], 
+    [
+      "Track 0007", 
+      "track_plots/7.json"
+    ], 
+    [
+      "Track 0008", 
+      "track_plots/8.json"
+    ], 
+    [
+      "Track 0009", 
+      "track_plots/9.json"
+    ], 
+    [
+      "Track 0010", 
+      "track_plots/10.json"
+    ], 
+    [
+      "Track 0011", 
+      "track_plots/11.json"
+    ], 
+    [
+      "Track 0012", 
+      "track_plots/12.json"
+    ], 
+    [
+      "Track 0013", 
+      "track_plots/13.json"
+    ], 
+    [
+      "Track 0014", 
+      "track_plots/14.json"
+    ], 
+    [
+      "Track 0015", 
+      "track_plots/15.json"
+    ], 
+    [
+      "Track 0016", 
+      "track_plots/16.json"
+    ], 
+    [
+      "Track 0017", 
+      "track_plots/17.json"
+    ], 
+    [
+      "Track 0018", 
+      "track_plots/18.json"
+    ], 
+    [
+      "Track 0019", 
+      "track_plots/19.json"
+    ]
+  ]
+}

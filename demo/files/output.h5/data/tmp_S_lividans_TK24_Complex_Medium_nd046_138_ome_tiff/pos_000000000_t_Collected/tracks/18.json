@@ -1,0 +1,100 @@
+{
+  "results": [
+    {
+      "distance": 2.0984776310850237, 
+      "distance_num": 1.0, 
+      "graph": 127, 
+      "meta_t": 127, 
+      "node_id_a": 37, 
+      "node_id_b": 83, 
+      "node_next_id_a": 38, 
+      "node_next_id_b": 90, 
+      "timepoint": 76540.6848018291, 
+      "track_table_number": 18
+    }, 
+    {
+      "distance": 5.324259735953042, 
+      "distance_num": 1.0, 
+      "graph": 128, 
+      "meta_t": 128, 
+      "node_id_a": 38, 
+      "node_id_b": 90, 
+      "node_next_id_a": 48, 
+      "node_next_id_b": 103, 
+      "timepoint": 77143.27999620402, 
+      "track_table_number": 18
+    }, 
+    {
+      "distance": 8.42195526217005, 
+      "distance_num": 1.0, 
+      "graph": 129, 
+      "meta_t": 129, 
+      "node_id_a": 48, 
+      "node_id_b": 103, 
+      "node_next_id_a": 53, 
+      "node_next_id_b": 121, 
+      "timepoint": 77739.27736417901, 
+      "track_table_number": 18
+    }, 
+    {
+      "distance": 11.302346314604057, 
+      "distance_num": 1.0, 
+      "graph": 130, 
+      "meta_t": 130, 
+      "node_id_a": 53, 
+      "node_id_b": 121, 
+      "node_next_id_a": 59, 
+      "node_next_id_b": 129, 
+      "timepoint": 78338.28778427899, 
+      "track_table_number": 18
+    }, 
+    {
+      "distance": 24.849734470029183, 
+      "distance_num": 2.0, 
+      "graph": 131, 
+      "meta_t": 131, 
+      "node_id_a": 59, 
+      "node_id_b": 129, 
+      "node_next_id_a": 56, 
+      "node_next_id_b": 132, 
+      "timepoint": 78943.24605330407, 
+      "track_table_number": 18
+    }, 
+    {
+      "distance": 29.57513598266845, 
+      "distance_num": 2.0, 
+      "graph": 132, 
+      "meta_t": 132, 
+      "node_id_a": 56, 
+      "node_id_b": 132, 
+      "node_next_id_a": 71, 
+      "node_next_id_b": 138, 
+      "timepoint": 79540.78848482907, 
+      "track_table_number": 18
+    }, 
+    {
+      "distance": 29.725527035102466, 
+      "distance_num": 4.0, 
+      "graph": 133, 
+      "meta_t": 133, 
+      "node_id_a": 71, 
+      "node_id_b": 138, 
+      "node_next_id_a": 82, 
+      "node_next_id_b": 157, 
+      "timepoint": 80140.70410970402, 
+      "track_table_number": 18
+    }, 
+    {
+      "distance": 29.877831508885457, 
+      "distance_num": 2.0, 
+      "graph": 134, 
+      "meta_t": 134, 
+      "node_id_a": 82, 
+      "node_id_b": 157, 
+      "node_next_id_a": 94, 
+      "node_next_id_b": 197, 
+      "timepoint": 80741.8681861291, 
+      "track_table_number": 18
+    }
+  ]
+}
