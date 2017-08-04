@@ -1,7 +1,7 @@
 'use strict';
 
-var LS_MYCELYSO_CURRENT = 'mycelyso_current';
-var LS_MYCELYSO_REMARKS = 'mycelyso_remarks';
+var LS_MYCELYSO_CURRENT = 'mycelyso_demo_current';
+var LS_MYCELYSO_REMARKS = 'mycelyso_demo_remarks';
 
 function MycelysoPersistence(backend) {
     this.backend = backend;
