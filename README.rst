@@ -67,7 +67,7 @@ Pre-Bundled Windows Application
 -------------------------------
 
 If you don't have a Python 3 installation ready, and want to just run *mycelyso*, we you can download a pre-packaged version
-for 64-bit versions of Windows (mycelyso-win64.zip) from `AppVeyor <https://ci.appveyor.com/project/csachs/mycelyso/branch/master>`_.
+for 64-bit versions of Windows (mycelyso-win64.zip) from `AppVeyor <https://ci.appveyor.com/project/csachs/mycelyso/branch/master/artifacts>`_.
 
 Please note, that, instead of `python -m mycelyso` or `python -m mycelyso_inspector`, the calls would then be `mycelyso.exe` or `mycelyso_inspector.exe`.
 
