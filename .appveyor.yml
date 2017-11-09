@@ -13,8 +13,7 @@ before_build:
   - cmd: conda config --add channels bioconda
   - cmd: conda config --add channels csachs
   - cmd: conda update -y conda
-  # unfortunately current pyinstaller in conda does not work with python 3.6
-  - cmd: pip install git+https://github.com/pyinstaller/pyinstaller
+  - cmd: conda install pyinstaller
 
 build_script:
   # first install the latest version, that fetches all deps
