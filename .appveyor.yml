@@ -13,7 +13,7 @@ before_build:
   - cmd: conda config --add channels bioconda
   - cmd: conda config --add channels csachs
   - cmd: conda update -y conda
-  - cmd: conda install pyinstaller
+  - cmd: conda install -y pyinstaller
 
 build_script:
   # first install the latest version, that fetches all deps
