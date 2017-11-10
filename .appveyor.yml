@@ -13,7 +13,8 @@ before_build:
   - cmd: conda config --add channels bioconda
   - cmd: conda config --add channels csachs
   - cmd: conda update -y conda
-  - cmd: conda install -y pyinstaller
+  # pyinstaller is currently not working in conjunction with mycelyso, hopefully a pinned commit will resolve this
+  - cmd: pip install https://github.com/pyinstaller/pyinstaller/archive/15770dadce1227b6772aac68f08ad8eed3d13f99.zip
 
 build_script:
   # first install the latest version, that fetches all deps
