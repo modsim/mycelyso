@@ -30,7 +30,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 __author__ = "Christian C. Sachs"
 
-__version__ = '1.0.0rc2'
+__version__ = '1.0.0rc3'
 
 __citation__ = """
 Sachs CC, Koepff J, Wiechert W, Grünberger A, Nöh K (2017)
@@ -46,7 +46,9 @@ __banner__ = """
       /___/          /___/              |
             \    `           __     ,''''   Modeling&Simulation Group
              \    `----._ _,'  `'  _/
-              ---'       ''      `-'        Research  Center  Juelich
+              ---'       ''      `-'        Research  Centre  Juelich
 
+               For more information visit: github.com/modsim/mycelyso
+               
 If you use this software in a publication, please cite our paper:
 """ + __citation__
