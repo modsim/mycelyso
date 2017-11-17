@@ -64,30 +64,30 @@ We will load the ``output.h5`` using ``pandas.HDFStore`` …
 
     <class 'pandas.io.pytables.HDFStore'>
     File path: output.h5
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/result_table                                                                          frame        (shape->[1,208]) 
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/result_table_collected                                                                frame        (shape->[136,27])
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000001            frame        (shape->[22,8])  
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000002            frame        (shape->[29,8])  
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000003            frame        (shape->[11,8])  
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000004            frame        (shape->[23,8])  
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000005            frame        (shape->[16,8])  
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000006            frame        (shape->[14,8])  
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000007            frame        (shape->[12,8])  
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000008            frame        (shape->[9,8])   
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000009            frame        (shape->[17,8])  
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000010            frame        (shape->[11,8])  
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000011            frame        (shape->[8,8])   
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000012            frame        (shape->[7,8])   
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000013            frame        (shape->[10,8])  
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000014            frame        (shape->[5,8])   
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000015            frame        (shape->[7,8])   
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000016            frame        (shape->[5,8])   
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000017            frame        (shape->[7,8])   
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000018            frame        (shape->[8,8])   
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000019            frame        (shape->[8,8])   
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000020            frame        (shape->[7,8])   
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_mapping_track_table_aux_tables/track_table_aux_tables_000000000               frame        (shape->[20,2])  
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/track_table/track_table_000000000                                              frame        (shape->[20,66]) 
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/result_table                                                                          frame        (shape->[1,208]) 
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/result_table_collected                                                                frame        (shape->[136,27])
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000001            frame        (shape->[22,8])  
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000002            frame        (shape->[29,8])  
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000003            frame        (shape->[11,8])  
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000004            frame        (shape->[23,8])  
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000005            frame        (shape->[16,8])  
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000006            frame        (shape->[14,8])  
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000007            frame        (shape->[12,8])  
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000008            frame        (shape->[9,8])   
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000009            frame        (shape->[17,8])  
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000010            frame        (shape->[11,8])  
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000011            frame        (shape->[8,8])   
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000012            frame        (shape->[7,8])   
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000013            frame        (shape->[10,8])  
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000014            frame        (shape->[5,8])   
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000015            frame        (shape->[7,8])   
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000016            frame        (shape->[5,8])   
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000017            frame        (shape->[7,8])   
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000018            frame        (shape->[8,8])   
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000019            frame        (shape->[8,8])   
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_individual_track_table_aux_tables/track_table_aux_tables_000000020            frame        (shape->[7,8])   
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/_mapping_track_table_aux_tables/track_table_aux_tables_000000000               frame        (shape->[20,2])  
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/tables/track_table/track_table_000000000                                              frame        (shape->[20,66]) 
 
 
 
@@ -114,7 +114,7 @@ Remember that HDF5 stands for *Hierarchical* Data Format 5 …
     
     /results:
     /results (Group) ''
-      children := ['tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff' (Group)]
+      children := ['mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff' (Group)]
 
 
 The key names are dependent on the on-disk path of the analyzed file.
@@ -132,8 +132,8 @@ we pick the first …
 
 .. parsed-literal::
 
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff (Group) ''
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected (Group) ''
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff (Group) ''
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected (Group) ''
 
 
 We can now investigate what data is available for that particular
@@ -162,17 +162,17 @@ tabular datasets
 .. parsed-literal::
 
     data
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/data (Group) ''
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/data/banner (Group) ''
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/data/graphml (Group) ''
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/data/overall_graphml (Group) ''
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/data/tunables (Group) ''
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/data/version (Group) ''
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/data (Group) ''
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/data/banner (Group) ''
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/data/graphml (Group) ''
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/data/overall_graphml (Group) ''
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/data/tunables (Group) ''
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/data/version (Group) ''
     
     nodes
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/images (Group) ''
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/images/binary (Group) ''
-    /results/tmp_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/images/skeleton (Group) ''
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/images (Group) ''
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/images/binary (Group) ''
+    /results/mycelyso_S_lividans_TK24_Complex_Medium_nd046_138_ome_tiff/pos_000000000_t_Collected/images/skeleton (Group) ''
     
 
 
@@ -214,7 +214,7 @@ displaying it …
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x7fb2dc981e80>
+    Text(0.5,1,'Skeleton')
 
 
 
@@ -242,12 +242,12 @@ display it and overlay it onto the image data …
     
     print("Example node: %s: %r" % (example_node_id, graph.node[example_node_id],))
     
-    other_node_id = list(sorted(graph.edge[example_node_id].keys(), reverse=True))[0]
+    other_node_id = list(sorted(graph.adj[example_node_id].keys(), reverse=True))[0]
     
     print("Some other node: %s" % (other_node_id,))
     
     
-    print("The distance between the two nodes is: %.2f px" % (graph.edge[example_node_id][other_node_id]['weight']))
+    print("The distance between the two nodes is: %.2f px" % (graph.adj[example_node_id][other_node_id]['weight']))
     
     pyplot.title('Graph Representation of Timepoint #%d:' % (n,))
     
@@ -275,7 +275,7 @@ display it and overlay it onto the image data …
 
 .. parsed-literal::
 
-    <matplotlib.image.AxesImage at 0x7fb2dae72780>
+    <matplotlib.image.AxesImage at 0x7f89d9770128>
 
 
 
@@ -592,7 +592,7 @@ information about the whole position:
           <td>0.000119</td>
           <td>9.727372e-07</td>
           <td>S_lividans_TK24_Complex_Medium_nd046_138.ome.tiff</td>
-          <td>/tmp/S_lividans_TK24_Complex_Medium_nd046_138....</td>
+          <td>/mycelyso/S_lividans_TK24_Complex_Medium_nd046...</td>
           <td>-28.385481</td>
           <td>6.207684e-15</td>
           <td>0.604935</td>
@@ -837,7 +837,7 @@ information about every single frame of the time series of one position:
           <td>3.0</td>
           <td>0</td>
           <td>356.745246</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>1</th>
@@ -867,7 +867,7 @@ information about every single frame of the time series of one position:
           <td>0.0</td>
           <td>1</td>
           <td>954.331815</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>2</th>
@@ -897,7 +897,7 @@ information about every single frame of the time series of one position:
           <td>-2.0</td>
           <td>2</td>
           <td>1548.970068</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>3</th>
@@ -927,7 +927,7 @@ information about every single frame of the time series of one position:
           <td>-4.0</td>
           <td>3</td>
           <td>2152.429459</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>4</th>
@@ -957,7 +957,7 @@ information about every single frame of the time series of one position:
           <td>-5.0</td>
           <td>4</td>
           <td>2754.315663</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>5</th>
@@ -987,7 +987,7 @@ information about every single frame of the time series of one position:
           <td>-5.0</td>
           <td>5</td>
           <td>3349.845006</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>6</th>
@@ -1017,7 +1017,7 @@ information about every single frame of the time series of one position:
           <td>-4.0</td>
           <td>6</td>
           <td>3954.256373</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>7</th>
@@ -1047,7 +1047,7 @@ information about every single frame of the time series of one position:
           <td>-6.0</td>
           <td>7</td>
           <td>4548.847011</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>8</th>
@@ -1077,7 +1077,7 @@ information about every single frame of the time series of one position:
           <td>-5.0</td>
           <td>8</td>
           <td>5149.800172</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>9</th>
@@ -1107,7 +1107,7 @@ information about every single frame of the time series of one position:
           <td>-3.0</td>
           <td>9</td>
           <td>5747.743609</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>10</th>
@@ -1137,7 +1137,7 @@ information about every single frame of the time series of one position:
           <td>-4.0</td>
           <td>10</td>
           <td>6346.900296</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>11</th>
@@ -1167,7 +1167,7 @@ information about every single frame of the time series of one position:
           <td>-6.0</td>
           <td>11</td>
           <td>6946.751259</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>12</th>
@@ -1197,7 +1197,7 @@ information about every single frame of the time series of one position:
           <td>-5.0</td>
           <td>12</td>
           <td>7543.367799</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>13</th>
@@ -1227,7 +1227,7 @@ information about every single frame of the time series of one position:
           <td>-4.0</td>
           <td>13</td>
           <td>8144.258055</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>14</th>
@@ -1257,7 +1257,7 @@ information about every single frame of the time series of one position:
           <td>-4.0</td>
           <td>14</td>
           <td>8747.270315</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>15</th>
@@ -1287,7 +1287,7 @@ information about every single frame of the time series of one position:
           <td>-5.0</td>
           <td>15</td>
           <td>9342.921723</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>16</th>
@@ -1317,7 +1317,7 @@ information about every single frame of the time series of one position:
           <td>-5.0</td>
           <td>16</td>
           <td>9944.746882</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>17</th>
@@ -1347,7 +1347,7 @@ information about every single frame of the time series of one position:
           <td>-6.0</td>
           <td>17</td>
           <td>10546.833173</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>18</th>
@@ -1377,7 +1377,7 @@ information about every single frame of the time series of one position:
           <td>-6.0</td>
           <td>18</td>
           <td>11142.278725</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>19</th>
@@ -1407,7 +1407,7 @@ information about every single frame of the time series of one position:
           <td>-5.0</td>
           <td>19</td>
           <td>11748.821861</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>20</th>
@@ -1437,7 +1437,7 @@ information about every single frame of the time series of one position:
           <td>-5.0</td>
           <td>20</td>
           <td>12354.980074</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>21</th>
@@ -1467,7 +1467,7 @@ information about every single frame of the time series of one position:
           <td>-5.0</td>
           <td>21</td>
           <td>12944.765587</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>22</th>
@@ -1497,7 +1497,7 @@ information about every single frame of the time series of one position:
           <td>-7.0</td>
           <td>22</td>
           <td>13545.854889</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>23</th>
@@ -1527,7 +1527,7 @@ information about every single frame of the time series of one position:
           <td>-6.0</td>
           <td>23</td>
           <td>14146.223223</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>24</th>
@@ -1557,7 +1557,7 @@ information about every single frame of the time series of one position:
           <td>-4.0</td>
           <td>24</td>
           <td>14748.335994</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>25</th>
@@ -1587,7 +1587,7 @@ information about every single frame of the time series of one position:
           <td>-6.0</td>
           <td>25</td>
           <td>15343.735260</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>26</th>
@@ -1617,7 +1617,7 @@ information about every single frame of the time series of one position:
           <td>-7.0</td>
           <td>26</td>
           <td>15953.863397</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>27</th>
@@ -1647,7 +1647,7 @@ information about every single frame of the time series of one position:
           <td>-4.0</td>
           <td>27</td>
           <td>16542.758080</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>28</th>
@@ -1677,7 +1677,7 @@ information about every single frame of the time series of one position:
           <td>-4.0</td>
           <td>28</td>
           <td>17142.263416</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>29</th>
@@ -1707,7 +1707,7 @@ information about every single frame of the time series of one position:
           <td>-7.0</td>
           <td>29</td>
           <td>17740.279887</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>...</th>
@@ -1767,7 +1767,7 @@ information about every single frame of the time series of one position:
           <td>-1.0</td>
           <td>106</td>
           <td>63947.249755</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>107</th>
@@ -1797,7 +1797,7 @@ information about every single frame of the time series of one position:
           <td>-2.0</td>
           <td>107</td>
           <td>64543.707035</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>108</th>
@@ -1827,7 +1827,7 @@ information about every single frame of the time series of one position:
           <td>-1.0</td>
           <td>108</td>
           <td>65139.869557</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>109</th>
@@ -1857,7 +1857,7 @@ information about every single frame of the time series of one position:
           <td>0.0</td>
           <td>109</td>
           <td>65741.778848</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>110</th>
@@ -1887,7 +1887,7 @@ information about every single frame of the time series of one position:
           <td>-1.0</td>
           <td>110</td>
           <td>66340.189219</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>111</th>
@@ -1917,7 +1917,7 @@ information about every single frame of the time series of one position:
           <td>-1.0</td>
           <td>111</td>
           <td>66943.783533</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>112</th>
@@ -1947,7 +1947,7 @@ information about every single frame of the time series of one position:
           <td>-1.0</td>
           <td>112</td>
           <td>67544.224723</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>113</th>
@@ -1977,7 +1977,7 @@ information about every single frame of the time series of one position:
           <td>-1.0</td>
           <td>113</td>
           <td>68144.223215</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>114</th>
@@ -2007,7 +2007,7 @@ information about every single frame of the time series of one position:
           <td>-2.0</td>
           <td>114</td>
           <td>68741.153508</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>115</th>
@@ -2037,7 +2037,7 @@ information about every single frame of the time series of one position:
           <td>-2.0</td>
           <td>115</td>
           <td>69343.336711</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>116</th>
@@ -2067,7 +2067,7 @@ information about every single frame of the time series of one position:
           <td>0.0</td>
           <td>116</td>
           <td>69940.686151</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>117</th>
@@ -2097,7 +2097,7 @@ information about every single frame of the time series of one position:
           <td>-1.0</td>
           <td>117</td>
           <td>70540.386399</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>118</th>
@@ -2127,7 +2127,7 @@ information about every single frame of the time series of one position:
           <td>-3.0</td>
           <td>118</td>
           <td>71141.753863</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>119</th>
@@ -2157,7 +2157,7 @@ information about every single frame of the time series of one position:
           <td>-3.0</td>
           <td>119</td>
           <td>71748.778771</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>120</th>
@@ -2187,7 +2187,7 @@ information about every single frame of the time series of one position:
           <td>-1.0</td>
           <td>120</td>
           <td>72342.288541</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>121</th>
@@ -2217,7 +2217,7 @@ information about every single frame of the time series of one position:
           <td>-1.0</td>
           <td>121</td>
           <td>72942.162923</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>122</th>
@@ -2247,7 +2247,7 @@ information about every single frame of the time series of one position:
           <td>-3.0</td>
           <td>122</td>
           <td>73543.257127</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>123</th>
@@ -2277,7 +2277,7 @@ information about every single frame of the time series of one position:
           <td>-1.0</td>
           <td>123</td>
           <td>74140.149509</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>124</th>
@@ -2307,7 +2307,7 @@ information about every single frame of the time series of one position:
           <td>-2.0</td>
           <td>124</td>
           <td>74739.753889</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>125</th>
@@ -2337,7 +2337,7 @@ information about every single frame of the time series of one position:
           <td>-3.0</td>
           <td>125</td>
           <td>75342.294086</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>126</th>
@@ -2367,7 +2367,7 @@ information about every single frame of the time series of one position:
           <td>-1.0</td>
           <td>126</td>
           <td>75940.191470</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>127</th>
@@ -2397,7 +2397,7 @@ information about every single frame of the time series of one position:
           <td>-1.0</td>
           <td>127</td>
           <td>76540.684802</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>128</th>
@@ -2427,7 +2427,7 @@ information about every single frame of the time series of one position:
           <td>-1.0</td>
           <td>128</td>
           <td>77143.279996</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>129</th>
@@ -2457,7 +2457,7 @@ information about every single frame of the time series of one position:
           <td>-3.0</td>
           <td>129</td>
           <td>77739.277364</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>130</th>
@@ -2487,7 +2487,7 @@ information about every single frame of the time series of one position:
           <td>-2.0</td>
           <td>130</td>
           <td>78338.287784</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>131</th>
@@ -2517,7 +2517,7 @@ information about every single frame of the time series of one position:
           <td>-2.0</td>
           <td>131</td>
           <td>78943.246053</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>132</th>
@@ -2547,7 +2547,7 @@ information about every single frame of the time series of one position:
           <td>-2.0</td>
           <td>132</td>
           <td>79540.788485</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>133</th>
@@ -2577,7 +2577,7 @@ information about every single frame of the time series of one position:
           <td>-3.0</td>
           <td>133</td>
           <td>80140.704110</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>134</th>
@@ -2607,7 +2607,7 @@ information about every single frame of the time series of one position:
           <td>-1.0</td>
           <td>134</td>
           <td>80741.868186</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
         <tr>
           <th>135</th>
@@ -2637,7 +2637,7 @@ information about every single frame of the time series of one position:
           <td>0.0</td>
           <td>135</td>
           <td>81340.338617</td>
-          <td>VERSION:1:SHA256:ly9V6atfXJwdK3mHZ7jb5KlnHCRNI...</td>
+          <td>VERSION:1:SHA256:iNevP0W3i5SsPhjSobMn0xCxU+e/Y...</td>
         </tr>
       </tbody>
     </table>
@@ -2666,7 +2666,7 @@ mycelium length), which can be plotted over time:
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x7fb2dad35668>]
+    [<matplotlib.lines.Line2D at 0x7f89d964edd8>]
 
 
 
@@ -4475,7 +4475,7 @@ Let's find the longest track and try to visualize it:
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x7fb2dac82b70>]
+    [<matplotlib.lines.Line2D at 0x7f89d9621470>]
 
 
 
