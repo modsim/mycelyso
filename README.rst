@@ -39,7 +39,16 @@ Screenshot
    :target: https://modsim.github.io/mycelyso/demo/static/index.htm
 
 `To quickly get a grasp what results can be generated with mycelyso, please
-take a look at the static demo page of mycelyso Inspector generated with the example dataset <https://modsim.github.io/mycelyso/demo/static/>`_.
+take a look at the static demo page of mycelyso Inspector generated with the example dataset. <https://modsim.github.io/mycelyso/demo/static/>`_
+
+
+Analysis Tutorial Video
+#######################
+
+.. image:: https://modsim.github.io/mycelyso/DemoAnalysis.png
+   :target: https://modsim.github.io/mycelyso/DemoAnalysis.mp4
+
+`This video shows how to run the analysis with the pre-packages Windows version of *mycelyso*. <https://modsim.github.io/mycelyso/DemoAnalysis.mp4>`_
 
 Publication
 ###########
