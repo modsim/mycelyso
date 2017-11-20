@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-The application submodule contains the base class for applications, as well auxilliary functions.
+The application submodule contains the base class for applications, as well auxiliary functions.
 """
 
 import argparse
 import logging
 import multiprocessing
+# noinspection PyUnresolvedReferences
 import sys
 import numpy as np
 
@@ -17,6 +18,7 @@ from ..misc.hacks.multiprocessing_patch import *
 from collections import namedtuple
 
 from ..imagestack.imagestack import ImageStack, Dimensions
+# noinspection PyUnresolvedReferences
 from ..imagestack.readers import *
 from ..pipeline import PipelineExecutor
 
@@ -98,6 +100,7 @@ class AppInterface(object):
 
     def setup(self, pipeline_executor):
         return
+
 
 Meta = namedtuple('Meta', ['pos', 't'])
 

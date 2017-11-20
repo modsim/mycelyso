@@ -63,6 +63,7 @@ def get_progress_bar(n):
         return iter(range(n))
 
 
+# noinspection PyMethodMayBeStatic
 class PipelineExecutor(object):
     wait = 0.01
 
@@ -108,12 +109,15 @@ class PipelineExecutor(object):
         except StopIteration:
             pass
 
+    # noinspection PyUnusedLocal
     def in_cache(self, token):
         return False
 
+    # noinspection PyUnusedLocal
     def get_cache(self, token):
         pass
 
+    # noinspection PyUnusedLocal
     def set_cache(self, token, result):
         if result is None:
             return
@@ -181,6 +185,9 @@ class PipelineExecutor(object):
 
         while len(todo) > 0 or len(check) > 0:
             for op in list(todo.keys()):
+
+                result = None
+
                 if op not in invalidated:
 
                     parameter_dict = {'meta': op}

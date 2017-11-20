@@ -111,7 +111,7 @@ class TrackingMaximumCoverage(Tunable):
 
 
 class TrackingMinimumTrackedPointCount(Tunable):
-    """ Tracking, minimal timesteps in track filter [#] """
+    """ Tracking, minimal time steps in track filter [#] """
     default = 5
 
 

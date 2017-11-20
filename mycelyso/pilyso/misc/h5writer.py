@@ -31,6 +31,8 @@ lock_debugging = False
 def wait_for_lock_and_prepare_filename(base_filename, local_timeout):
     found_filename = False
     filename = base_filename
+    lock_file = None
+
     while not found_filename:
 
         lock_file = '%s.lock' % (filename,)
@@ -70,6 +72,7 @@ def release_lock(lock_file):
         remove(lock_file)
     except FileNotFoundError:
         pass
+
 
 timeout = 5 * 60.0
 
@@ -149,6 +152,7 @@ def return_or_uncompress(something):
 def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
     def _inner_hdf5_output(meta, result):
 
+        # noinspection PyProtectedMember
         meta_str = '_'.join(
             k + '_' + ('%09d' % v if type(v) == int else v.__name__)
             for k, v in sorted(meta._asdict().items(), key=lambda x: x[0])
@@ -167,6 +171,8 @@ def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
 
         base_filename = _filename
 
+        lock_file = None
+
         while not success:
 
             filename, lock_file = wait_for_lock_and_prepare_filename(base_filename, local_timeout)
@@ -183,6 +189,7 @@ def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
                 with acquire_lock(lock_file) as lock:
                     store = HDFStore(filename, complevel=compression_level, complib=compression_type)
 
+                    # noinspection PyProtectedMember
                     h5 = store._handle
 
                     # cache for palettes
@@ -227,6 +234,7 @@ def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
                     def process_row(result_table_rows, m, row):
                         cresults = []
 
+                        # noinspection PyProtectedMember
                         tmp = {('meta_' + mk): (mv if type(mv) == int else -1) for mk, mv in m._asdict().items()}
 
                         if type(result_table_rows) == list:
@@ -355,7 +363,6 @@ def hdf5_output(_filename, immediate_prefix='', tabular_name='result_table'):
         release_lock(lock_file)
 
         return result
-
 
     return _inner_hdf5_output
 

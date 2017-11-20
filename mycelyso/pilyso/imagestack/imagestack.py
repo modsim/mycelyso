@@ -6,6 +6,7 @@ from os import getpid
 from collections import namedtuple
 from itertools import product
 
+# noinspection PyCompatibility
 from urllib.parse import urlparse, parse_qs
 
 
@@ -23,26 +24,33 @@ class Dimensions(object):
     def by_char(cls, char):
         return cls.all_by_char()[char]
 
+    # noinspection PyClassHasNoInit
     class Dimension(object):
         char = 'd'
 
+    # noinspection PyClassHasNoInit
     class Time(Dimension):
         char = 't'
 
+    # noinspection PyClassHasNoInit
     class PositionXY(Dimension):
         char = 'r'  # region
 
     Position = PositionXY
 
+    # noinspection PyClassHasNoInit
     class PositionZ(Dimension):
         char = 'z'
 
+    # noinspection PyClassHasNoInit
     class Channel(Dimension):
         char = 'c'
 
+    # noinspection PyClassHasNoInit
     class Width(Dimension):
         char = 'w'
 
+    # noinspection PyClassHasNoInit
     class Height(Dimension):
         char = 'h'
 
@@ -97,10 +105,10 @@ class FloatFilter(ImageStackFilter):
 
 class MinMaxFilter(ImageStackFilter):
     def filter(self, image):
-        fimage = image.astype(np.float32, copy=True)
-        fimage -= fimage.min()
-        fimage /= fimage.max()
-        return fimage
+        float_image = image.astype(np.float32, copy=True)
+        float_image -= float_image.min()
+        float_image /= float_image.max()
+        return float_image
 
 
 class UnwrapFilter(ImageStackFilter):
@@ -129,6 +137,7 @@ class ImageStack(ImageStackAPI):
         def __getitem__(self, item):
             return self.parent.bridged_access(self.purpose, item)
 
+    # noinspection PyProtectedMember
     class ImageStackView(object):
         @property
         def order(self):
@@ -348,9 +357,11 @@ class ImageStack(ImageStackAPI):
             # windows peculiarity
             drive_prefix = "%s:" % (to_open.scheme,)
             if len(to_open.scheme) == 1 and os.path.isdir(drive_prefix):
+                # noinspection PyProtectedMember
                 to_open = to_open._replace(scheme='')._replace(path=drive_prefix + to_open.path)
 
         if to_open.scheme == '':
+            # noinspection PyProtectedMember
             to_open = to_open._replace(scheme='file')
 
         def recursive_subclasses(class_, collector):
@@ -386,6 +397,7 @@ class ImageStack(ImageStackAPI):
 
     __init___called = False
 
+    # noinspection PyUnusedLocal
     def __init__(self, *args, **kwargs):
         if self.__init___called:
             return

@@ -7,7 +7,7 @@ to interrupt the running process and spawn a IPython shell within the running pr
 try:
     from signal import signal, SIGUSR2
 except ImportError:
-    SIGUSR2 = None
+    signal, SIGUSR2 = None, None
 
 import traceback
 
@@ -21,13 +21,14 @@ def maintenance_interrupt(the_signal, frame):
         from IPython import embed
         embed()
     except ImportError:
+        embed = None
         from code import interact
         interact(local=locals())
     print("... continuing")
 
 
 def install_maintenance_interrupt():
-    if SIGUSR2 is None:
+    if signal is None or SIGUSR2 is None:
         return  # no functionality in windows
     signal(SIGUSR2, maintenance_interrupt)
 

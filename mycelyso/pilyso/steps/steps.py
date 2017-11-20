@@ -25,6 +25,7 @@ class Delete(object):
 class Compress(object):
     pass
 
+
 def set_result(**kwargs):
     def _inner(result):
         for k, v in kwargs.items():
@@ -115,6 +116,7 @@ def _box_detection_get_parameters(ims, timepoint, pos):
         cleaned_reference[:, r] = 1
 
     except RuntimeError:
+        # noinspection PyCompatibility
         raise Skip(Meta(pos=pos, t=Collected)) from None
 
     return angle, fft_a, crop

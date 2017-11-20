@@ -5,9 +5,11 @@ as well as some necessary pipeline building blocks.
 """
 
 from .application import App, AppInterface, Meta
+# noinspection PyUnresolvedReferences
 from ..pipeline import *
 from .helper import *
 
+# noinspection PyUnresolvedReferences
 from ..pipeline.executor import Skip
 
 

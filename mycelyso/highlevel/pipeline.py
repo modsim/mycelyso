@@ -4,6 +4,7 @@ The pipeline module contains the mycelyso-Pipeline, assembled from various funct
 """
 
 from os.path import basename, abspath
+# noinspection PyUnresolvedReferences
 import networkx as nx
 
 from tunable import TunableManager
@@ -12,6 +13,7 @@ from ..tunables import CropWidth, CropHeight, BoxDetection, StoreImage, SkipBina
 from .steps import *
 from .. import __banner__
 from .. import __version__
+# noinspection PyUnresolvedReferences
 from ..pilyso.application import App, PipelineExecutionContext, PipelineEnvironment, Every, Collected, Meta, Skip
 from ..pilyso.imagestack import ImageStack
 from ..pilyso.misc.h5writer import hdf5_output, hdf5_node_name, return_or_uncompress
@@ -239,6 +241,7 @@ class MycelysoPipeline(PipelineExecutionContext):
             # binarize
             per_image |= binarize
         else:
+            # noinspection PyUnusedLocal
             def _image_to_binary(image, binary=None):
                 return image.astype(bool)
 

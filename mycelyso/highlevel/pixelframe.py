@@ -23,7 +23,7 @@ class PixelFrame(object):
         
         :param image: Input image (skeletonized) 
         :param timepoint: Experiment time  (in seconds) 
-        :param calibration: Voxel size (in µm)
+        :param calibration: Pixel size (in µm)
         """
         self.timepoint = timepoint
         self.calibration = calibration

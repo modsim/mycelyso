@@ -13,6 +13,7 @@ import io
 SEND_MAX = 2**31 - 8*1024 - 1
 
 
+# noinspection PyProtectedMember
 def _new_send(self, buf, write=multiprocessing.connection.Connection._write):
     remaining = len(buf)
     while True:
@@ -26,6 +27,7 @@ def _new_send(self, buf, write=multiprocessing.connection.Connection._write):
         buf = buf[n:]
 
 
+# noinspection PyProtectedMember
 def _new_recv(self, size, read=multiprocessing.connection.Connection._read):
     buf = io.BytesIO()
     handle = self._handle
@@ -75,6 +77,7 @@ def _new_recv_bytes(self, maxsize=None):
     if maxsize is not None and size > maxsize:
         return None
     return self._recv(size)
+
 
 multiprocessing.connection.Connection._send_bytes = _new_send_bytes
 multiprocessing.connection.Connection._recv_bytes = _new_recv_bytes

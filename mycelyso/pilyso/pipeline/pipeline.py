@@ -9,6 +9,7 @@ if getattr(inspect, 'signature'):
     def get_argnames_and_defaults(call):
         sig = inspect.signature(call)
         args = [para for para in sig.parameters]
+        # noinspection PyProtectedMember
         defaults = [para.default for para in sig.parameters.values() if para.default is not inspect._empty]
         return args, defaults
 

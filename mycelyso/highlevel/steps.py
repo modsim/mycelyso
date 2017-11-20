@@ -99,6 +99,7 @@ def skip_if_image_is_below_size(min_height=4, min_width=4):
     """
     def _inner(image, meta):
         if image.shape[0] < min_height or image.shape[1] < min_width:
+            # noinspection PyCompatibility
             raise Skip(Meta(pos=meta.pos, t=Collected)) from None
 
         return image, meta
@@ -195,7 +196,7 @@ def image_statistics(image, calibration, result=None):
 # noinspection PyUnusedLocal
 def quantify_binary(binary, calibration, result=None):
     """
-    Adds some informations about the binary image (i.e. covered ratio, area ...) to the results.
+    Adds some information about the binary image (i.e. covered ratio, area ...) to the results.
     
     :param binary: 
     :param calibration: 
@@ -265,8 +266,10 @@ def clean_up(calibration, binary):
            [ True,  True,  True],
            [ True,  True,  True]], dtype=bool)
     """
-    binary = ndi.gaussian_filter(binary * 1.0, CleanUpGaussianSigma.value / calibration) \
-             > CleanUpGaussianThreshold.value
+    binary = (
+        ndi.gaussian_filter(binary * 1.0, CleanUpGaussianSigma.value / calibration)
+        > CleanUpGaussianThreshold.value
+    )
 
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
@@ -292,7 +295,9 @@ def remove_small_structures(calibration, binary):
     """
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
-        return remove_small_objects(binary, min_size=int(RemoveSmallStructuresSize.value / calibration ** 2), connectivity=2)  # TODO
+        return remove_small_objects(binary,
+                                    min_size=int(RemoveSmallStructuresSize.value / calibration ** 2),
+                                    connectivity=2)  # TODO
 
 
 def remove_border_artifacts(calibration, binary):
@@ -436,7 +441,7 @@ def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fat
                                                           frame.self_to_successor_alternatives[other]):
                     if (_e_on_next != _other_on_next and (
                         next_frame.connected_components[_e_on_next] == next_frame.connected_components[
-                        _other_on_next]) and (
+                            _other_on_next]) and (
                         next_frame.shortest_paths[_e_on_next, _other_on_next] < float('inf')) and distance_condition(
                             distance, next_frame.shortest_paths[_e_on_next, _other_on_next])):
                         e_on_next, other_on_next = _e_on_next, _other_on_next
@@ -461,7 +466,7 @@ def individual_tracking(collected, tracked_fragments=None, tracked_fragments_fat
                 continue
 
             if ((next_distance < distance) and
-                        abs(1.0 - (distance / next_distance)) > TrackingMaximumRelativeShrinkage.value):
+                    abs(1.0 - (distance / next_distance)) > TrackingMaximumRelativeShrinkage.value):
                 # a later distance was SHORTER than the current, that means tracking error or cycle in graph
                 fates[track_id] = "track aborted due to shortcut (cycle or tracking error) [last %f > next %f]" % (
                     distance, next_distance

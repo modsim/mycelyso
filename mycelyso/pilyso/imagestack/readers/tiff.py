@@ -25,6 +25,7 @@ class TiffImageStack(ImageStack):
 
         self.set_dimensions_and_sizes([Dimensions.Time], [len(self.tiff.pages)])
 
+    # noinspection PyProtectedMember
     def notify_fork(self):
         self.tiff._fh.close()
         self.tiff._fh.open()

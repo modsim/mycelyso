@@ -9,7 +9,7 @@ def calculate_length(points, times=1, w=5):
     Calculates the length of a path.
     
     Paths sampled from pixel grids may contain notable measuring error, if euclidean distances are calculated
-    naively. This method uses an adapted approach from [Cornelisse1984]_, by repeatedly smothing
+    naively. This method uses an adapted approach from [Cornelisse1984]_, by repeatedly smoothing
     the coordinates with a moving average filter before calculating the euclidean distance.
     
     .. [Cornelisse1984] Cornelisse and van den Berg (1984) Journal of Microscopy

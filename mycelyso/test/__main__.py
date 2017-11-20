@@ -7,6 +7,7 @@ import sys
 import doctest
 
 
+# noinspection PyUnresolvedReferences
 def main():
     """
     Runs all the doctests.

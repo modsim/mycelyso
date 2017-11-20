@@ -312,6 +312,7 @@ class DuckTypedApplyResult(object):
         self.called = False
         self.callable = callable_
 
+    # noinspection PyMethodMayBeStatic
     def ready(self):
         return True
 
@@ -336,11 +337,13 @@ class DuckTypedApplyResult(object):
         return self.value
 
 
+# noinspection PyAbstractClass,PyUnusedLocal
 class NormalPool(Pool):
     def advanced_apply(self, command, args, **kwargs):
         return self.apply(func=command, args=args)
 
 
+# noinspection PyUnusedLocal
 class InProcessFakePool(object):
     @staticmethod
     def advanced_apply(command, args, **kwargs):

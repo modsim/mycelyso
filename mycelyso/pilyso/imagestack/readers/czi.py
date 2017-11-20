@@ -109,6 +109,7 @@ class CziImageStack(ImageStack):
             [self.size.get('T', 1), self.size.get('S', 1), 1, self.size.get('C', 1)]
         )
 
+    # noinspection PyProtectedMember
     def notify_fork(self):
         self.czi._fh.close()
         self.czi._fh.open()
