@@ -142,7 +142,9 @@ Which will produce the help screen:
          /___/          /___/              |
                \    `           __     ,''''   Modeling&Simulation Group
                 \    `----._ _,'  `'  _/
-                 ---'       ''      `-'        Research  Center  Juelich
+                 ---'       ''      `-'        Research  Centre  Juelich
+
+                  For more information visit: github.com/modsim/mycelyso
 
    If you use this software in a publication, please cite our paper:
 
