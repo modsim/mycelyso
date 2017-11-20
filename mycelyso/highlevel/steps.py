@@ -50,7 +50,7 @@ def qimshow(image, cmap='gray'):
     """
     if not pyplot:
         raise RuntimeError('matplotlib not installed.')
-    fig = matplotlib.pyplot.figure()
+    fig = pyplot.figure()
     ax = fig.add_subplot(111)
     range_ = ax.imshow(image, cmap=cmap, interpolation='none')
 
@@ -65,8 +65,8 @@ def qimshow(image, cmap='gray'):
         return 'x=%d y=%d value=%1.4f' % (x, y, value,)
 
     ax.format_coord = _format_coords
-    matplotlib.pyplot.colorbar(range_)
-    matplotlib.pyplot.show()
+    pyplot.colorbar(range_)
+    pyplot.show()
 
 
 # noinspection PyUnusedLocal
