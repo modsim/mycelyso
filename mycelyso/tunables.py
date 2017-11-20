@@ -7,6 +7,7 @@ You can set them via :code:`-t Name=value` on the command line.
 """
 
 from tunable import Tunable
+from .processing import binarization as binarization_module
 
 
 class NodeEndpointMergeRadius(Tunable):
@@ -122,3 +123,18 @@ class TrackingMinimalMaximumLength(Tunable):
 class TrackingMinimalGrownLength(Tunable):
     """ Tracking, minimal hyphae gained length in track filter [µm] """
     default = 5.0
+
+
+class ThresholdingTechnique(Tunable):
+    """ Binarization method to use, for available methods see documentation (mycelyso.processing.binarization) """
+
+    @classmethod
+    def test(cls, value):
+        return value in dir(binarization_module)
+
+    default = "experimental_thresholding"
+
+
+class ThresholdingParameters(Tunable):
+    """ Parameters for the used binarization method, passed as key1:value1,key2:value2,... string """
+    default = ""

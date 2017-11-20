@@ -13,7 +13,8 @@ from scipy.stats import linregress
 from ..tunables import CleanUpGaussianSigma, CleanUpGaussianThreshold, CleanUpHoleFillSize, \
     RemoveSmallStructuresSize, BorderArtifactRemovalBorderSize, TrackingMaximumRelativeShrinkage, \
     TrackingMinimumTipElongationRate, TrackingMaximumTipElongationRate, TrackingMaximumCoverage, \
-    TrackingMinimumTrackedPointCount, TrackingMinimalMaximumLength, TrackingMinimalGrownLength
+    TrackingMinimumTrackedPointCount, TrackingMinimalMaximumLength, TrackingMinimalGrownLength, \
+    ThresholdingTechnique, ThresholdingParameters
 
 from skimage.morphology import remove_small_holes, remove_small_objects, skeletonize as sk_skeletonize
 from skimage.measure import label, regionprops
@@ -26,8 +27,9 @@ from ..misc.graphml import to_graphml_string
 from ..misc.util import pairwise
 from ..misc.regression import prepare_optimized_regression
 from ..pilyso.application import Collected, Meta, Skip
+from ..pilyso.pipeline.pipeline import get_argnames_and_defaults
 
-from ..processing.binarization import experimental_thresholding
+from ..processing import binarization as binarization_module
 
 from .pixelframe import PixelFrame
 from .nodeframe import NodeFrame
@@ -113,7 +115,34 @@ def binarize(image, binary=None):
     :param binary: 
     :return: 
     """
-    return experimental_thresholding(image)
+
+    technique = getattr(binarization_module, ThresholdingTechnique.value)
+
+    args, defaults = get_argnames_and_defaults(technique)
+
+    for skip in 'kwargs', 'args':
+        if skip in args:
+            args.remove(skip)
+
+    args = args[-len(defaults):]
+
+    default_parameters = dict(zip(args, defaults))
+
+    override_parameters = {}
+
+    parameter_str = ThresholdingParameters.value
+    if parameter_str:
+        for pair in parameter_str.split(','):
+            key, value = pair.split(':')
+
+            if key not in default_parameters:
+                raise RuntimeError("Unsupported parameter \"%s\" passed to thresholding function." % (key,))
+
+            desired_type = type(default_parameters[key])
+
+            override_parameters[key] = desired_type(value)
+
+    return technique(image, **override_parameters)
 
 
 # noinspection PyUnusedLocal

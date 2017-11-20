@@ -26,7 +26,8 @@ class Mock(MagicMock):
 # from setup.py
 
 MOCK_MODULES = [
-    'skimage', 'skimage.morphology', 'skimage.measure', 'networkx', 'networkx.readwrite',
+    'skimage', 'skimage.morphology', 'skimage.measure', 'skimage.transform', 'skimage.feature', 'skimage.filters',
+    'networkx', 'networkx.readwrite',
     'tables', 'tables.nodes', 'numexpr', 'pandas',
     'tifffile', 'nd2file', 'mfisp_boxdetection', 'molyso', 'molyso.generic', 'molyso.generic.rotation',
     'molyso.generic.registration', 'tqdm'
