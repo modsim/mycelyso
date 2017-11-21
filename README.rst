@@ -78,7 +78,7 @@ Pre-Bundled Windows Application
 If you don't have a Python 3 installation ready, and want to just run *mycelyso*, we you can download a pre-packaged version
 for 64-bit versions of Windows (mycelyso-win64.zip) from `AppVeyor <https://ci.appveyor.com/project/csachs/mycelyso/branch/master/artifacts>`_.
 
-Please note, that, instead of `python -m mycelyso` or `python -m mycelyso_inspector`, the calls would then be `mycelyso.exe` or `mycelyso_inspector.exe`.
+Please note, that, instead of :code:`python -m mycelyso` or :code:`python -m mycelyso_inspector`, the calls would then be :code:`mycelyso.exe` or :code:`mycelyso_inspector.exe`.
 
 Docker
 ------
@@ -102,6 +102,9 @@ You have to enable the necessary channels (we aim to add mycelyso to `bioconda <
     > conda config --add channels csachs
 
     > conda install -y mycelyso mycelyso-inspector
+
+Please note that this readme assumes you are starting with a fresh install of Anaconda/Miniconda.
+If you start with an existing installation, individual dependency packages might need to be updated.
 
 Packages from PyPI (for advanced users)
 ---------------------------------------
@@ -231,9 +234,11 @@ with it.
 In *mycelyso Inspector*, you have various information displays: On the top, the HDF5 file / analyzed dataset / position can be selected.
 On the left, there is a list of graphs available. In the middle, there is the currently selected graph displayed. On the right, there is general information
 about the whole position (colony level statistics), below the main part is a table with information about individual tracks, and scrolled further down
-is the possiblity to show individual graph tracking in 2D or a colony growth oversight in 3D. Sticky at the bottom is binarized or skeletonized timeline of the position.
+is the possibility to show individual graph tracking in 2D or a colony growth oversight in 3D. Sticky at the bottom is binarized or skeletonized timeline of the position.
 
-The data to all graphs can be downloaded as tab separated text by pressing the right mouse button on a certain graph link (in the left menu) and chosing 'Save As'.
+The data to all graphs can be downloaded as tab separated text by pressing the right mouse button on a certain graph link (in the left menu) and choosing 'Save As'.
+
+**Information**: Occasional warnings in the console about invalid values are due to missing/invalid data points, and are of no particular concern.
 
 **WARNING**: *mycelyso Inspector* will serve results from all HDF5 (:code:`.h5`) files found in the current directory via an embedded webserver.
 Furthermore as a research tool, no special focus was laid on security, as such, you are assumed to prevent unauthorized
