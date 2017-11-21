@@ -257,7 +257,7 @@ def nick(image, window_size=15, k=-0.1, return_threshold=False, **kwargs):
 
 
 # noinspection PyUnusedLocal
-def batanaineh(image, mask=None, window_size=15, return_threshold=False, **kwargs):
+def bataineh(image, mask=None, window_size=15, return_threshold=False, **kwargs):
     """
     Thresholding method as developed by [Bataineh2011a]_.
 
