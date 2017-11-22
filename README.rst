@@ -47,7 +47,7 @@ Installation and Analysis Tutorial Videos
 
 .. raw:: html
 
-    <a href="https://modsim.github.io/mycelyso/DemoInstallation.mp4"><img src="https://modsim.github.io/mycelyso/DemoInstallation.png" width="45%"></a><a href="https://modsim.github.io/mycelyso/DemoAnalysis.mp4"><img src="https://modsim.github.io/mycelyso/DemoAnalysis.png" width="45%"></a>
+    <a href="https://modsim.github.io/mycelyso/DemoInstallation.mp4"><img src="https://modsim.github.io/mycelyso/DemoInstallation.png" width="45%"></a>&nbsp;<a href="https://modsim.github.io/mycelyso/DemoAnalysis.mp4"><img src="https://modsim.github.io/mycelyso/DemoAnalysis.png" width="45%"></a>
 
 These videos shows how to download and unpack *mycelyso* as well as to run a test analysis using the pre-packages Windows version of *mycelyso*.
 
