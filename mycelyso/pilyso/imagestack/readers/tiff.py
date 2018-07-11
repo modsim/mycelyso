@@ -37,7 +37,14 @@ class TiffImageStack(ImageStack):
         try:
             calibration = float(self.parameters['calibration'])
         except KeyError:
-            calibration = 1.0
+            try:
+                tags = self.tiff.pages[0].tags
+                assert tags.resolution_unit.value == 1  # 1 == µm?
+                x_resolution, y_resolution = tags.x_resolution.value, tags.y_resolution.value
+                assert x_resolution == y_resolution
+                calibration = x_resolution[1] / x_resolution[0]
+            except (KeyError, AssertionError):
+                calibration = 1.0
 
         try:
             interval = float(self.parameters['interval'])
