@@ -23,7 +23,7 @@ class OMETiffImageStack(TiffImageStack):
             raise RuntimeError('Not an OMETiffStack')
         self.xml = None
         self.ns = ''
-        self.xml_str = self.fp.tags['image_description'].value
+        self.xml_str = self.fp.description
 
         try:
             self.treat_z_as_mp = bool(self.parameters['treat_z_as_mp'])

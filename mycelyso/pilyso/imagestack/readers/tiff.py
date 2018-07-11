@@ -18,10 +18,7 @@ class TiffImageStack(ImageStack):
     priority = 1000
 
     def open(self, location, **kwargs):
-        try:
-            self.tiff = TiffFile(location.path, fastij=False)
-        except TypeError:
-            self.tiff = TiffFile(location.path)
+        self.tiff = TiffFile(location.path, movie=True)
 
         self.set_dimensions_and_sizes([Dimensions.Time], [len(self.tiff.pages)])
 
