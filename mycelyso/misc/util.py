@@ -22,7 +22,7 @@ def calculate_length(points, times=1, w=5):
     
     >>> calculate_length(np.array([[1.0, 1.0],
     ...                            [5.0, 5.0]]))
-    5.6568542494923806
+    5.656854249492381
     """
     # adapted method from Cornelisse and van den Berg
     if (len(points) - 2) > w:
@@ -46,8 +46,8 @@ def clean_by_radius(points, radius=15.0):
     >>> clean_by_radius(np.array([[1.0, 1.0],
     ...                           [1.1, 1.1],
     ...                           [9.0, 9.0]]), radius=1.5)
-    array([[ 1.,  1.],
-           [ 9.,  9.]])
+    array([[1., 1.],
+           [9., 9.]])
     """
     if len(points) == 0:
         return points

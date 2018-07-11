@@ -162,7 +162,7 @@ def skeletonize(binary, skeleton=None):
     array([[False, False, False, False],
            [False, False,  True, False],
            [False, False,  True, False],
-           [False, False, False, False]], dtype=bool)
+           [False, False, False, False]])
     """
     return sk_skeletonize(binary)
 
@@ -206,7 +206,7 @@ def quantify_binary(binary, calibration, result=None):
     >>> sorted(quantify_binary(np.array([[0, 0, 0],
     ...                                  [1, 1, 1],
     ...                                  [0, 0, 0]]), calibration=15.0).items())
-    [('covered_area', 675.0), ('covered_area_pixel', 3), ('covered_ratio', 0.33333333333333331)]
+    [('covered_area', 675.0), ('covered_area_pixel', 3), ('covered_ratio', 0.3333333333333333)]
     """
     ones = np.sum(binary)
     total = binary.shape[0] * binary.shape[1]
@@ -264,7 +264,7 @@ def clean_up(calibration, binary):
     ...                         [ True,  True,  True]]))
     array([[ True,  True,  True],
            [ True,  True,  True],
-           [ True,  True,  True]], dtype=bool)
+           [ True,  True,  True]])
     """
     binary = (
         ndi.gaussian_filter(binary * 1.0, CleanUpGaussianSigma.value / calibration)
@@ -291,7 +291,7 @@ def remove_small_structures(calibration, binary):
     ...                                        [ False, False,  True]]))
     array([[False, False, False],
            [False, False, False],
-           [False, False, False]], dtype=bool)
+           [False, False, False]])
     """
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
@@ -313,7 +313,7 @@ def remove_border_artifacts(calibration, binary):
     ...                                        [ False, False,  True]]))
     array([[False, False, False],
            [False, False, False],
-           [False, False, False]], dtype=bool)
+           [False, False, False]])
     """
     border = BorderArtifactRemovalBorderSize.value / calibration
 
