@@ -69,7 +69,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'mycelyso'
-copyright = '2017, Christian C. Sachs, Forschungszentrum Jülich'
+copyright = '2018, Christian C. Sachs, Forschungszentrum Jülich'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
