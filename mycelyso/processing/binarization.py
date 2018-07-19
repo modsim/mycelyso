@@ -4,6 +4,7 @@ The binarization module contains the binarization routine used to segment phase 
 mycelium networks into foreground and background.
 """
 
+import warnings
 import numpy as np
 
 try:
@@ -349,4 +350,6 @@ def experimental_thresholding(image, mask=None, window_size=15,
     if return_threshold:
         return threshold
     else:
-        return image < threshold
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore')
+            return image < threshold
