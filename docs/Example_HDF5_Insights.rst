@@ -2657,7 +2657,7 @@ mycelium length), which can be plotted over time:
     pyplot.title('Length over Time')
     
     pyplot.xlabel('Time [h]')
-    pyplot.ylabel('Lenght [µm]')
+    pyplot.ylabel('Length [µm]')
     
     pyplot.plot(timepoint, length)
 
@@ -4466,7 +4466,7 @@ Let's find the longest track and try to visualize it:
     pyplot.title('Length over Time')
     
     pyplot.xlabel('Time [h]')
-    pyplot.ylabel('Lenght [µm]')
+    pyplot.ylabel('Length [µm]')
     
     pyplot.plot(timepoint, length)
 
@@ -4490,7 +4490,7 @@ Now all tracked hyphae:
     pyplot.title('Length over Time')
     
     pyplot.xlabel('Time [h]')
-    pyplot.ylabel('Lenght [µm]')
+    pyplot.ylabel('Length [µm]')
     
     for idx, row in track_table.iterrows():
         particular_tracking_table = int(row.aux_table)  
