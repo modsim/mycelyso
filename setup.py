@@ -12,11 +12,11 @@ on_rtd = os.environ.get('READTHEDOCS') == 'True'
 
 install_requires = [
     'numpy', 'scipy', 'networkx', 'tables', 'numexpr', 'pandas',
+    'scikit-image>=0.12',
     'tifffile', 'nd2file',
     'mfisp_boxdetection', 'molyso', 'tunable',
     'tqdm'  # nicer progress bars, using the MPLv2+MIT licensed version
-] + (['scikit-image>=0.12'] if not on_rtd else [])
-# read the docs has a problem installing scikit-image, but doc building will fail if all packages are just mockups ...
+    ]
 
 import mycelyso
 
@@ -29,7 +29,7 @@ setup(
     author_email='c.sachs@fz-juelich.de',
     url='https://github.com/modsim/mycelyso',
     packages=find_packages(),
-    install_requires=install_requires,
+    install_requires=install_requires if not on_rtd else [],
     license='BSD',
     classifiers=[
         'Development Status :: 4 - Beta',
