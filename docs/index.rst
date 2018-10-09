@@ -19,4 +19,5 @@ Contents:
     readme
     license
     Example_HDF5_Insights
+    Example_Alternative_Growth_Fit
     mycelyso
