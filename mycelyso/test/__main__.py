@@ -6,6 +6,70 @@ The test module's __main__ contains the main() function to run the doctests.
 import sys
 import doctest
 
+from types import ModuleType
+
+
+def collect_modules_recursive(start, blacklist=None):
+    """
+    Collects all modules and submodules in a recursive manner.
+
+    :param start: the top module to start from
+    :param blacklist: a string or list of strings of module (sub)names which should be ignored.
+    :return:
+    """
+
+    if not isinstance(blacklist, list):
+        blacklist = [blacklist]
+
+    collector = set()
+
+    def _inner(current):
+        collector.add(current)
+        for another in dir(current):
+            another = getattr(current, another)
+            if isinstance(another, ModuleType):
+                if another.__name__.startswith(start.__name__):
+
+                    ok = True
+                    for blacklisted in blacklist:
+                        if blacklisted in another.__name__:
+                            ok = False
+
+                    if ok:
+                        _inner(another)
+
+    _inner(start)
+
+    return list(sorted(collector, key=lambda module: module.__name__))
+
+
+def run_tests_recursively(start_module, blacklist=None, exit=True, quiet=False):
+    """
+    Runs doctests recursively.
+
+    :param start_module: the top module to start from
+    :param blacklist: a string or list of strings of module (sub)names which should be ignored.
+    :param exit: whether to exit with return code
+    :param quiet: whether to print infos about tests
+    :return:
+    """
+    total_failures, total_tests = 0, 0
+
+    for a_module in collect_modules_recursive(start_module, blacklist):
+        failures, tests = doctest.testmod(a_module)
+        total_failures += failures
+        total_tests += tests
+
+    if not quiet:
+        print("Run %d tests in total." % (total_tests,))
+
+    if total_failures > 0:
+        if not quiet:
+            print("Test failures occurred, exiting with non-zero status.")
+
+        if exit:
+            sys.exit(1)
+
 
 # noinspection PyUnresolvedReferences
 def main():
@@ -39,45 +103,7 @@ def main():
     import mycelyso.processing.binarization
     import mycelyso.processing.pixelgraphs
 
-    modules_to_test = [
-        mycelyso.highlevel.nodeframe,
-        mycelyso.highlevel.pipeline,
-        mycelyso.highlevel.pixelframe,
-        mycelyso.highlevel.steps,
-        #
-        mycelyso.misc.graphml,
-        mycelyso.misc.regression,
-        mycelyso.misc.util,
-        #
-        mycelyso.pilyso.application.application,
-        mycelyso.pilyso.application.helper,
-        #
-        mycelyso.pilyso.imagestack.imagestack,
-        #
-        mycelyso.pilyso.misc.h5writer,
-        mycelyso.pilyso.misc.processpool,
-        #
-        mycelyso.pilyso.pipeline.executor,
-        mycelyso.pilyso.pipeline.pipeline,
-        #
-        mycelyso.pilyso.steps.steps,
-        #
-        mycelyso.processing.binarization,
-        mycelyso.processing.pixelgraphs,
-    ]
-
-    total_failures, total_tests = 0, 0
-
-    for a_module in modules_to_test:
-        failures, tests = doctest.testmod(a_module)
-        total_failures += failures
-        total_tests += tests
-
-    print("Run %d tests in total." % (total_tests,))
-
-    if total_failures > 0:
-        print("Test failures occurred, exiting with non-zero status.")
-        sys.exit(1)
+    run_tests_recursively(mycelyso, blacklist='czifile')
 
 
 if __name__ == '__main__':
