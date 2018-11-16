@@ -153,7 +153,7 @@ Which will produce the help screen:
    If you use this software in a publication, please cite our paper:
 
    Sachs CC, Koepff J, Wiechert W, Grünberger A, Nöh K (2018)
-   mycelyso: Analysis of Streptomyces mycelium live cell imaging data
+   mycelyso – High-throughput analysis of Streptomyces mycelium live cell imaging data
    Submitted.
 
    usage: __main__.py [-h] [-m MODULES] [-n PROCESSES] [--prompt]
