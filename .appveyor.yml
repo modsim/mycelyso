@@ -49,8 +49,8 @@ build_script:
   - cmd: "echo if __name__ == '__main__': >> runmycelysoinspector.py"
   - cmd: "echo     main() >> runmycelysoinspector.py"
   #
-  - cmd: pyinstaller runmycelyso.py -n mycelyso --exclude-module tcl --exclude-module tk --exclude-module _tkinter --exclude-module tkinter --exclude-module Tkinter --exclude-module opencv --exclude-module cv2
-  - cmd: pyinstaller runmycelysoinspector.py -n mycelyso_inspector --exclude-module tcl --exclude-module tk --exclude-module _tkinter --exclude-module tkinter --exclude-module Tkinter --exclude-module opencv --exclude-module cv2
+  - cmd: pyinstaller runmycelyso.py -n mycelyso --exclude-module tcl --exclude-module tk --exclude-module _tkinter --exclude-module tkinter --exclude-module Tkinter --exclude-module opencv --exclude-module cv2 --exclude-module cytoolz
+  - cmd: pyinstaller runmycelysoinspector.py -n mycelyso_inspector --exclude-module tcl --exclude-module tk --exclude-module _tkinter --exclude-module tkinter --exclude-module Tkinter --exclude-module opencv --exclude-module cv2 --exclude-module cytoolz
   #--exclude-module PyQt5 --exclude-module PySide
   - cmd: rd /s /q .\dist\mycelyso\Include
   - cmd: rd /s /q .\dist\mycelyso_inspector\Include
