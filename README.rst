@@ -185,7 +185,7 @@ To run an analysis, just pass the appropriate filename as a parameter. The desir
 :code:`--timepoints` switch, and if the file contains multiple positions, they can be selected with :code:`--positions`.
 Supported file formats are TIFF, OME-TIFF, Nikon ND2 and Zeiss CZI.
 
-The analysis will use all cores present by default. While this is desirable generally desirable, it might lead to consuming
+The analysis will use all cores present by default. While this is generally desirable, it might lead to consuming
 too much memory (as each parallel acting process needs a certain additionally amount of memory).
 If you notice that *mycelyso* takes up too much memory, try limiting the number of processes via :code:`-n`.
 If you choose :code:`-n 0`, the code will additionally not use the parallel subsystem (:code:`multiprocessing`).
