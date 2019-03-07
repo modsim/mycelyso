@@ -29,7 +29,7 @@ setup(
     author_email='c.sachs@fz-juelich.de',
     url='https://github.com/modsim/mycelyso',
     packages=find_packages(),
-    install_requires=install_requires if not on_rtd else [],
+    install_requires=install_requires if not on_rtd else ['tunable'],
     license='BSD',
     classifiers=[
         'Development Status :: 4 - Beta',
