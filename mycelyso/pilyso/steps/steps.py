@@ -164,3 +164,16 @@ def rescale_image_to_uint8(image):
     image *= 255.0
 
     return image.astype(np.uint8)
+
+
+def copy_calibration(collected, result):
+    calibrations = np.array([item['calibration'] for item in collected.values()])
+
+    calibration = calibrations[0]
+
+    if not (calibrations == calibration).all():
+        print("WARNING: Calibration of individual timepoints is not identical. This is highly unexpected behavior.")
+
+    result.calibration = calibration
+
+    return result

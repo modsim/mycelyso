@@ -20,7 +20,7 @@ from ..pilyso.misc.h5writer import hdf5_output, hdf5_node_name, return_or_uncomp
 from ..pilyso.pipeline.pipeline import NeatDict
 from ..pilyso.steps import \
     image_source, pull_metadata_from_image, substract_start_frame, rescale_image_to_uint8, set_result, Delete, \
-    box_detection, create_boxcrop_from_subtracted_image, calculate_image_sha256_hash, Compress
+    box_detection, create_boxcrop_from_subtracted_image, calculate_image_sha256_hash, Compress, copy_calibration
 
 
 class Mycelyso(App):
@@ -276,6 +276,8 @@ class MycelysoPipeline(PipelineExecutionContext):
 
         per_position = self.add_stage(Meta(pos=Every, t=Collected))
 
+        per_position |= copy_calibration
+
         per_position |= track_multipoint
 
         per_position |= generate_overall_graphml
@@ -301,6 +303,7 @@ class MycelysoPipeline(PipelineExecutionContext):
                     'filename_complete',
                     'filename',
                     'meta_pos',
+                    'calibration',
                     '*_regression_*'
                 ],
                 'tunables': 'data',
