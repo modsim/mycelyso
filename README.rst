@@ -140,7 +140,7 @@ Which will produce the help screen:
 
    mycelyso INFO
      MYCElium   anaLYsis __ SOftware
-     ___   __ _________ / /_ _____ ___         Developed  2015 - 2018 by
+     ___   __ _________ / /_ _____ ___         Developed  2015 - 2019 by
     /  ' \/ // / __/ -_) / // (_-</ _ \ __
    /_/_/_/\_, /\__/\__/_/\_, /___/\___/'  \.   Christian   C.  Sachs  at
          /___/          /___/              |
@@ -152,7 +152,7 @@ Which will produce the help screen:
 
    If you use this software in a publication, please cite our paper:
 
-   Sachs CC, Koepff J, Wiechert W, Grünberger A, Nöh K (2018)
+   Sachs CC, Koepff J, Wiechert W, Grünberger A, Nöh K (2019)
    mycelyso – High-throughput analysis of Streptomyces mycelium live cell imaging data
    Submitted.
 
