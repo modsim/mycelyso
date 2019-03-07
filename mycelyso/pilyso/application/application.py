@@ -199,10 +199,13 @@ class App(AppInterface):
 
         self.log.info("Tunable Hash: %s" % (TunableManager.get_hash()))
 
+        calibration = ims.meta[0, 0].calibration
+
         self.log.info(
-            "Beginning Processing:\n%s\n%s",
-            prettify_numpy_array(self.positions,  "Positions : "),
-            prettify_numpy_array(self.timepoints, "Timepoints: ")
+            "Beginning Processing:\n%s\n%s\n%s",
+            prettify_numpy_array(self.positions,  "Positions  : "),
+            prettify_numpy_array(self.timepoints, "Timepoints : "),
+            "Calibration: %.3f µm·pixel⁻¹" % (calibration,)
         )
 
         if self.args.processes < 0:
