@@ -8,7 +8,7 @@ environment:
   CONDA: C:\Miniconda36-x64
 
 before_build:
-  - cmd: set PATH=%CONDA%;%CONDA%\Scripts;%CONDA%\Library\bin;%PATH%
+  - cmd: set PATH=%CONDA%;%CONDA%\Scripts;%CONDA%\Library\bin;%CONDA%\Library\mingw-w64\bin;%PATH%
   - cmd: conda config --add channels conda-forge
   - cmd: conda config --add channels bioconda
   - cmd: conda config --add channels csachs
