@@ -30,12 +30,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 __author__ = "Christian C. Sachs"
 
-__version__ = '1.0.0rc5'
+__version__ = '1.0.0'
 
 __citation__ = """
 Sachs CC, Koepff J, Wiechert W, Grünberger A, Nöh K (2019)
-mycelyso – High-throughput analysis of Streptomyces mycelium live cell imaging data
-Submitted.
+mycelyso – high-throughput analysis of Streptomyces mycelium live cell imaging data
+BMC Bioinformatics, volume 20, 452, doi: 10.1186/s12859-019-3004-1
 """
 
 __banner__ = """

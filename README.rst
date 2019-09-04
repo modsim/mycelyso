@@ -26,8 +26,8 @@ mycelyso Readme
 .. image:: https://zenodo.org/badge/doi/10.5281/zenodo.376281.svg
    :target: https://dx.doi.org/10.5281/zenodo.376281
 
-.. image:: https://zenodo.org/badge/doi/coming/soon.svg
-   :target: https://dx.doi.org/
+.. image:: https://zenodo.org/badge/doi/10.1186/s12859-019-3004-1.svg
+   :target: https://dx.doi.org/10.1186/s12859-019-3004-1
 
 Frontmatter
 -----------
@@ -53,7 +53,13 @@ These videos shows how to download and unpack *mycelyso* as well as to run a tes
 
 Publication
 ###########
-The accompanying publication is currently in revision, its citation will be added here once it has been published.
+When using *mycelyso* for scientific applications, please cite our publication:
+
+    Sachs CC, Koepff J, Wiechert W, Grünberger A, Nöh K (2019)
+    mycelyso – high-throughput analysis of Streptomyces mycelium live cell imaging data
+    BMC Bioinformatics, volume 20, 452, doi: 10.1186/s12859-019-3004-1
+
+It is available on the *BMC Bioinformatics* homepage at `DOI: 10.1186/s12859-019-3004-1 <https://dx.doi.org/10.1186/s12859-019-3004-1>`_
 
 Documentation
 #############
@@ -153,8 +159,8 @@ Which will produce the help screen:
    If you use this software in a publication, please cite our paper:
 
    Sachs CC, Koepff J, Wiechert W, Grünberger A, Nöh K (2019)
-   mycelyso – High-throughput analysis of Streptomyces mycelium live cell imaging data
-   Submitted.
+   mycelyso – high-throughput analysis of Streptomyces mycelium live cell imaging data
+   BMC Bioinformatics, volume 20, 452, doi: 10.1186/s12859-019-3004-1
 
    usage: __main__.py [-h] [-m MODULES] [-n PROCESSES] [--prompt]
                       [-tp TIMEPOINTS] [-mp POSITIONS] [-t TUNABLE]
