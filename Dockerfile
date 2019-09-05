@@ -1,4 +1,5 @@
-FROM continuumio/anaconda3
+# continuumio/anaconda3:latest is broken, oups
+FROM continuumio/anaconda3:2019.03
 LABEL maintainer c.sachs@fz-juelich.de
 RUN apt-get update && apt-get install -y unzip libgl1-mesa-glx && \
     # opengl for qt...
