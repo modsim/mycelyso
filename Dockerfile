@@ -1,28 +1,28 @@
-# continuumio/anaconda3:latest is broken, oups
-FROM continuumio/anaconda3:2019.03
+FROM continuumio/miniconda3:4.7.10-alpine
 LABEL maintainer c.sachs@fz-juelich.de
-RUN apt-get update && apt-get install -y unzip libgl1-mesa-glx && \
-    # opengl for qt...
-    apt-get clean && \
-    conda config --add channels conda-forge && \
-    conda config --add channels bioconda && \
-    conda config --add channels csachs && \
-    conda install -y mycelyso mycelyso-inspector && \
+
+USER root
+
+ENV PATH "$PATH:/opt/conda/bin:/bin/sbin:/usr/bin"
+
+# we could copy the files from the current directory, but that would create an additional layer ...
+# COPY . /tmp/package
+
+RUN conda config --add channels conda-forge --add channels bioconda --add channels csachs && \
+    conda install -y jupyter mycelyso mycelyso-inspector && \
     pip uninstall -y mycelyso && \
-    pip install "git+https://github.com/modsim/mycelyso#egg=mycelyso" && \
-    adduser --disabled-password user && \
-    mkdir /data /examples && \
-    wget https://github.com/modsim/mycelyso/archive/master.zip -O /tmp/mycelyso.zip && \
-    unzip -j /tmp/mycelyso.zip 'mycelyso-master/examples/*' -d /examples && \
-    rm /tmp/mycelyso.zip && \
-    apt-get remove -y unzip && \
-    apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/* && \
+    wget https://github.com/modsim/mycelyso/archive/master.tar.gz -O - | tar zx -C /tmp && mv /tmp/mycelyso-master /tmp/package && \
+    pip install /tmp/package && \
+    mv /tmp/package/examples / && \
+    rm -rf /tmp/package && \
+    busybox adduser --disabled-password user && \
     ln -s /examples /home/user && \
-    chown -R user:user /data /examples /home/user && \
-    runuser user -s /bin/sh "-c jupyter notebook --generate-config" && \
+    mkdir /data && \
+    chown -R user:users /data /examples /home/user && \
+    su -s /bin/sh user -c "jupyter notebook --generate-config" && \
     echo "c.NotebookApp.ip = '0.0.0.0'" >> /home/user/.jupyter/jupyter_notebook_config.py && \
-    echo "c.NotebookApp.notebook_dir = '/home/user'" >> /home/user/.jupyter/jupyter_notebook_config.py && \   
+    echo "c.NotebookApp.notebook_dir = '/home/user'" >> /home/user/.jupyter/jupyter_notebook_config.py && \
+    conda clean -afy || true && \
     echo Done
 
 USER user
