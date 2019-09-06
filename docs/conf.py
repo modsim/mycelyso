@@ -23,8 +23,6 @@ class Mock(MagicMock):
     def __getattr__(cls, item):
         return MagicMock()
 
-# from setup.py
-
 MOCK_MODULES = [
     'skimage', 'skimage.morphology', 'skimage.measure', 'skimage.transform', 'skimage.feature', 'skimage.filters',
     'networkx', 'networkx.readwrite',
