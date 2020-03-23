@@ -392,11 +392,11 @@ class NodeFrame(object):
 
         for n, pos in enumerate(self.data):
             positions[n] = (float(pos[1]), float(pos[0]))
-            g.node[n]['x'] = float(pos[1])
-            g.node[n]['y'] = float(pos[0])
+            g.nodes[n]['x'] = float(pos[1])
+            g.nodes[n]['y'] = float(pos[0])
 
             if with_z > 0:
-                g.node[n]['z'] = float(self.timepoint * with_z)
+                g.nodes[n]['z'] = float(self.timepoint * with_z)
                 positions[n] = (float(pos[1]), float(pos[0]), float(self.timepoint * with_z))
 
         if not return_positions:
