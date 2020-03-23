@@ -273,7 +273,7 @@ def clean_up(calibration, binary):
 
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
-        binary = remove_small_holes(binary, min_size=int(CleanUpHoleFillSize.value / calibration ** 2), connectivity=2)
+        binary = remove_small_holes(binary, area_threshold=int(CleanUpHoleFillSize.value / calibration ** 2), connectivity=2)
 
     return binary
 
