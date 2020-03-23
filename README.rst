@@ -305,11 +305,3 @@ General remarks: :code:`--tty` is used to allocate a tty, necessary for interact
 The :code:`--rm` switch tells docker to remove the container (not image) again after use.
 As aforementioned, docker is containerized, i.e. unless explicitly stated, no communication with the outside is possible.
 Therefore via :code:`--volume` the current working directory is mapped into the container.
-
-Third Party Licenses
---------------------
-Note that this software contains the following portions from other authors, under the following licenses (all BSD-flavoured):
-
-mycelyso/pilyso/imagestack/readers/external/czifile.py:
-    czifile.py by Christoph Gohlke, licensed BSD (see file head).
-        Copyright (c) 2013-2015, Christoph Gohlke, 2013-2015, The Regents of the University of California
