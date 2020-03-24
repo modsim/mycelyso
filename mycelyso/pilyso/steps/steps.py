@@ -8,7 +8,7 @@ from base64 import b64encode
 
 import numpy as np
 import scipy.ndimage as ndi
-from ..imagestack.imagestack import Dimensions
+from pilyso_io.imagestack import Dimensions
 from ..application.application import Meta
 
 from mfisp_boxdetection import find_box

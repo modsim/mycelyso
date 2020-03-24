@@ -15,7 +15,7 @@ from .. import __banner__
 from .. import __version__
 # noinspection PyUnresolvedReferences
 from ..pilyso.application import App, PipelineExecutionContext, PipelineEnvironment, Every, Collected, Meta, Skip
-from ..pilyso.imagestack import ImageStack
+from pilyso_io.imagestack import ImageStack
 from ..pilyso.misc.h5writer import hdf5_output, hdf5_node_name, return_or_uncompress
 from ..pilyso.pipeline.pipeline import NeatDict
 from ..pilyso.steps import \

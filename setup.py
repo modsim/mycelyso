@@ -11,10 +11,8 @@ sys.path.insert(0, '.')
 on_rtd = os.environ.get('READTHEDOCS') == 'True'
 
 install_requires = [
-    'numpy', 'scipy', 'networkx', 'tables', 'numexpr', 'pandas',
-    'scikit-image>=0.12',
-    'tifffile>0.13.5', 'nd2file',
-    'mfisp_boxdetection', 'molyso', 'tunable',
+    'numpy', 'scipy', 'networkx', 'tables', 'numexpr', 'pandas', 'scikit-image',
+    'pilyso-io', 'mfisp_boxdetection', 'molyso', 'tunable',
     'tqdm'  # nicer progress bars, using the MPLv2+MIT licensed version
     ]
 
