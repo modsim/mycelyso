@@ -90,8 +90,6 @@ def main():
     import mycelyso.pilyso.application.application
     import mycelyso.pilyso.application.helper
 
-    import mycelyso.pilyso.imagestack.imagestack
-
     import mycelyso.pilyso.misc.h5writer
     import mycelyso.pilyso.misc.processpool
 

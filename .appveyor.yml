@@ -17,11 +17,9 @@ before_build:
 
 build_script:
   # first install the latest version, that fetches all deps
-  - cmd: conda install -y mycelyso mycelyso-inspector
+  - cmd: conda install -y python==3.7 mycelyso mycelyso-inspector
   # there seems to be an old version around
   - cmd: conda update -y pyasn1
-  # problems with certain versions in conjunction with pyinstaller
-  - cmd: conda install -y scipy==0.19.1 pandas==0.20.3
   # ... then install the git version. if deps would be missing pip would now try to get'em
   - cmd: python setup.py install
   # this is the starter, full of implicit exports to steer pyinstaller into the right direction
