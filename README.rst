@@ -100,13 +100,12 @@ not be present in the PyPI (Python Package Index). Thankfully the conda Package 
 provides all packages necessary in an easy to use manner. To use it, please `download Anaconda <https://www.continuum.io/downloads>`_ (Miniconda could be downloaded
 as well, but as most packages included in Anaconda are needed anyways, it does hardly provide a size benefit).
 
-You have to enable the necessary channels (we aim to add mycelyso to `bioconda <https://bioconda.github.io>`_ lateron):
+You have to enable the necessary channels:
 
 .. code-block:: bash
 
     > conda config --add channels conda-forge
-    > conda config --add channels bioconda
-    > conda config --add channels csachs
+    > conda config --add channels modsim
 
     > conda install -y mycelyso mycelyso-inspector
 

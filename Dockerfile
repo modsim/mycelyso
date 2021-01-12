@@ -1,18 +1,21 @@
-FROM continuumio/miniconda3:4.7.10-alpine
+FROM continuumio/miniconda3:4.9.2-alpine
 LABEL maintainer c.sachs@fz-juelich.de
 
 USER root
 
 ENV PATH "$PATH:/opt/conda/bin:/bin/sbin:/usr/bin"
 
-# we could copy the files from the current directory, but that would create an additional layer ...
-# COPY . /tmp/package
+COPY . /tmp/package
 
-RUN conda config --add channels conda-forge --add channels bioconda --add channels csachs && \
-    conda install -y jupyter mycelyso mycelyso-inspector && \
-    pip uninstall -y mycelyso && \
-    wget https://github.com/modsim/mycelyso/archive/master.tar.gz -O - | tar zx -C /tmp && mv /tmp/mycelyso-master /tmp/package && \
-    pip install /tmp/package && \
+
+RUN \
+    wget https://github.com/modsim/mycelyso-inspector/archive/master.tar.gz -O - | tar zx -C /tmp && \
+    # conda build needs bash
+    apk add --no-cache bash git && \
+    conda install -c conda-forge conda-build conda-verify && \
+    conda build -c conda-forge -c modsim /tmp/mycelyso-inspector-master/recipe && \
+    conda build -c conda-forge -c modsim /tmp/package/recipe && \
+    conda install -c conda-forge -c modsim -c local -y python==3.7 jupyter mycelyso mycelyso-inspector && \
     mv /tmp/package/examples / && \
     rm -rf /tmp/package && \
     busybox adduser --disabled-password user && \
@@ -23,6 +26,7 @@ RUN conda config --add channels conda-forge --add channels bioconda --add channe
     echo "c.NotebookApp.ip = '0.0.0.0'" >> /home/user/.jupyter/jupyter_notebook_config.py && \
     echo "c.NotebookApp.notebook_dir = '/home/user'" >> /home/user/.jupyter/jupyter_notebook_config.py && \
     conda clean -afy || true && \
+    # conda build purge-all && \ # keep the package in the Docker image
     echo Done
 
 USER user

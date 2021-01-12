@@ -10,8 +10,7 @@ environment:
 before_build:
   - cmd: set PATH=%CONDA%;%CONDA%\Scripts;%CONDA%\Library\bin;%CONDA%\Library\mingw-w64\bin;%PATH%
   - cmd: conda config --add channels conda-forge
-  - cmd: conda config --add channels bioconda
-  - cmd: conda config --add channels csachs
+  - cmd: conda config --add channels modsim
   - cmd: conda update -y conda
   # pyinstaller is currently not working in conjunction with mycelyso, hopefully a pinned commit will resolve this
   - cmd: pip install https://github.com/pyinstaller/pyinstaller/archive/15770dadce1227b6772aac68f08ad8eed3d13f99.zip

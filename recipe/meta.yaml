@@ -1,0 +1,56 @@
+{% set name = "mycelyso" %}
+{% set version = "1.0.1.dev1" %}
+#{% set sha256 = "9804cdc22d88beb6f0e6e87870fe962d57aacd6415ba2a5b5ef3c1010cd7f5bf" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+#  fn: {{ name }}-{{ version }}.tar.gz
+#  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+#  sha256: {{ sha256 }}
+  path: ..
+
+build:
+  number: 0
+  script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
+  noarch: python
+
+requirements:
+  build:
+    - python
+    - setuptools
+  run:
+    - numpy
+    - scipy
+    - matplotlib
+    - scikit-image
+    - networkx
+    - pytables
+    - numexpr
+    - pandas
+    - pilyso-io
+    - mfisp-boxdetection
+    - molyso
+    - tunable
+    - tqdm
+
+test:
+  imports:
+    - mycelyso
+
+about:
+  home: https://github.com/modsim/mycelyso
+  license: BSD-2-Clause
+  license_family: BSD
+  summary: 'mycelyso - MYCEelium anaLYsis SOftware'
+  description: |
+    MYCEelium anaLYsis SOftware, see https://github.com/modsim/mycelyso for details.
+
+  doc_url: https://mycelyso.readthedocs.io
+  dev_url: https://github.com/modsim/mycelyso
+
+extra:
+  recipe-maintainers:
+    - csachs

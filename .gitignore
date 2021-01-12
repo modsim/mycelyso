@@ -3,6 +3,7 @@ docs/_build/
 .idea/
 build/
 dist/
+local/
 examples/*.tif
 examples/*.tiff
 *.egg-info/
