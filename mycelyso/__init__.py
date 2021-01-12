@@ -4,7 +4,7 @@ mycelyso, the MYCElium anaLYsis SOftware
 """
 
 __license__ = """
-Copyright (c) 2015-2020 Christian C. Sachs, Forschungszentrum Jülich GmbH.
+Copyright (c) 2015-2021 Christian C. Sachs, Forschungszentrum Jülich GmbH.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,7 @@ BMC Bioinformatics, volume 20, 452, doi: 10.1186/s12859-019-3004-1
 
 __banner__ = """
   MYCElium   anaLYsis __ SOftware
-  ___   __ _________ / /_ _____ ___         Developed  2015 - 2020 by
+  ___   __ _________ / /_ _____ ___         Developed  2015 - 2021 by
  /  ' \/ // / __/ -_) / // (_-</ _ \ __
 /_/_/_/\_, /\__/\__/_/\_, /___/\___/'  \.   Christian   C.  Sachs  at
       /___/          /___/              |
