@@ -30,7 +30,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 __author__ = "Christian C. Sachs"
 
-__version__ = '1.0.1.dev1'
+__version__ = '1.0.1.dev2'
 
 __citation__ = """
 Sachs CC, Koepff J, Wiechert W, Grünberger A, Nöh K (2019)

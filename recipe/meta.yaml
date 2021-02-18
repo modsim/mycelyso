@@ -1,5 +1,5 @@
 {% set name = "mycelyso" %}
-{% set version = "1.0.1.dev1" %}
+{% set version = "1.0.1.dev2" %}
 #{% set sha256 = "9804cdc22d88beb6f0e6e87870fe962d57aacd6415ba2a5b5ef3c1010cd7f5bf" %}
 
 package:
