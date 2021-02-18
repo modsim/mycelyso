@@ -60,6 +60,16 @@ class StoreImage(Tunable):
     default = False
 
 
+class Invert(Tunable):
+    """ Whether the input image should be inverted before being fed into the binarization method. """
+    default = False
+
+
+class InvertBinarization(Tunable):
+    """ Whether the resulting binarization should be inverted. """
+    default = False
+
+
 class SkipBinarization(Tunable):
     """ Whether to directly use the input image as binary mask. Use in case external binarization is desired. """
     default = False

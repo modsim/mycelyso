@@ -107,6 +107,16 @@ def skip_if_image_is_below_size(min_height=4, min_width=4):
     return _inner
 
 
+def invert_image(image):
+    image = ~image
+    return image
+
+
+def invert_binary(binary):
+    binary = ~binary
+    return binary
+
+
 # noinspection PyUnusedLocal
 def binarize(image, binary=None):
     """

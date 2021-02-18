@@ -9,7 +9,7 @@ import networkx as nx
 
 from tunable import TunableManager
 
-from ..tunables import CropWidth, CropHeight, BoxDetection, StoreImage, SkipBinarization
+from ..tunables import CropWidth, CropHeight, BoxDetection, StoreImage, Invert, SkipBinarization, InvertBinarization
 from .steps import *
 from .. import __banner__
 from .. import __version__
@@ -216,6 +216,9 @@ class MycelysoPipeline(PipelineExecutionContext):
             per_image |= box_detection
             per_image |= create_boxcrop_from_subtracted_image
 
+        if Invert.value:
+           per_image |= invert_image
+
         per_image |= rescale_image_to_uint8
 
         per_image |= set_result(raw_unrotated_image=Delete, raw_image=Delete, subtracted_image=Delete)
@@ -246,6 +249,9 @@ class MycelysoPipeline(PipelineExecutionContext):
                 return image.astype(bool)
 
             per_image |= _image_to_binary
+
+        if InvertBinarization.value:
+            per_image |= invert_binary
 
         # ... and cleanup
         per_image |= clean_up
