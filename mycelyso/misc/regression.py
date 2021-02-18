@@ -63,8 +63,8 @@ def find_linear_window(
 
             regression = results[0][2]
 
-            # noinspection PyProtectedMember,PyProtectedMember
-            regression = regression._replace(**{k: float('nan') for k in regression._asdict().keys()})
+            # noinspection PyProtectedMember
+            regression = type(regression)(**{k: float('nan') for k in regression._asdict().keys()})
 
             if return_begin_end:
                 return float('nan'), float('nan'), regression
