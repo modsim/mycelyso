@@ -11,11 +11,11 @@ mycelyso Readme
 .. image:: https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat
    :target: https://mycelyso.readthedocs.io/en/latest/
 
-.. image:: https://travis-ci.org/modsim/mycelyso.svg?branch=master
+.. image:: https://travis-ci.org/modsim/mycelyso.svg?branch=main
    :target: https://travis-ci.org/modsim/mycelyso
 
-.. image:: https://ci.appveyor.com/api/projects/status/0jcyc25y81tp4iua/branch/master?svg=true
-   :target: https://ci.appveyor.com/project/csachs/mycelyso/branch/master
+.. image:: https://ci.appveyor.com/api/projects/status/0jcyc25y81tp4iua/branch/main?svg=true
+   :target: https://ci.appveyor.com/project/csachs/mycelyso/branch/main
 
 .. image:: https://img.shields.io/docker/build/modsim/mycelyso.svg
    :target: https://hub.docker.com/r/modsim/mycelyso
@@ -83,7 +83,7 @@ Pre-Bundled Windows Application
 -------------------------------
 
 If you don't have a Python 3 installation ready, and want to just run *mycelyso*, we you can download a pre-packaged version
-for 64-bit versions of Windows (mycelyso-win64.zip) from `AppVeyor <https://ci.appveyor.com/project/csachs/mycelyso/branch/master/artifacts>`_.
+for 64-bit versions of Windows (mycelyso-win64.zip) from `AppVeyor <https://ci.appveyor.com/project/csachs/mycelyso/branch/main/artifacts>`_.
 
 Please note, that, instead of :code:`python -m mycelyso` or :code:`python -m mycelyso_inspector`, the calls would then be :code:`mycelyso.exe` or :code:`mycelyso_inspector.exe`.
 
@@ -127,7 +127,7 @@ Directly from github (for advanced users)
 
 .. code-block:: bash
 
-    > pip install --user https://github.com/modsim/mycelyso/archive/master.zip mycelyso-inspector
+    > pip install --user https://github.com/modsim/mycelyso/archive/main.zip mycelyso-inspector
 
 
 mycelyso Quickstart

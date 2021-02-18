@@ -9,11 +9,11 @@ COPY . /tmp/package
 
 
 RUN \
-    wget https://github.com/modsim/mycelyso-inspector/archive/master.tar.gz -O - | tar zx -C /tmp && \
+    wget https://github.com/modsim/mycelyso-inspector/archive/main.tar.gz -O - | tar zx -C /tmp && \
     # conda build needs bash
     apk add --no-cache bash git && \
     conda install -c conda-forge conda-build conda-verify && \
-    conda build -c conda-forge -c modsim /tmp/mycelyso-inspector-master/recipe && \
+    conda build -c conda-forge -c modsim /tmp/mycelyso-inspector-main/recipe && \
     conda build -c conda-forge -c modsim /tmp/package/recipe && \
     conda install -c conda-forge -c modsim -c local -y python==3.7 jupyter mycelyso mycelyso-inspector && \
     mv /tmp/package/examples / && \
